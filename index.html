@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
+<!-- saved from url=(0050)file:///Users/evanchethik/Downloads/tracker_4.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Revenue & Invoice Tracker</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>Revenue &amp; Invoice Tracker</title>
+<link href="./index_files/css2" rel="stylesheet">
 <style>
   :root {
     --ink: #1a1a1a;
@@ -569,8 +569,8 @@
     <div class="header-sub">Internal Business Intelligence</div>
   </div>
   <div style="display:flex;align-items:center;gap:12px;">
-    <span id="syncStatus" style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);"></span>
-    <button onclick="refreshData()" style="background:none;border:1px solid var(--gold);color:var(--gold);padding:5px 12px;border-radius:4px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;" title="Reload from Google Sheets">↻ Refresh</button>
+    <span id="syncStatus" style="font-family:&#39;DM Mono&#39;,monospace;font-size:11px;color:var(--muted);"></span>
+    <button onclick="refreshData()" style="background:none;border:1px solid var(--gold);color:var(--gold);padding:5px 12px;border-radius:4px;cursor:pointer;font-family:&#39;DM Sans&#39;,sans-serif;font-size:12px;" title="Reload from Google Sheets">↻ Refresh</button>
     <div class="header-date" id="headerDate"></div>
   </div>
 </div>
@@ -578,7 +578,7 @@
 <!-- Loading overlay -->
 <div id="loadingOverlay" style="display:none;position:fixed;inset:0;background:rgba(26,26,26,0.6);z-index:1000;align-items:center;justify-content:center;">
   <div style="background:var(--paper);border-radius:10px;padding:32px 48px;text-align:center;border-top:3px solid var(--gold);">
-    <div style="font-family:'DM Serif Display',serif;font-size:20px;margin-bottom:8px;">Syncing</div>
+    <div style="font-family:&#39;DM Serif Display&#39;,serif;font-size:20px;margin-bottom:8px;">Syncing</div>
     <div id="loadingMsg" style="color:var(--muted);font-size:14px;">Loading from Google Sheets…</div>
     <div style="margin-top:16px;width:40px;height:40px;border:3px solid var(--cream);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;margin:16px auto 0;"></div>
   </div>
@@ -592,12 +592,12 @@
 </style>
 
 <nav class="nav">
-  <button class="nav-tab active" onclick="showSection('dashboard')">Dashboard</button>
-  <button class="nav-tab" onclick="showSection('invoices')">Invoice Tracker</button>
-  <button class="nav-tab" onclick="showSection('projected')">Projected Revenue</button>
-  <button class="nav-tab" onclick="showSection('clients')">Client List</button>
-  <button class="nav-tab" onclick="showSection('analytics')">Analytics</button>
-  <button class="nav-tab" onclick="showSection('add-invoice')">+ New Invoice</button>
+  <button class="nav-tab active" onclick="showSection(&#39;dashboard&#39;)">Dashboard</button>
+  <button class="nav-tab" onclick="showSection(&#39;invoices&#39;)">Invoice Tracker</button>
+  <button class="nav-tab" onclick="showSection(&#39;projected&#39;)">Projected Revenue</button>
+  <button class="nav-tab" onclick="showSection(&#39;clients&#39;)">Client List</button>
+  <button class="nav-tab" onclick="showSection(&#39;analytics&#39;)">Analytics</button>
+  <button class="nav-tab" onclick="showSection(&#39;add-invoice&#39;)">+ New Invoice</button>
 </nav>
 
 <!-- ============================
@@ -638,7 +638,7 @@
     <div class="panel">
       <div class="panel-header">
         <span class="panel-title">Outstanding Invoices</span>
-        <button class="export-btn" onclick="showSection('invoices')">View All →</button>
+        <button class="export-btn" onclick="showSection(&#39;invoices&#39;)">View All →</button>
       </div>
       <div class="panel-body">
         <table class="data-table" id="outstandingTable"></table>
@@ -687,18 +687,18 @@
       <table class="data-table" id="invoiceTable">
         <thead>
           <tr>
-            <th onclick="sortInvoices('invoice')">Invoice #</th>
-            <th onclick="sortInvoices('serviceDate')">Date of Service</th>
-            <th onclick="sortInvoices('client')">Client</th>
-            <th onclick="sortInvoices('industry')">Industry</th>
-            <th onclick="sortInvoices('fee')">Fee</th>
-            <th onclick="sortInvoices('lead')">Lead</th>
-            <th onclick="sortInvoices('invoiceDate')">Invoice Date</th>
-            <th onclick="sortInvoices('estPayAvg')">Est. Pay (Avg)</th>
-            <th onclick="sortInvoices('estPayLast')">Est. Pay (Last)</th>
-            <th onclick="sortInvoices('payDate')">Actual Payment</th>
+            <th onclick="sortInvoices(&#39;invoice&#39;)">Invoice #</th>
+            <th onclick="sortInvoices(&#39;serviceDate&#39;)">Date of Service</th>
+            <th onclick="sortInvoices(&#39;client&#39;)">Client</th>
+            <th onclick="sortInvoices(&#39;industry&#39;)">Industry</th>
+            <th onclick="sortInvoices(&#39;fee&#39;)">Fee</th>
+            <th onclick="sortInvoices(&#39;lead&#39;)">Lead</th>
+            <th onclick="sortInvoices(&#39;invoiceDate&#39;)">Invoice Date</th>
+            <th onclick="sortInvoices(&#39;estPayAvg&#39;)">Est. Pay (Avg)</th>
+            <th onclick="sortInvoices(&#39;estPayLast&#39;)">Est. Pay (Last)</th>
+            <th onclick="sortInvoices(&#39;payDate&#39;)">Actual Payment</th>
             <th>Status</th>
-            <th onclick="sortInvoices('daysToPayment')">Days to Pay</th>
+            <th onclick="sortInvoices(&#39;daysToPayment&#39;)">Days to Pay</th>
           </tr>
         </thead>
         <tbody id="invoiceTableBody"></tbody>
@@ -766,10 +766,10 @@
       <table class="data-table" id="clientTable">
         <thead>
           <tr>
-            <th onclick="sortClients('client')">Client</th>
-            <th onclick="sortClients('industry')">Industry</th>
-            <th onclick="sortClients('revenue')">Total Revenue</th>
-            <th onclick="sortClients('lastDate')">Last Engagement</th>
+            <th onclick="sortClients(&#39;client&#39;)">Client</th>
+            <th onclick="sortClients(&#39;industry&#39;)">Industry</th>
+            <th onclick="sortClients(&#39;revenue&#39;)">Total Revenue</th>
+            <th onclick="sortClients(&#39;lastDate&#39;)">Last Engagement</th>
             <th>Last Category</th>
             <th>Last Fee</th>
             <th>Avg Payment (days)</th>
@@ -816,7 +816,7 @@
 
   <div class="two-col">
     <div class="panel">
-      <div class="panel-header"><span class="panel-title">Monthly Revenue &mdash; Year over Year</span><div style="display:flex;gap:6px;"><button class="export-btn" id="viewToggle3mo" onclick="setMonthlyView('3mo')" style="color:var(--gold);border-color:var(--gold);">Last 3 Months</button><button class="export-btn" id="viewToggle6mo" onclick="setMonthlyView('6mo')">Last 6 Months</button><button class="export-btn" id="viewToggleAll" onclick="setMonthlyView('all')">All Months</button></div></div>
+      <div class="panel-header"><span class="panel-title">Monthly Revenue — Year over Year</span><div style="display:flex;gap:6px;"><button class="export-btn" id="viewToggle3mo" onclick="setMonthlyView(&#39;3mo&#39;)" style="color:var(--gold);border-color:var(--gold);">Last 3 Months</button><button class="export-btn" id="viewToggle6mo" onclick="setMonthlyView(&#39;6mo&#39;)">Last 6 Months</button><button class="export-btn" id="viewToggleAll" onclick="setMonthlyView(&#39;all&#39;)">All Months</button></div></div>
       <div class="panel-body" id="monthlyRevChart"></div>
     </div>
     <div class="panel">
@@ -856,7 +856,7 @@
         </div>
         <div class="form-group">
           <label>Industry</label>
-          <input type="text" id="f_industry" readonly style="background:var(--cream);">
+          <input type="text" id="f_industry" readonly="" style="background:var(--cream);">
         </div>
         <div class="form-group">
           <label>Fee ($)</label>
@@ -876,11 +876,11 @@
         </div>
         <div class="form-group">
           <label>Est. Payment (Avg Term)</label>
-          <input type="text" id="f_estAvg" readonly style="background:var(--cream);">
+          <input type="text" id="f_estAvg" readonly="" style="background:var(--cream);">
         </div>
         <div class="form-group">
           <label>Est. Payment (Last Term)</label>
-          <input type="text" id="f_estLast" readonly style="background:var(--cream);">
+          <input type="text" id="f_estLast" readonly="" style="background:var(--cream);">
         </div>
         <div class="form-group">
           <label>Actual Payment Date (leave blank if unpaid)</label>
@@ -892,7 +892,7 @@
         </div>
       </div>
 
-      <div style="background:var(--gold-pale);border:1px solid var(--gold-light);border-radius:6px;padding:14px;margin-bottom:20px;font-size:13px;" id="clientAutoInfo" style="display:none;"></div>
+      <div style="background:var(--gold-pale);border:1px solid var(--gold-light);border-radius:6px;padding:14px;margin-bottom:20px;font-size:13px;" id="clientAutoInfo"></div>
 
       <div style="display:flex;gap:12px;">
         <button class="btn btn-primary" onclick="addInvoice()">Save Invoice</button>
@@ -910,11 +910,11 @@
     <div class="modal-title">Mark Invoice as Paid</div>
     <div class="form-group" style="margin-bottom:16px;">
       <label>Invoice</label>
-      <input type="text" id="modal_invoice" readonly style="background:var(--cream);">
+      <input type="text" id="modal_invoice" readonly="" style="background:var(--cream);">
     </div>
     <div class="form-group" style="margin-bottom:16px;">
       <label>Client</label>
-      <input type="text" id="modal_client" readonly style="background:var(--cream);">
+      <input type="text" id="modal_client" readonly="" style="background:var(--cream);">
     </div>
     <div class="form-group">
       <label>Payment Date</label>
@@ -1633,6 +1633,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Fetch live data from Google Sheet
   showLoading('Loading live data from Google Sheets…');
   try {
+    console.log('Fetching from:', APPS_SCRIPT_URL);
+    const data = await apiFetch({ action: 'getAll' });
+    console.log('Data received:', data);
     const data = await apiFetch({ action: 'getAll' });
 
     // Overwrite in-memory data with live Sheet data
@@ -2496,5 +2499,6 @@ function renderMonthlyRevChart() {
   document.getElementById('monthlyRevChart').innerHTML = html;
 }
 </script>
-</body>
-</html>
+
+
+</body></html>
