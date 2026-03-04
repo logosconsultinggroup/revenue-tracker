@@ -932,7 +932,7 @@
 // CONFIGURATION — set your Apps Script Web App URL here
 // after deploying Code.gs as a Web App in your Sheet
 // =====================================================
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwmtDjUDhueHN-Ob3G4Z195jp5oRaVWwajAlotuwjB3QJMrdzNqKZHc7d8GePkw4IW-oQ/exec';
+const APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
 
 // =====================================================
 // API LAYER — all reads and writes go through here
@@ -1540,7 +1540,6 @@ const fmtDate = d => {
   if (!d) return '—';
   try { return new Date(d + (d.includes('T') ? '' : 'T12:00:00')).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); } catch(e) { return d; }
 };
-const parseDate = s => s ? new Date(s + 'T12:00:00') : null;
 const today = new Date();
 const todayStr = today.toISOString().split('T')[0];
 
