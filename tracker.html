@@ -1,0 +1,2501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Revenue & Invoice Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --paper: #f5f2ed;
+    --cream: #ede9e0;
+    --gold: #b8943f;
+    --gold-light: #d4b96a;
+    --gold-pale: #f0e6c8;
+    --rust: #c0533a;
+    --slate: #4a5568;
+    --muted: #8a8070;
+    --green: #2d7a4f;
+    --green-pale: #e8f5ee;
+    --red-pale: #fdecea;
+    --border: #d4cfc4;
+    --shadow: rgba(26,26,26,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 2px solid var(--gold);
+  }
+  .header-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    letter-spacing: 0.5px;
+    color: var(--gold-light);
+  }
+  .header-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+  .header-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* NAVIGATION */
+  .nav {
+    background: var(--cream);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    padding: 0 32px;
+    gap: 4px;
+  }
+  .nav-tab {
+    padding: 12px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+  }
+  .nav-tab:hover { color: var(--ink); }
+  .nav-tab.active {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+  }
+
+  /* MAIN LAYOUT */
+  .main { padding: 28px 32px; max-width: 1400px; margin: 0 auto; }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* KPI CARDS */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .kpi-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--gold);
+  }
+  .kpi-card.green::before { background: var(--green); }
+  .kpi-card.rust::before { background: var(--rust); }
+  .kpi-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .kpi-value {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    color: var(--ink);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .kpi-sub {
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* PANEL */
+  .panel {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  .panel-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .panel-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 16px;
+    color: var(--ink);
+  }
+  .panel-body { padding: 20px; }
+
+  /* CASH FLOW CHART */
+  .cashflow-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    height: 140px;
+    padding: 0 4px;
+    position: relative;
+  }
+  .cashflow-month {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .cashflow-bar-wrap {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    position: relative;
+  }
+  .cashflow-bar {
+    width: 100%;
+    border-radius: 3px 3px 0 0;
+    transition: opacity 0.2s;
+    cursor: pointer;
+    position: relative;
+  }
+  .cashflow-bar.projected { background: var(--gold-pale); border: 1.5px dashed var(--gold); }
+  .cashflow-bar.actual { background: var(--gold); }
+  .cashflow-bar.outstanding { background: repeating-linear-gradient(45deg, #d4b96a, #d4b96a 3px, #f0e6c8 3px, #f0e6c8 8px); border: 1.5px solid var(--gold-light); }
+  .cashflow-bar:hover { opacity: 0.8; }
+  .cashflow-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    text-align: center;
+  }
+  .cashflow-amount {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    color: var(--slate);
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  /* TABLES */
+  .data-table { width: 100%; border-collapse: collapse; }
+  .data-table th {
+    background: var(--cream);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--muted);
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+  }
+  .data-table th:hover { color: var(--ink); }
+  .data-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #f0ece4;
+    vertical-align: middle;
+    font-size: 13px;
+  }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: #faf8f4; }
+  .data-table tbody tr { cursor: default; }
+
+  /* BADGES */
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+  }
+  .badge-paid { background: var(--green-pale); color: var(--green); }
+  .badge-pending { background: var(--gold-pale); color: #8a6520; }
+  .badge-overdue { background: var(--red-pale); color: var(--rust); }
+  .badge-industry {
+    background: var(--cream);
+    color: var(--slate);
+    font-size: 10px;
+  }
+
+  /* PAYMENT TIMING */
+  .timing-bar {
+    height: 6px;
+    background: var(--cream);
+    border-radius: 3px;
+    overflow: hidden;
+    width: 80px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .timing-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s;
+  }
+  .timing-fast { background: var(--green); }
+  .timing-avg { background: var(--gold); }
+  .timing-slow { background: var(--rust); }
+
+  /* FORM STYLES */
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group.span-2 { grid-column: span 2; }
+  .form-group.span-3 { grid-column: span 3; }
+  label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--muted);
+  }
+  input, select, textarea {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 9px 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--ink);
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--gold);
+    background: white;
+  }
+
+  /* BUTTONS */
+  .btn {
+    padding: 9px 20px;
+    border-radius: 6px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+  }
+  .btn-primary {
+    background: var(--gold);
+    color: white;
+  }
+  .btn-primary:hover { background: #a07830; }
+  .btn-secondary {
+    background: var(--cream);
+    color: var(--ink);
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover { background: var(--border); }
+  .btn-sm {
+    padding: 5px 12px;
+    font-size: 12px;
+  }
+  .btn-danger { background: var(--rust); color: white; }
+  .btn-danger:hover { background: #a04030; }
+
+  /* SEARCH & FILTER BAR */
+  .filter-bar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .search-input {
+    flex: 1;
+    min-width: 200px;
+    max-width: 300px;
+  }
+  .filter-bar select { width: auto; min-width: 140px; flex-shrink: 0; }
+
+  /* TWO-COL LAYOUT */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+
+  /* ALERT ITEMS */
+  .alert-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .alert-item:last-child { border-bottom: none; }
+  .alert-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+  .dot-red { background: var(--rust); }
+  .dot-gold { background: var(--gold); }
+  .dot-green { background: var(--green); }
+  .alert-text { flex: 1; }
+  .alert-title { font-weight: 500; font-size: 13px; }
+  .alert-sub { font-size: 12px; color: var(--muted); margin-top: 1px; }
+  .alert-amount { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--ink); font-weight: 500; }
+
+  /* CLIENT PROFILE CARDS */
+  .client-profile {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    background: white;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  .client-profile:hover { border-color: var(--gold); }
+  .client-name { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+  .client-meta { font-size: 12px; color: var(--muted); }
+  .client-revenue { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--green); font-weight: 500; }
+
+  /* PAGINATION */
+  .pagination {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    padding-top: 16px;
+  }
+  .page-btn {
+    padding: 5px 10px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    transition: all 0.2s;
+  }
+  .page-btn:hover, .page-btn.active { background: var(--gold); color: white; border-color: var(--gold); }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(26,26,26,0.5);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: white;
+    border-radius: 10px;
+    padding: 28px;
+    max-width: 620px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  }
+  .modal-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+  .modal-footer {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .section-desc {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+
+  /* LEAD STATS */
+  .lead-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .lead-bar:last-child { border-bottom: none; }
+  .lead-name { width: 80px; font-weight: 500; font-size: 13px; }
+  .lead-track {
+    flex: 1;
+    height: 8px;
+    background: var(--cream);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .lead-fill { height: 100%; border-radius: 4px; background: var(--gold); }
+  .lead-amount { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); width: 80px; text-align: right; }
+
+  /* TOOLTIP */
+  .tooltip { position: relative; }
+  .tooltip:hover .tooltip-box { display: block; }
+  .tooltip-box {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--ink);
+    color: var(--paper);
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    white-space: nowrap;
+    z-index: 50;
+  }
+
+  /* EXPORT BTN */
+  .export-btn {
+    font-size: 12px;
+    color: var(--muted);
+    cursor: pointer;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 5px 12px;
+    font-family: 'DM Mono', monospace;
+    transition: all 0.2s;
+  }
+  .export-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* EMPTY STATE */
+  .empty-state {
+    text-align: center;
+    padding: 40px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  /* PROJECTED TABLE HIGHLIGHT */
+  .projected-row td { color: var(--slate); font-style: italic; }
+  .projected-row td:first-child { color: var(--ink); font-style: normal; }
+
+  /* SCROLLABLE TABLE WRAPPER */
+  .table-wrap { overflow-x: auto; }
+
+  /* SUMMARY ROW */
+  .summary-row td {
+    font-weight: 600;
+    background: var(--cream);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    border-top: 2px solid var(--border);
+  }
+
+  /* PAYMENT HEAT */
+  .heat-fast { color: var(--green); font-weight: 500; }
+  .heat-avg { color: #8a6520; }
+  .heat-slow { color: var(--rust); font-weight: 500; }
+
+  .mono { font-family: 'DM Mono', monospace; }
+  .muted { color: var(--muted); }
+  .text-right { text-align: right; }
+  .text-green { color: var(--green); }
+  .text-rust { color: var(--rust); }
+  .text-gold { color: var(--gold); }
+
+  @media (max-width: 900px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .two-col { grid-template-columns: 1fr; }
+    .three-col { grid-template-columns: 1fr; }
+    .form-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header-title">Revenue &amp; Invoice Tracker</div>
+    <div class="header-sub">Internal Business Intelligence</div>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <span id="syncStatus" style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);"></span>
+    <button onclick="refreshData()" style="background:none;border:1px solid var(--gold);color:var(--gold);padding:5px 12px;border-radius:4px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;" title="Reload from Google Sheets">↻ Refresh</button>
+    <div class="header-date" id="headerDate"></div>
+  </div>
+</div>
+
+<!-- Loading overlay -->
+<div id="loadingOverlay" style="display:none;position:fixed;inset:0;background:rgba(26,26,26,0.6);z-index:1000;align-items:center;justify-content:center;">
+  <div style="background:var(--paper);border-radius:10px;padding:32px 48px;text-align:center;border-top:3px solid var(--gold);">
+    <div style="font-family:'DM Serif Display',serif;font-size:20px;margin-bottom:8px;">Syncing</div>
+    <div id="loadingMsg" style="color:var(--muted);font-size:14px;">Loading from Google Sheets…</div>
+    <div style="margin-top:16px;width:40px;height:40px;border:3px solid var(--cream);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;margin:16px auto 0;"></div>
+  </div>
+</div>
+
+<!-- Toast notification -->
+<div id="toast" style="display:none;position:fixed;bottom:24px;right:24px;background:var(--green);color:#fff;padding:12px 20px;border-radius:6px;font-size:13px;z-index:1001;box-shadow:0 4px 16px rgba(0,0,0,0.2);max-width:340px;"></div>
+
+<style>
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+
+<nav class="nav">
+  <button class="nav-tab active" onclick="showSection('dashboard')">Dashboard</button>
+  <button class="nav-tab" onclick="showSection('invoices')">Invoice Tracker</button>
+  <button class="nav-tab" onclick="showSection('projected')">Projected Revenue</button>
+  <button class="nav-tab" onclick="showSection('clients')">Client List</button>
+  <button class="nav-tab" onclick="showSection('analytics')">Analytics</button>
+  <button class="nav-tab" onclick="showSection('add-invoice')">+ New Invoice</button>
+</nav>
+
+<!-- ============================
+     DASHBOARD
+     ============================ -->
+<div class="main">
+<div id="dashboard" class="section active">
+  <div class="kpi-grid" id="kpiGrid"></div>
+
+  <div class="two-col">
+    <!-- Cash Flow -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">Cash Flow — 2026</span>
+        <span class="muted mono" style="font-size:11px;">Expected Payments by Month</span>
+      </div>
+      <div class="panel-body">
+        <div id="cashflowChart" class="cashflow-bars"></div>
+        <div style="display:flex;gap:16px;margin-top:12px;font-size:11px;color:var(--muted);">
+          <span><span style="display:inline-block;width:10px;height:10px;background:var(--gold);border-radius:2px;margin-right:4px;"></span>Collected</span>
+          <span><span style="display:inline-block;width:10px;height:10px;background:repeating-linear-gradient(45deg,#d4b96a,#d4b96a 3px,#f0e6c8 3px,#f0e6c8 8px);border:1.5px solid var(--gold-light);border-radius:2px;margin-right:4px;"></span>Outstanding invoices</span>
+          <span><span style="display:inline-block;width:10px;height:10px;background:var(--gold-pale);border:1.5px dashed var(--gold);border-radius:2px;margin-right:4px;"></span>Projected engagements</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Alerts -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">Attention Required</span>
+      </div>
+      <div class="panel-body" id="alertsPanel"></div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <!-- Outstanding -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">Outstanding Invoices</span>
+        <button class="export-btn" onclick="showSection('invoices')">View All →</button>
+      </div>
+      <div class="panel-body">
+        <table class="data-table" id="outstandingTable"></table>
+      </div>
+    </div>
+
+    <!-- Lead Performance -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">2025–2026 Revenue by Lead</span>
+      </div>
+      <div class="panel-body" id="leadStats"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================
+     INVOICE TRACKER
+     ============================ -->
+<div id="invoices" class="section">
+  <div class="section-title">Invoice Tracker</div>
+  <div class="section-desc">All invoices from 2023–present. Click a column header to sort.</div>
+
+  <div class="filter-bar">
+    <input type="text" class="search-input" placeholder="Search client, invoice #..." id="invoiceSearch" oninput="renderInvoiceTable()">
+    <select id="invoiceStatusFilter" onchange="renderInvoiceTable()">
+      <option value="">All Status</option>
+      <option value="paid">Paid</option>
+      <option value="outstanding">Outstanding</option>
+    </select>
+    <select id="invoiceLeadFilter" onchange="renderInvoiceTable()">
+      <option value="">All Leads</option>
+    </select>
+    <select id="invoiceYearFilter" onchange="renderInvoiceTable()">
+      <option value="">All Years</option>
+      <option value="2026">2026</option>
+      <option value="2025">2025</option>
+      <option value="2024">2024</option>
+      <option value="2023">2023</option>
+    </select>
+    <button class="export-btn" onclick="exportInvoicesCSV()">Export CSV</button>
+  </div>
+
+  <div class="panel">
+    <div class="table-wrap">
+      <table class="data-table" id="invoiceTable">
+        <thead>
+          <tr>
+            <th onclick="sortInvoices('invoice')">Invoice #</th>
+            <th onclick="sortInvoices('serviceDate')">Date of Service</th>
+            <th onclick="sortInvoices('client')">Client</th>
+            <th onclick="sortInvoices('industry')">Industry</th>
+            <th onclick="sortInvoices('fee')">Fee</th>
+            <th onclick="sortInvoices('lead')">Lead</th>
+            <th onclick="sortInvoices('invoiceDate')">Invoice Date</th>
+            <th onclick="sortInvoices('estPayAvg')">Est. Pay (Avg)</th>
+            <th onclick="sortInvoices('estPayLast')">Est. Pay (Last)</th>
+            <th onclick="sortInvoices('payDate')">Actual Payment</th>
+            <th>Status</th>
+            <th onclick="sortInvoices('daysToPayment')">Days to Pay</th>
+          </tr>
+        </thead>
+        <tbody id="invoiceTableBody"></tbody>
+      </table>
+    </div>
+    <div class="pagination" id="invoicePagination"></div>
+  </div>
+</div>
+
+<!-- ============================
+     PROJECTED REVENUE
+     ============================ -->
+<div id="projected" class="section">
+  <div class="section-title">Projected Revenue — 2026</div>
+  <div class="section-desc">Upcoming engagements and estimated payment windows.</div>
+
+  <div class="kpi-grid" id="projectedKPIs"></div>
+
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-title">2026 Projection Pipeline</span>
+      <button class="export-btn" onclick="exportProjectedCSV()">Export CSV</button>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Client</th>
+            <th>Est. Fee</th>
+            <th>Est. Invoice Date</th>
+            <th>Est. Payment (Avg Term)</th>
+            <th>Est. Payment (Last Term)</th>
+            <th>Payment Window</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="projectedTableBody"></tbody>
+        <tfoot><tr class="summary-row" id="projectedSummary"></tr></tfoot>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ============================
+     CLIENT LIST
+     ============================ -->
+<div id="clients" class="section">
+  <div class="section-title">Client List</div>
+  <div class="section-desc">All clients since July 2015. Search by name or industry.</div>
+
+  <div class="filter-bar">
+    <input type="text" class="search-input" placeholder="Search client..." id="clientSearch" oninput="renderClientTable()">
+    <select id="clientIndustryFilter" onchange="renderClientTable()">
+      <option value="">All Industries</option>
+    </select>
+    <select id="clientActivityFilter" onchange="renderClientTable()">
+      <option value="">All Clients</option>
+      <option value="active">Active (last 2 years)</option>
+      <option value="dormant">Dormant (2+ years)</option>
+    </select>
+  </div>
+
+  <div class="panel">
+    <div class="table-wrap">
+      <table class="data-table" id="clientTable">
+        <thead>
+          <tr>
+            <th onclick="sortClients('client')">Client</th>
+            <th onclick="sortClients('industry')">Industry</th>
+            <th onclick="sortClients('revenue')">Total Revenue</th>
+            <th onclick="sortClients('lastDate')">Last Engagement</th>
+            <th>Last Category</th>
+            <th>Last Fee</th>
+            <th>Avg Payment (days)</th>
+            <th>Last Payment (days)</th>
+            <th>Activity</th>
+          </tr>
+        </thead>
+        <tbody id="clientTableBody"></tbody>
+      </table>
+    </div>
+    <div class="pagination" id="clientPagination"></div>
+  </div>
+</div>
+
+<!-- ============================
+     ANALYTICS
+     ============================ -->
+<div id="analytics" class="section">
+  <div class="section-title">Analytics</div>
+  <div class="section-desc">Payment behavior, industry breakdown, and revenue trends.</div>
+
+  <div class="three-col">
+    <!-- Payment Reliability -->
+    <div class="panel">
+      <div class="panel-header"><span class="panel-title">Top Clients by Revenue</span></div>
+      <div class="panel-body" id="topClientsChart"></div>
+    </div>
+
+    <!-- Industry Breakdown -->
+    <div class="panel">
+      <div class="panel-header"><span class="panel-title">Revenue by Industry (2023+)</span></div>
+      <div class="panel-body" id="industryChart"></div>
+    </div>
+
+    <!-- Payment Timing -->
+    <div class="panel">
+      <div class="panel-header"><span class="panel-title">Payment Behavior by Client</span></div>
+      <div class="panel-body" style="font-size:12px;color:var(--muted);margin-bottom:12px;">
+        Faster = more reliable payer vs. their own average
+      </div>
+      <div class="panel-body" id="paymentBehaviorChart"></div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="panel">
+      <div class="panel-header"><span class="panel-title">Monthly Revenue &mdash; Year over Year</span><div style="display:flex;gap:6px;"><button class="export-btn" id="viewToggle3mo" onclick="setMonthlyView('3mo')" style="color:var(--gold);border-color:var(--gold);">Last 3 Months</button><button class="export-btn" id="viewToggle6mo" onclick="setMonthlyView('6mo')">Last 6 Months</button><button class="export-btn" id="viewToggleAll" onclick="setMonthlyView('all')">All Months</button></div></div>
+      <div class="panel-body" id="monthlyRevChart"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><span class="panel-title">Clients Due for Re-Engagement</span></div>
+      <div class="panel-body" id="reengagePanel"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================
+     ADD INVOICE
+     ============================ -->
+<div id="add-invoice" class="section">
+  <div class="section-title">New Invoice</div>
+  <div class="section-desc">Add a new invoice. Payment estimates are auto-calculated from client history.</div>
+
+  <div class="panel">
+    <div class="panel-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Invoice Number</label>
+          <input type="text" id="f_invoice" placeholder="e.g. 4134">
+        </div>
+        <div class="form-group">
+          <label>Date of Service</label>
+          <input type="date" id="f_serviceDate">
+        </div>
+        <div class="form-group">
+          <label>Invoice Date</label>
+          <input type="date" id="f_invoiceDate">
+        </div>
+        <div class="form-group span-2">
+          <label>Client</label>
+          <select id="f_client" onchange="autoFillClient()">
+            <option value="">— Select client —</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Industry</label>
+          <input type="text" id="f_industry" readonly style="background:var(--cream);">
+        </div>
+        <div class="form-group">
+          <label>Fee ($)</label>
+          <input type="number" id="f_fee" placeholder="0.00" step="0.01">
+        </div>
+        <div class="form-group">
+          <label>Lead</label>
+          <select id="f_lead">
+            <option value="Fred">Fred</option>
+            <option value="Katie">Katie</option>
+            <option value="Fred/Katie">Fred/Katie</option>
+            <option value="Evan">Evan</option>
+            <option value="Maida">Maida</option>
+            <option value="Yinnan">Yinnan</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Est. Payment (Avg Term)</label>
+          <input type="text" id="f_estAvg" readonly style="background:var(--cream);">
+        </div>
+        <div class="form-group">
+          <label>Est. Payment (Last Term)</label>
+          <input type="text" id="f_estLast" readonly style="background:var(--cream);">
+        </div>
+        <div class="form-group">
+          <label>Actual Payment Date (leave blank if unpaid)</label>
+          <input type="date" id="f_payDate">
+        </div>
+        <div class="form-group span-2">
+          <label>Notes</label>
+          <input type="text" id="f_notes" placeholder="Optional notes...">
+        </div>
+      </div>
+
+      <div style="background:var(--gold-pale);border:1px solid var(--gold-light);border-radius:6px;padding:14px;margin-bottom:20px;font-size:13px;" id="clientAutoInfo" style="display:none;"></div>
+
+      <div style="display:flex;gap:12px;">
+        <button class="btn btn-primary" onclick="addInvoice()">Save Invoice</button>
+        <button class="btn btn-secondary" onclick="clearInvoiceForm()">Clear</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<!-- MODAL for editing payment date -->
+<div class="modal-overlay" id="payModal">
+  <div class="modal">
+    <div class="modal-title">Mark Invoice as Paid</div>
+    <div class="form-group" style="margin-bottom:16px;">
+      <label>Invoice</label>
+      <input type="text" id="modal_invoice" readonly style="background:var(--cream);">
+    </div>
+    <div class="form-group" style="margin-bottom:16px;">
+      <label>Client</label>
+      <input type="text" id="modal_client" readonly style="background:var(--cream);">
+    </div>
+    <div class="form-group">
+      <label>Payment Date</label>
+      <input type="date" id="modal_paydate">
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="savePayment()">Save Payment</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// =====================================================
+// CONFIGURATION — set your Apps Script Web App URL here
+// after deploying Code.gs as a Web App in your Sheet
+// =====================================================
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwmtDjUDhueHN-Ob3G4Z195jp5oRaVWwajAlotuwjB3QJMrdzNqKZHc7d8GePkw4IW-oQ/exec';
+
+// =====================================================
+// API LAYER — all reads and writes go through here
+// =====================================================
+async function apiFetch(params) {
+  const url = APPS_SCRIPT_URL + '?' + new URLSearchParams(params);
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('Network error: ' + res.status);
+  const json = await res.json();
+  if (json.error) throw new Error(json.error);
+  return json;
+}
+
+async function apiPost(body) {
+  const res = await fetch(APPS_SCRIPT_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain' }, // Apps Script requires text/plain for CORS
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) throw new Error('Network error: ' + res.status);
+  const json = await res.json();
+  if (json.error) throw new Error(json.error);
+  return json;
+}
+
+function showLoading(msg) {
+  document.getElementById('loadingOverlay').style.display = 'flex';
+  document.getElementById('loadingMsg').textContent = msg || 'Loading…';
+}
+function hideLoading() {
+  document.getElementById('loadingOverlay').style.display = 'none';
+}
+function showToast(msg, isError) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = isError ? 'var(--rust)' : 'var(--green)';
+  t.style.display = 'block';
+  setTimeout(() => t.style.display = 'none', 3500);
+}
+
+// =====================================================
+// DATA TRANSFORMATION — Sheet rows → app objects
+// =====================================================
+function transformClients(rows) {
+  return rows.map(r => ({
+    client:       r['Client'] || '',
+    industry:     r['Industry'] || '',
+    revenue:      parseMoney(r['Engagement Revenue (Since July 2015)']),
+    lastDate:     parseDate(r['Last Engagement Date']),
+    lastCategory: r['Last Engagement Category'] || '',
+    lastFee:      r['Last Engagement Fee'] || '',
+    bank:         r['Bank'] || '',
+    app:          parseNum(r['APP']),
+    latest:       parseNum(r['Latest'])
+  })).filter(c => c.client);
+}
+
+function transformInvoices(rows) {
+  return rows.map(r => {
+    const payDate = parseDate(r['Payment Date']);
+    return {
+      invoice:    String(r['Invoice number'] || '').trim(),
+      serviceDate:parseDate(r['Date of Service']),
+      client:     r['Client'] || '',
+      industry:   r['Industry'] || '',
+      fee:        parseMoney(r['Fee']),
+      lead:       r['Lead'] || '',
+      creator:    r['Creator'] || '',
+      invoiceDate:parseDate(r['Invoice Date']),
+      estPayAvg:  parseDate(r['Estimated Payment (APP)']),
+      estPayLast: parseDate(r['Estimated Payment (Last Payment Date)']),
+      payDate:    payDate,
+      identifier: r['Identifier'] || '',
+      paymentTerm:r['Payment Term'] || '',
+      paid:       !!payDate,
+      _rowObj:    r  // keep original for writes
+    };
+  }).filter(i => i.invoice || i.client);
+}
+
+function transformProjected(rows) {
+  return rows.map(r => ({
+    client:     r['Client'] || '',
+    fee:        parseMoney(r['(Estimate) Fee']),
+    estInvoice: parseDate(r['Estimated Invoice Date']),
+    estPayAvg:  parseDate(r['Estimate Payment Date (Average Payment Term)']),
+    estPayLast: parseDate(r['Estimated Payment Date (Based on Last Payment Term)']),
+    _rowObj:    r
+  })).filter(p => p.client);
+}
+
+// =====================================================
+// DATA — parsed from your CSVs (fallback/seed data)
+// =====================================================
+
+const clientData = [
+{"client":"Better Holdco, Inc.","industry":"Financial Services","revenue":null,"lastDate":null,"lastCategory":"Coaching","lastFee":null,"bank":"TD","app":null,"latest":null},
+{"client":"BofA/ML Wealth Management","industry":"Financial Services","revenue":null,"lastDate":null,"lastCategory":"Coaching","lastFee":null,"bank":"Citi","app":null,"latest":null},
+{"client":"Dechert LLP","industry":"Law","revenue":null,"lastDate":null,"lastCategory":"Consulting","lastFee":null,"bank":"","app":null,"latest":null},
+{"client":"Executive Communications Council","industry":"Public Relations","revenue":null,"lastDate":null,"lastCategory":"","lastFee":null,"bank":"TD","app":null,"latest":null},
+{"client":"Hartford Life Insurance Companies","industry":"Insurance","revenue":null,"lastDate":null,"lastCategory":"Coaching","lastFee":null,"bank":"Citi","app":null,"latest":null},
+{"client":"ChildFund Alliance","industry":"Non-profit","revenue":7000,"lastDate":"2015-07-25","lastCategory":"Consulting","lastFee":null,"bank":"Citi","app":35,"latest":35},
+{"client":"AVNET, Inc.","industry":"Electronics","revenue":8975,"lastDate":"2015-09-15","lastCategory":"Consulting","lastFee":null,"bank":"Citi","app":52,"latest":52},
+{"client":"Chosun Issue Forum 2015","industry":"Professional Services","revenue":10000,"lastDate":"2015-09-21","lastCategory":"Educational Service","lastFee":null,"bank":"Citi","app":13,"latest":13},
+{"client":"Credit Suisse","industry":"Financial Services","revenue":31819.89,"lastDate":"2015-11-16","lastCategory":"Coaching","lastFee":null,"bank":"Citi","app":44,"latest":29},
+{"client":"Merck & Co. Inc.","industry":"Pharmaceuticals","revenue":15140.82,"lastDate":"2016-02-01","lastCategory":"Coaching","lastFee":null,"bank":"Citi","app":4,"latest":7},
+{"client":"Natixis Global Asset Management","industry":"Financial Services","revenue":39633.57,"lastDate":"2016-02-05","lastCategory":"Coaching","lastFee":null,"bank":"Citi","app":56,"latest":33},
+{"client":"Assurant, Inc.","industry":"Insurance","revenue":77094,"lastDate":"2016-03-07","lastCategory":"Coaching","lastFee":null,"bank":"Citi","app":37,"latest":32},
+{"client":"BlackRock","industry":"Financial Services","revenue":72762.96,"lastDate":"2017-03-28","lastCategory":"Coaching","lastFee":null,"bank":"Citi","app":42,"latest":177},
+{"client":"National Dance Institute","industry":"Non-profit","revenue":12000,"lastDate":"2017-04-07","lastCategory":"Consulting","lastFee":null,"bank":"Citi","app":7,"latest":7},
+{"client":"Young Life","industry":"Non-profit","revenue":5000,"lastDate":"2017-04-07","lastCategory":"Consulting","lastFee":null,"bank":"Citi","app":20,"latest":20},
+{"client":"Charles River Laboratories International, Inc.","industry":"Pharmaceuticals","revenue":25312.5,"lastDate":"2017-09-15","lastCategory":"Coaching","lastFee":null,"bank":"Citi","app":5,"latest":3},
+{"client":"George's Bay Limited","industry":"Financial Services","revenue":53137.5,"lastDate":"2018-05-03","lastCategory":"Coaching","lastFee":null,"bank":"Citi","app":19,"latest":27},
+{"client":"New York Stock Exchange","industry":"Financial Services","revenue":36367.94,"lastDate":"2018-06-25","lastCategory":"Coaching","lastFee":null,"bank":"Citi","app":56,"latest":29},
+{"client":"Stericycle","industry":"Healthcare","revenue":285827.59,"lastDate":"2018-08-27","lastCategory":"Coaching","lastFee":null,"bank":"Citi","app":32,"latest":84},
+{"client":"Sabra Dipping Company LLC","industry":"Food","revenue":24128.37,"lastDate":"2018-11-30","lastCategory":"Coaching","lastFee":null,"bank":"Citi","app":28,"latest":16},
+{"client":"HSBC USA","industry":"Financial Services","revenue":51600,"lastDate":"2019-04-01","lastCategory":"Coaching","lastFee":null,"bank":"TD","app":35,"latest":2},
+{"client":"The Hartford","industry":"Financial Services","revenue":82206.5,"lastDate":"2019-05-07","lastCategory":"Coaching","lastFee":null,"bank":"Citi","app":53,"latest":33},
+{"client":"School of the New York Times","industry":"Education","revenue":62500,"lastDate":"2019-06-11","lastCategory":"Consulting","lastFee":null,"bank":"Citi","app":23,"latest":20},
+{"client":"GoldenTree Asset Management, LP","industry":"Financial Services","revenue":538836.55,"lastDate":"2020-03-06","lastCategory":"Coaching","lastFee":null,"bank":"Citi","app":66,"latest":10},
+{"client":"Religion News Service","industry":"Media","revenue":35325,"lastDate":"2020-03-30","lastCategory":"Consulting","lastFee":null,"bank":"TD","app":35,"latest":32},
+{"client":"H&M","industry":"Retail","revenue":190895.26,"lastDate":"2020-09-30","lastCategory":"Consulting","lastFee":null,"bank":"Citi","app":37,"latest":30},
+{"client":"Saint Mary's College of California","industry":"Higher Education","revenue":79451.56,"lastDate":"2020-11-12","lastCategory":"Consulting","lastFee":null,"bank":"Citi","app":38,"latest":26},
+{"client":"AbbVie","industry":"Life Sciences","revenue":2143862.16,"lastDate":"2019-12-27","lastCategory":"Coaching","lastFee":null,"bank":"TD","app":44,"latest":20},
+{"client":"GoldenTree Asset Management, LP","industry":"Financial Services","revenue":538836.55,"lastDate":"2020-03-06","lastCategory":"Coaching","lastFee":null,"bank":"Citi","app":66,"latest":10},
+{"client":"OshKosh Corporation","industry":"Manufacturing","revenue":180293.17,"lastDate":"2022-04-25","lastCategory":"Coaching","lastFee":null,"bank":"Citi","app":40,"latest":44},
+{"client":"BofA/ML","industry":"Financial Services","revenue":603584.77,"lastDate":"2022-06-24","lastCategory":"Coaching","lastFee":null,"bank":"Citi","app":25,"latest":6},
+{"client":"StanleyBlack&Decker","industry":"Manufacturing","revenue":433870.36,"lastDate":"2023-10-18","lastCategory":"Educational Service","lastFee":null,"bank":"Citi","app":54,"latest":35},
+{"client":"Icahn School of Medicine at Mount Sinai","industry":"Higher Education","revenue":95000,"lastDate":"2023-11-17","lastCategory":"Educational Service","lastFee":null,"bank":"Citi","app":50,"latest":41},
+{"client":"Neurocrine Biosciences","industry":"Healthcare","revenue":65945.13,"lastDate":"2023-12-05","lastCategory":"Coaching","lastFee":null,"bank":"Citi","app":35,"latest":44},
+{"client":"Dal-Tile Corporation","industry":"Manufacturing","revenue":57023.09,"lastDate":"2024-02-21","lastCategory":"Educational Service","lastFee":null,"bank":"Citi","app":179,"latest":48},
+{"client":"Astellas","industry":"Pharmaceuticals","revenue":111615.57,"lastDate":"2024-03-04","lastCategory":"Coaching","lastFee":null,"bank":"Citi","app":38,"latest":53},
+{"client":"Bank of America","industry":"Financial Services","revenue":102245.5,"lastDate":"2026-02-10","lastCategory":"Consulting","lastFee":null,"bank":"Citi","app":14,"latest":3},
+{"client":"Federal Laboratory Consortium","industry":"Pharmaceuticals","revenue":11872.75,"lastDate":"2024-04-15","lastCategory":"","lastFee":null,"bank":"TD","app":30,"latest":19},
+{"client":"Janssen Immunology","industry":"Healthcare","revenue":25575.45,"lastDate":"2024-04-22","lastCategory":"Coaching","lastFee":null,"bank":"","app":24,"latest":7},
+{"client":"McCormick and Company","industry":"Consumer Products","revenue":15000,"lastDate":"2024-05-03","lastCategory":"","lastFee":null,"bank":"TD","app":24,"latest":11},
+{"client":"The Defense Information School","industry":"Education","revenue":23221.2,"lastDate":"2024-05-16","lastCategory":"Educational Service","lastFee":null,"bank":"Citi","app":29,"latest":18},
+{"client":"Commercial Metals Company","industry":"Manufacturing","revenue":12000,"lastDate":"2024-07-03","lastCategory":"","lastFee":null,"bank":"TD","app":1,"latest":2},
+{"client":"Peritus PR","industry":"Communications","revenue":3741.08,"lastDate":"2024-07-23","lastCategory":"","lastFee":null,"bank":"TD","app":2,"latest":1},
+{"client":"WURD","industry":"Media","revenue":8650,"lastDate":"2025-09-15","lastCategory":"","lastFee":null,"bank":"TD","app":25,"latest":37},
+{"client":"ASHBA","industry":"NGO","revenue":1000,"lastDate":"2024-08-02","lastCategory":"","lastFee":null,"bank":"TD","app":23,"latest":23},
+{"client":"Cigna","industry":"Insurance","revenue":322538.22,"lastDate":"2024-08-19","lastCategory":"","lastFee":null,"bank":"TD","app":42,"latest":52},
+{"client":"Mission Technologies","industry":"Manufacturing","revenue":14162.32,"lastDate":"2024-08-19","lastCategory":"Consulting","lastFee":null,"bank":"TD","app":28,"latest":2},
+{"client":"Procter & Gamble","industry":"Consumer Goods","revenue":14250,"lastDate":"2024-08-20","lastCategory":"","lastFee":null,"bank":"TD","app":44,"latest":44},
+{"client":"Babcock Laboratories","industry":"Education","revenue":6750,"lastDate":"2024-09-04","lastCategory":"","lastFee":null,"bank":"TD","app":58,"latest":54},
+{"client":"Pernod Ricard USA","industry":"Consumer Products","revenue":481320.79,"lastDate":"2024-09-13","lastCategory":"Coaching","lastFee":null,"bank":"TD","app":47,"latest":34},
+{"client":"NDIA","industry":"Defense","revenue":1065.27,"lastDate":"2024-10-01","lastCategory":"","lastFee":null,"bank":"TD","app":20,"latest":20},
+{"client":"NowThis Media Group, LLC","industry":"Media","revenue":42537.5,"lastDate":"2024-10-01","lastCategory":"","lastFee":null,"bank":"TD","app":23,"latest":27},
+{"client":"McDonald's","industry":"Food Sector","revenue":37543.45,"lastDate":"2024-10-15","lastCategory":"Consulting","lastFee":null,"bank":"TD","app":22,"latest":21},
+{"client":"Mohawk Industries, Inc.","industry":"Manufacturing","revenue":358982.46,"lastDate":"2026-01-06","lastCategory":"Educational Service","lastFee":null,"bank":"Citi","app":27,"latest":18},
+{"client":"United Way","industry":"NGO","revenue":7596.25,"lastDate":"2025-01-03","lastCategory":"","lastFee":null,"bank":"TD","app":36,"latest":56},
+{"client":"HCA Healthcare","industry":"Healthcare","revenue":122610.61,"lastDate":"2025-01-10","lastCategory":"Educational Service","lastFee":null,"bank":"Citi","app":36,"latest":39},
+{"client":"Country Financial","industry":"Insurance","revenue":7500,"lastDate":"2025-01-21","lastCategory":"Coaching","lastFee":null,"bank":"TD","app":55,"latest":55},
+{"client":"Crewcial","industry":"Financial Services","revenue":509843.75,"lastDate":"2025-01-27","lastCategory":"Consulting","lastFee":null,"bank":"Citi","app":8,"latest":17},
+{"client":"Newport News Shipbuilding","industry":"Manufacturing","revenue":329563.83,"lastDate":"2025-12-01","lastCategory":"Coaching","lastFee":null,"bank":"Citi","app":19,"latest":59},
+{"client":"AUTM","industry":"Manufacturing","revenue":14005.39,"lastDate":"2025-03-02","lastCategory":"","lastFee":null,"bank":"TD","app":10,"latest":5},
+{"client":"UWCW","industry":"NGO","revenue":24853.75,"lastDate":"2025-03-03","lastCategory":"Coaching","lastFee":null,"bank":"TD","app":48,"latest":70},
+{"client":"Professional Speechwriters Association","industry":"Public Relations","revenue":26486.15,"lastDate":"2025-10-28","lastCategory":"Educational Service","lastFee":null,"bank":"Citi","app":15,"latest":26},
+{"client":"Rockefeller Capital Management","industry":"Financial Services","revenue":88781.25,"lastDate":"2025-10-07","lastCategory":"Coaching","lastFee":null,"bank":"TD","app":13,"latest":9},
+{"client":"Brands2Life","industry":"Public Relations","revenue":2000,"lastDate":"2025-03-26","lastCategory":"","lastFee":null,"bank":"TD","app":26,"latest":26},
+{"client":"Wharton School of Business","industry":"Higher Education","revenue":37602.29,"lastDate":"2025-03-31","lastCategory":"Educational Service","lastFee":null,"bank":"Citi","app":59,"latest":67},
+{"client":"Biogen","industry":"Pharmaceutical","revenue":38459.77,"lastDate":"2025-04-24","lastCategory":"Coaching","lastFee":null,"bank":"TD","app":61,"latest":61},
+{"client":"Eli Lilly & Co.","industry":"Pharmaceuticals","revenue":1917190.38,"lastDate":"2025-12-11","lastCategory":"Educational Service","lastFee":null,"bank":"Citi","app":21,"latest":4},
+{"client":"Johnson&Johnson","industry":"Pharmaceuticals","revenue":172772.83,"lastDate":"2025-12-04","lastCategory":"Coaching","lastFee":null,"bank":"Citi","app":27,"latest":12},
+{"client":"Humana Inc.","industry":"Insurance","revenue":145016.15,"lastDate":"2026-01-21","lastCategory":"Consulting","lastFee":null,"bank":"Citi","app":24,"latest":18},
+{"client":"Point72","industry":"Financial Services","revenue":126689.17,"lastDate":"2026-02-11","lastCategory":"Coaching","lastFee":null,"bank":"TD","app":33,"latest":11},
+{"client":"PRSA","industry":"Public Relations","revenue":83731.85,"lastDate":"2025-12-15","lastCategory":"Educational Service","lastFee":null,"bank":"TD","app":20,"latest":4},
+{"client":"California Institute for the Arts","industry":"Higher Education","revenue":26573.24,"lastDate":"2025-06-11","lastCategory":"Consulting","lastFee":null,"bank":"Citi","app":62,"latest":34},
+{"client":"Ghidotti","industry":"Communications","revenue":10110.57,"lastDate":"2025-06-13","lastCategory":"","lastFee":null,"bank":"TD","app":19,"latest":19},
+{"client":"Depository Trust & Clearing Corporation","industry":"Financial Services","revenue":208748.44,"lastDate":"2026-02-05","lastCategory":"Coaching","lastFee":null,"bank":"TD","app":39,"latest":9},
+{"client":"Plaid","industry":"Financial Services","revenue":7500,"lastDate":"2025-10-14","lastCategory":"","lastFee":null,"bank":"TD","app":19,"latest":23},
+{"client":"Youth Villages","industry":"NGO","revenue":367371.33,"lastDate":"2026-02-02","lastCategory":"","lastFee":null,"bank":"TD","app":11,"latest":10},
+{"client":"Campus Text","industry":"Publishing","revenue":7880.98,"lastDate":"2025-07-11","lastCategory":"Educational Service","lastFee":null,"bank":"Citi","app":27,"latest":27},
+{"client":"Real Chemistry","industry":"Healthcare","revenue":4500,"lastDate":"2025-07-11","lastCategory":"","lastFee":null,"bank":"BofA","app":109,"latest":109},
+{"client":"Stanley Center for Peace and Security","industry":"Non-profit","revenue":68000,"lastDate":"2025-07-14","lastCategory":"Consulting","lastFee":null,"bank":"TD","app":5,"latest":4},
+{"client":"NeighborWorks America","industry":"NGO","revenue":1800,"lastDate":"2025-08-26","lastCategory":"Consulting","lastFee":null,"bank":"TD","app":null,"latest":null},
+{"client":"Invesco","industry":"Financial Services","revenue":6000,"lastDate":"2025-10-08","lastCategory":"Consulting","lastFee":null,"bank":"TD","app":69,"latest":69},
+{"client":"USAA","industry":"Financial Services","revenue":38177.86,"lastDate":"2025-11-05","lastCategory":"Consulting","lastFee":null,"bank":"TD","app":30,"latest":30},
+{"client":"PTC Therapeutics","industry":"Pharmaceuticals","revenue":6284.34,"lastDate":"2026-02-05","lastCategory":"Consulting","lastFee":null,"bank":"TD","app":30,"latest":30},
+{"client":"Harsith Chandrakumar","industry":"Leadership","revenue":200,"lastDate":"2026-02-06","lastCategory":"Consulting","lastFee":null,"bank":"TD","app":1,"latest":1},
+{"client":"Goldman Sachs","industry":"Financial Services","revenue":411886.41,"lastDate":"2026-02-09","lastCategory":"Coaching","lastFee":null,"bank":"Citi","app":39,"latest":1},
+{"client":"Prince Street Pizza","industry":"Restaurant","revenue":73188.75,"lastDate":"2023-06-05","lastCategory":"Coaching","lastFee":null,"bank":"Citi","app":23,"latest":22},
+{"client":"Exact Sciences","industry":"Healthcare","revenue":37048.27,"lastDate":"2023-10-11","lastCategory":"","lastFee":null,"bank":"TD","app":14,"latest":14},
+{"client":"Novo Nordisk","industry":"Pharmaceuticals","revenue":67264.53,"lastDate":"2023-09-05","lastCategory":"Coaching","lastFee":null,"bank":"Citi","app":12,"latest":8},
+{"client":"Janssen R&D, L.L.C.","industry":"Healthcare","revenue":27518.51,"lastDate":"2025-12-19","lastCategory":"Coaching","lastFee":null,"bank":"Citi","app":41,"latest":4},
+{"client":"Federal Research Consortium","industry":"Government","revenue":6000,"lastDate":"2023-01-01","lastCategory":"","lastFee":null,"bank":"","app":null,"latest":null},
+{"client":"Brookfield","industry":"Financial Services","revenue":12000,"lastDate":"2023-01-01","lastCategory":"","lastFee":null,"bank":"","app":null,"latest":null}
+];
+
+const projectedData = [
+  {client:"Rockefeller Capital Management",fee:6000,invoiceDate:"2026-02-17",estPayAvg:"2026-03-01",estPayLast:"2026-02-26"},
+  {client:"Point72",fee:1500,invoiceDate:"2026-02-18",estPayAvg:"2026-03-23",estPayLast:"2026-03-01"},
+  {client:"Point72",fee:1500,invoiceDate:"2026-02-19",estPayAvg:"2026-03-24",estPayLast:"2026-03-02"},
+  {client:"Depository Trust & Clearing Corporation",fee:24000,invoiceDate:"2026-02-25",estPayAvg:"2026-04-04",estPayLast:"2026-03-06"},
+  {client:"Brookfield",fee:12000,invoiceDate:"2026-02-26",estPayAvg:null,estPayLast:null},
+  {client:"Mohawk Industries, Inc.",fee:12000,invoiceDate:"2026-02-28",estPayAvg:"2026-03-27",estPayLast:"2026-03-18"},
+  {client:"McCormick and Company",fee:20000,invoiceDate:"2026-02-28",estPayAvg:"2026-03-23",estPayLast:"2026-03-11"},
+  {client:"Eli Lilly & Co.",fee:12000,invoiceDate:"2026-03-02",estPayAvg:"2026-03-22",estPayLast:"2026-03-06"},
+  {client:"Humana Inc.",fee:12000,invoiceDate:"2026-03-03",estPayAvg:"2026-03-27",estPayLast:"2026-03-21"},
+  {client:"Goldman Sachs",fee:1500,invoiceDate:"2026-03-06",estPayAvg:"2026-04-13",estPayLast:"2026-03-07"},
+  {client:"Bank of America",fee:12000,invoiceDate:"2026-03-06",estPayAvg:"2026-03-20",estPayLast:"2026-03-09"},
+  {client:"Eli Lilly & Co.",fee:12000,invoiceDate:"2026-03-16",estPayAvg:"2026-04-05",estPayLast:"2026-03-20"},
+  {client:"Bank of America",fee:2250,invoiceDate:"2026-03-23",estPayAvg:"2026-04-06",estPayLast:"2026-03-26"},
+  {client:"Wharton School of Business",fee:3000,invoiceDate:"2026-03-27",estPayAvg:"2026-05-24",estPayLast:"2026-06-02"},
+  {client:"Goldman Sachs",fee:1500,invoiceDate:"2026-04-10",estPayAvg:"2026-05-18",estPayLast:"2026-04-11"},
+  {client:"Bank of America",fee:6000,invoiceDate:"2026-04-14",estPayAvg:"2026-04-28",estPayLast:"2026-04-17"},
+  {client:"Goldman Sachs",fee:1500,invoiceDate:"2026-04-17",estPayAvg:"2026-05-25",estPayLast:"2026-04-18"},
+  {client:"Goldman Sachs",fee:1500,invoiceDate:"2026-05-01",estPayAvg:"2026-06-08",estPayLast:"2026-05-02"},
+  {client:"Federal Research Consortium",fee:6000,invoiceDate:"2026-05-12",estPayAvg:null,estPayLast:null},
+  {client:"Depository Trust & Clearing Corporation",fee:24000,invoiceDate:"2026-05-19",estPayAvg:"2026-06-26",estPayLast:"2026-05-28"},
+  {client:"Depository Trust & Clearing Corporation",fee:24000,invoiceDate:"2026-05-19",estPayAvg:"2026-06-26",estPayLast:"2026-05-28"},
+  {client:"Depository Trust & Clearing Corporation",fee:24000,invoiceDate:"2026-08-06",estPayAvg:"2026-09-13",estPayLast:"2026-08-15"},
+  {client:"Depository Trust & Clearing Corporation",fee:24000,invoiceDate:"2026-08-06",estPayAvg:"2026-09-13",estPayLast:"2026-08-15"},
+  {client:"Mohawk Industries, Inc.",fee:12000,invoiceDate:"2026-08-20",estPayAvg:"2026-09-16",estPayLast:"2026-09-07"},
+  {client:"Professional Speechwriters Association",fee:15000,invoiceDate:"2026-12-04",estPayAvg:"2026-12-18",estPayLast:"2026-12-30"},
+  {client:"Pernod Ricard USA",fee:null,invoiceDate:null,estPayAvg:null,estPayLast:null},
+  {client:"Biogen",fee:38500,invoiceDate:null,estPayAvg:null,estPayLast:null}
+];
+
+// Invoice data — parsed and cleaned
+const rawInvoiceData = [
+{invoice:"4132",serviceDate:"2026-02-11",client:"Point72",industry:"Financial Services",fee:10500,lead:"Fred",invoiceDate:"2026-02-11",estPayAvg:"2026-03-16",estPayLast:"2026-02-22",payDate:null,paid:false,days:null},
+{invoice:"4133",serviceDate:"2026-02-10",client:"Bank of America",industry:"Financial Services",fee:6000,lead:"Fred",invoiceDate:"2026-02-10",estPayAvg:"2026-02-24",estPayLast:"2026-02-13",payDate:null,paid:false,days:null},
+{invoice:"4129",serviceDate:"2026-02-05",client:"PTC Therapeutics",industry:"Pharmaceuticals",fee:6284.34,lead:"Katie",invoiceDate:"2026-02-05",estPayAvg:"2026-03-07",estPayLast:"2026-03-07",payDate:null,paid:false,days:null},
+{invoice:"4128",serviceDate:"2026-02-05",client:"Depository Trust & Clearing Corporation",industry:"Financial Services",fee:12000,lead:"Fred",invoiceDate:"2026-02-05",estPayAvg:"2026-03-15",estPayLast:"2026-02-14",payDate:null,paid:false,days:null},
+{invoice:"4126",serviceDate:"2026-02-03",client:"Bank of America",industry:"Financial Services",fee:1500,lead:"Fred",invoiceDate:"2026-02-03",estPayAvg:"2026-02-17",estPayLast:"2026-02-06",payDate:null,paid:false,days:null},
+{invoice:"4125",serviceDate:"2026-02-02",client:"Youth Villages",industry:"NGO",fee:3333.33,lead:"Katie",invoiceDate:"2026-02-02",estPayAvg:"2026-02-13",estPayLast:"2026-02-12",payDate:null,paid:false,days:null},
+{invoice:"4124",serviceDate:"2026-01-22",client:"Point72",industry:"Financial Services",fee:2250,lead:"Fred",invoiceDate:"2026-01-23",estPayAvg:"2026-02-25",estPayLast:"2026-02-03",payDate:null,paid:false,days:null},
+{invoice:"4122",serviceDate:"2026-01-13",client:"Point72",industry:"Financial Services",fee:12000,lead:"Fred",invoiceDate:"2026-01-13",estPayAvg:"2026-02-15",estPayLast:"2026-01-24",payDate:null,paid:false,days:null},
+{invoice:"4118",serviceDate:"2026-01-06",client:"Mohawk Industries, Inc.",industry:"Manufacturing",fee:1500,lead:"Katie",invoiceDate:"2026-01-06",estPayAvg:"2026-02-02",estPayLast:"2026-01-24",payDate:null,paid:false,days:null},
+{invoice:"4023A",serviceDate:"2025-02-07",client:"Johnson&Johnson",industry:"Pharmaceuticals",fee:3375,lead:"Fred",invoiceDate:"2025-02-07",estPayAvg:"2025-03-06",estPayLast:"2025-02-19",payDate:"2025-03-27",paid:true,days:48},
+{invoice:"4131",serviceDate:"2026-02-09",client:"Goldman Sachs",industry:"Financial Services",fee:1500,lead:"Fred",invoiceDate:"2026-02-09",estPayAvg:"2026-03-19",estPayLast:"2026-02-10",payDate:"2026-02-09",paid:true,days:0},
+{invoice:"4130",serviceDate:"2026-02-06",client:"Harsith Chandrakumar",industry:"Leadership",fee:200,lead:"Fred",invoiceDate:"2026-02-06",estPayAvg:"2026-02-07",estPayLast:"2026-02-07",payDate:"2026-02-06",paid:true,days:0},
+{invoice:"4127",serviceDate:"2026-02-03",client:"Bank of America",industry:"Financial Services",fee:6000,lead:"Fred",invoiceDate:"2026-02-03",estPayAvg:"2026-02-17",estPayLast:"2026-02-06",payDate:"2026-02-06",paid:true,days:3},
+{invoice:"4123",serviceDate:"2026-01-21",client:"Humana Inc.",industry:"Insurance",fee:13050.52,lead:"Fred",invoiceDate:"2026-01-22",estPayAvg:"2026-02-15",estPayLast:"2026-02-09",payDate:"2026-02-09",paid:true,days:18},
+{invoice:"4121",serviceDate:"2026-01-09",client:"Goldman Sachs",industry:"Financial Services",fee:3000,lead:"Fred",invoiceDate:"2026-01-12",estPayAvg:"2026-02-19",estPayLast:"2026-01-13",payDate:"2026-01-12",paid:true,days:0},
+{invoice:"4120",serviceDate:"2026-01-09",client:"Bank of America",industry:"Financial Services",fee:2250,lead:"Fred",invoiceDate:"2026-01-12",estPayAvg:"2026-01-26",estPayLast:"2026-01-15",payDate:"2026-01-20",paid:true,days:8},
+{invoice:"4119",serviceDate:"2026-01-08",client:"Bank of America",industry:"Financial Services",fee:6000,lead:"Fred",invoiceDate:"2026-01-08",estPayAvg:"2026-01-22",estPayLast:"2026-01-11",payDate:"2026-01-12",paid:true,days:4},
+{invoice:"4117",serviceDate:"2026-01-01",client:"Youth Villages",industry:"NGO",fee:3333.33,lead:"Katie",invoiceDate:"2026-01-05",estPayAvg:"2026-01-16",estPayLast:"2026-01-15",payDate:"2026-01-15",paid:true,days:10},
+{invoice:"4116",serviceDate:"2025-12-19",client:"Bank of America",industry:"Financial Services",fee:11250,lead:"Fred",invoiceDate:"2025-12-19",estPayAvg:"2026-01-02",estPayLast:"2025-12-22",payDate:"2026-02-03",paid:true,days:46},
+{invoice:"4115",serviceDate:"2025-12-19",client:"Janssen R&D, L.L.C.",industry:"Healthcare",fee:3750,lead:"Fred",invoiceDate:"2025-12-19",estPayAvg:"2026-01-29",estPayLast:"2025-12-23",payDate:"2025-12-23",paid:true,days:4},
+{invoice:"4114",serviceDate:"2025-12-19",client:"Point72",industry:"Financial Services",fee:12000,lead:"Fred",invoiceDate:"2025-12-19",estPayAvg:"2026-01-21",estPayLast:"2025-12-30",payDate:"2025-12-30",paid:true,days:11},
+{invoice:"4113",serviceDate:"2025-12-19",client:"Mohawk Industries, Inc.",industry:"Manufacturing",fee:3000,lead:"Katie",invoiceDate:"2025-12-19",estPayAvg:"2026-01-15",estPayLast:"2026-01-06",payDate:"2026-01-06",paid:true,days:18},
+{invoice:"4112",serviceDate:"2025-12-17",client:"Janssen R&D, L.L.C.",industry:"Healthcare",fee:4500,lead:"Fred",invoiceDate:"2025-12-17",estPayAvg:"2026-01-27",estPayLast:"2025-12-21",payDate:"2025-12-23",paid:true,days:6},
+{invoice:"4111",serviceDate:"2025-12-15",client:"PRSA",industry:"Public Relations",fee:4500,lead:"Fred/Katie",invoiceDate:"2025-12-15",estPayAvg:"2026-01-03",estPayLast:"2025-12-19",payDate:"2025-12-19",paid:true,days:4},
+{invoice:"4110",serviceDate:"2025-12-11",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:12838.46,lead:"Fred",invoiceDate:"2025-12-11",estPayAvg:"2025-12-31",estPayLast:"2025-12-15",payDate:"2025-12-15",paid:true,days:4},
+{invoice:"4109",serviceDate:"2025-12-10",client:"Humana Inc.",industry:"Insurance",fee:342.93,lead:"Fred",invoiceDate:"2025-12-10",estPayAvg:"2026-01-03",estPayLast:"2025-12-28",payDate:"2025-12-26",paid:true,days:16},
+{invoice:"4108",serviceDate:"2025-12-04",client:"Johnson&Johnson",industry:"Pharmaceuticals",fee:3000,lead:"Fred",invoiceDate:"2025-12-04",estPayAvg:"2025-12-31",estPayLast:"2025-12-16",payDate:"2025-12-10",paid:true,days:null},
+{invoice:"4107",serviceDate:"2025-12-01",client:"Newport News Shipbuilding",industry:"Manufacturing",fee:66000,lead:"Fred",invoiceDate:"2025-12-01",estPayAvg:"2025-12-20",estPayLast:"2026-01-29",payDate:"2026-01-29",paid:true,days:59},
+{invoice:"4106",serviceDate:"2025-12-01",client:"Bank of America",industry:"Financial Services",fee:6000,lead:"Fred",invoiceDate:"2025-12-01",estPayAvg:"2025-12-15",estPayLast:"2025-12-04",payDate:"2025-12-04",paid:true,days:3},
+{invoice:"4105",serviceDate:"2025-12-01",client:"Humana Inc.",industry:"Insurance",fee:12486.19,lead:"Fred",invoiceDate:"2025-12-01",estPayAvg:"2025-12-25",estPayLast:"2025-12-19",payDate:"2025-12-16",paid:true,days:15},
+{invoice:"4104",serviceDate:"2025-12-01",client:"Youth Villages",industry:"NGO",fee:3333.33,lead:"Katie",invoiceDate:"2025-12-01",estPayAvg:"2025-12-12",estPayLast:"2025-12-11",payDate:"2025-12-18",paid:true,days:17},
+{invoice:"4103",serviceDate:"2025-11-24",client:"Mohawk Industries, Inc.",industry:"Manufacturing",fee:3000,lead:"Katie",invoiceDate:"2025-11-24",estPayAvg:"2025-12-21",estPayLast:"2025-12-12",payDate:"2025-12-23",paid:true,days:29},
+{invoice:"4102",serviceDate:"2025-11-20",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:13230,lead:"Fred",invoiceDate:"2025-11-20",estPayAvg:"2025-12-10",estPayLast:"2025-11-24",payDate:"2025-11-25",paid:true,days:5},
+{invoice:"4101",serviceDate:"2025-11-21",client:"McCormick and Company",industry:"Consumer Products",fee:12934.52,lead:"Katie",invoiceDate:"2025-12-01",estPayAvg:"2025-12-24",estPayLast:"2025-12-12",payDate:"2025-12-12",paid:true,days:11},
+{invoice:"4100",serviceDate:"2025-11-17",client:"Bank of America",industry:"Financial Services",fee:3000,lead:"Fred",invoiceDate:"2025-11-17",estPayAvg:"2025-12-01",estPayLast:"2025-11-20",payDate:"2025-12-17",paid:true,days:30},
+{invoice:"4099",serviceDate:"2025-10-28",client:"Professional Speechwriters Association",industry:"Public Relations",fee:824.91,lead:"Katie",invoiceDate:"2025-11-17",estPayAvg:"2025-12-01",estPayLast:"2025-12-13",payDate:"2025-12-13",paid:true,days:26},
+{invoice:"4098",serviceDate:"2025-11-15",client:"Mohawk Industries, Inc.",industry:"Manufacturing",fee:26912.89,lead:"Katie",invoiceDate:"2025-11-15",estPayAvg:"2025-12-12",estPayLast:"2025-12-03",payDate:"2026-01-06",paid:true,days:52},
+{invoice:"4097",serviceDate:"2025-11-14",client:"Mohawk Industries, Inc.",industry:"Manufacturing",fee:6000,lead:"Katie",invoiceDate:"2025-11-14",estPayAvg:"2025-12-11",estPayLast:"2025-12-02",payDate:"2025-12-23",paid:true,days:39},
+{invoice:"4096",serviceDate:"2025-11-10",client:"Bank of America",industry:"Financial Services",fee:6000,lead:"Fred",invoiceDate:"2025-11-10",estPayAvg:"2025-11-24",estPayLast:"2025-11-24",payDate:"2025-11-19",paid:true,days:9},
+{invoice:"4094",serviceDate:"2025-11-05",client:"USAA",industry:"Financial Services",fee:38177.86,lead:"Fred",invoiceDate:"2025-11-05",estPayAvg:"2025-12-05",estPayLast:"2025-12-05",payDate:"2025-12-05",paid:true,days:30},
+{invoice:"4093",serviceDate:"2025-11-03",client:"Mohawk Industries, Inc.",industry:"Manufacturing",fee:3000,lead:"Katie",invoiceDate:"2025-11-05",estPayAvg:"2025-12-02",estPayLast:"2025-12-02",payDate:"2025-12-23",paid:true,days:48},
+{invoice:"4092",serviceDate:"2025-11-03",client:"Youth Villages",industry:"NGO",fee:3333.33,lead:"Katie",invoiceDate:"2025-11-03",estPayAvg:"2025-11-14",estPayLast:"2025-11-13",payDate:"2025-11-11",paid:true,days:8},
+{invoice:"4090",serviceDate:"2025-10-22",client:"McCormick and Company",industry:"Consumer Products",fee:12621.69,lead:"Fred",invoiceDate:"2025-10-22",estPayAvg:"2025-11-14",estPayLast:"2025-11-02",payDate:"2025-11-06",paid:true,days:15},
+{invoice:"4089",serviceDate:"2025-10-16",client:"Bank of America",industry:"Financial Services",fee:6000,lead:"Fred",invoiceDate:"2025-10-16",estPayAvg:"2025-10-30",estPayLast:"2025-10-19",payDate:"2025-11-06",paid:true,days:21},
+{invoice:"4088",serviceDate:"2025-10-14",client:"Plaid",industry:"Financial Services",fee:1500,lead:"Fred",invoiceDate:"2025-10-14",estPayAvg:"2025-11-02",estPayLast:"2025-11-06",payDate:"2025-11-06",paid:true,days:23},
+{invoice:"4087",serviceDate:"2025-10-10",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:13396.61,lead:"Fred",invoiceDate:"2025-10-10",estPayAvg:"2025-10-30",estPayLast:"2025-10-14",payDate:"2025-10-16",paid:true,days:6},
+{invoice:"4086",serviceDate:"2025-10-08",client:"Invesco",industry:"Financial Services",fee:6000,lead:"Fred",invoiceDate:"2025-10-10",estPayAvg:"2025-12-18",estPayLast:"2025-12-18",payDate:"2025-12-18",paid:true,days:69},
+{invoice:"4085",serviceDate:"2025-10-07",client:"Rockefeller Capital Management",industry:"Financial Services",fee:6000,lead:"Fred",invoiceDate:"2025-10-07",estPayAvg:"2025-10-19",estPayLast:"2025-10-16",payDate:"2025-10-16",paid:true,days:9},
+{invoice:"4084",serviceDate:"2025-10-02",client:"Mohawk Industries, Inc.",industry:"Manufacturing",fee:20002,lead:"Katie",invoiceDate:"2025-10-10",estPayAvg:"2025-11-06",estPayLast:"2025-10-28",payDate:"2025-10-28",paid:true,days:18},
+{invoice:"4083",serviceDate:"2025-10-01",client:"Youth Villages",industry:"NGO",fee:3333.33,lead:"Katie",invoiceDate:"2025-10-06",estPayAvg:"2025-10-17",estPayLast:"2025-10-16",payDate:"2025-10-14",paid:true,days:8},
+{invoice:"4082",serviceDate:"2025-10-01",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:37845.34,lead:"Fred/Katie",invoiceDate:"2025-10-03",estPayAvg:"2025-10-23",estPayLast:"2025-10-07",payDate:"2025-10-06",paid:true,days:3},
+{invoice:"4080",serviceDate:"2025-09-25",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:39756.21,lead:"Fred/Katie",invoiceDate:"2025-09-25",estPayAvg:"2025-10-15",estPayLast:"2025-09-29",payDate:"2025-10-30",paid:true,days:35},
+{invoice:"4079",serviceDate:"2025-09-25",client:"Johnson&Johnson",industry:"Pharmaceuticals",fee:2986.46,lead:"Fred",invoiceDate:"2025-09-25",estPayAvg:"2025-10-22",estPayLast:"2025-10-07",payDate:"2025-10-07",paid:true,days:12},
+{invoice:"4078",serviceDate:"2025-09-25",client:"Humana Inc.",industry:"Insurance",fee:12387.46,lead:"Fred",invoiceDate:"2025-09-25",estPayAvg:"2025-10-19",estPayLast:"2025-10-13",payDate:"2025-10-10",paid:true,days:15},
+{invoice:"4077",serviceDate:"2025-09-25",client:"Mohawk Industries, Inc.",industry:"Manufacturing",fee:25945.6,lead:"Katie",invoiceDate:"2025-10-10",estPayAvg:"2025-11-06",estPayLast:"2025-10-28",payDate:"2025-10-22",paid:true,days:12},
+{invoice:"4076",serviceDate:"2025-09-15",client:"Mohawk Industries, Inc.",industry:"Manufacturing",fee:27232.12,lead:"Katie",invoiceDate:"2025-10-03",estPayAvg:"2025-10-30",estPayLast:"2025-10-21",payDate:"2025-10-15",paid:true,days:12},
+{invoice:"4075",serviceDate:"2025-09-09",client:"Depository Trust & Clearing Corporation",industry:"Financial Services",fee:24000,lead:"Fred",invoiceDate:"2025-09-09",estPayAvg:"2025-10-17",estPayLast:"2025-09-18",payDate:"2025-09-18",paid:true,days:9},
+{invoice:"4074",serviceDate:"2025-09-09",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:3000,lead:"Katie",invoiceDate:"2025-09-09",estPayAvg:"2025-09-29",estPayLast:"2025-09-13",payDate:"2025-09-15",paid:true,days:6},
+{invoice:"4073",serviceDate:"2025-09-15",client:"WURD",industry:"Media",fee:2650,lead:"Katie",invoiceDate:"2025-09-15",estPayAvg:"2025-10-09",estPayLast:"2025-10-22",payDate:"2025-10-22",paid:true,days:37},
+{invoice:"4072",serviceDate:"2025-09-01",client:"Youth Villages",industry:"NGO",fee:3333.33,lead:"Katie",invoiceDate:"2025-09-02",estPayAvg:"2025-09-13",estPayLast:"2025-09-12",payDate:"2025-09-18",paid:true,days:16},
+{invoice:"4070",serviceDate:"2025-08-25",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:13424.01,lead:"Fred",invoiceDate:"2025-08-25",estPayAvg:"2025-09-14",estPayLast:"2025-08-29",payDate:"2025-08-29",paid:true,days:4},
+{invoice:"4068",serviceDate:"2025-08-05",client:"McCormick and Company",industry:"Consumer Products",fee:13252.9,lead:"Fred",invoiceDate:"2025-08-05",estPayAvg:"2025-08-28",estPayLast:"2025-08-16",payDate:"2025-09-15",paid:true,days:41},
+{invoice:"4067",serviceDate:"2025-07-25",client:"Youth Villages",industry:"NGO",fee:3333.33,lead:"Katie",invoiceDate:"2025-08-01",estPayAvg:"2025-08-12",estPayLast:"2025-08-11",payDate:"2025-08-14",paid:true,days:13},
+{invoice:"4066",serviceDate:"2025-07-25",client:"PRSA",industry:"Public Relations",fee:5100,lead:"Fred/Katie",invoiceDate:"2025-07-25",estPayAvg:"2025-08-13",estPayLast:"2025-07-29",payDate:"2025-08-07",paid:true,days:13},
+{invoice:"4065",serviceDate:"2025-07-23",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:13332.75,lead:"Fred",invoiceDate:"2025-07-11",estPayAvg:"2025-07-31",estPayLast:"2025-07-15",payDate:"2025-08-14",paid:true,days:34},
+{invoice:"4064",serviceDate:"2025-06-30",client:"Youth Villages",industry:"NGO",fee:3333.33,lead:"Katie",invoiceDate:"2025-07-17",estPayAvg:"2025-07-28",estPayLast:"2025-07-27",payDate:"2025-07-22",paid:true,days:5},
+{invoice:"4062",serviceDate:"2025-07-14",client:"Stanley Center for Peace and Security",industry:"Non-profit",fee:11000,lead:"Katie",invoiceDate:"2025-07-14",estPayAvg:"2025-07-19",estPayLast:"2025-07-18",payDate:"2025-07-18",paid:true,days:4},
+{invoice:"4061",serviceDate:"2025-07-11",client:"Real Chemistry",industry:"Healthcare",fee:4500,lead:"Fred",invoiceDate:"2025-07-11",estPayAvg:"2025-10-28",estPayLast:"2025-10-28",payDate:"2025-10-28",paid:true,days:109},
+{invoice:"4060",serviceDate:"2025-07-11",client:"Campus Text",industry:"Publishing",fee:724.29,lead:"Fred",invoiceDate:"2025-07-11",estPayAvg:"2025-08-06",estPayLast:"2025-08-07",payDate:"2025-08-07",paid:true,days:0},
+{invoice:"4059",serviceDate:"2025-06-18",client:"Plaid",industry:"Financial Services",fee:6000,lead:"Fred",invoiceDate:"2025-06-18",estPayAvg:"2025-07-07",estPayLast:"2025-07-11",payDate:"2025-07-03",paid:true,days:15},
+{invoice:"4058",serviceDate:"2025-06-17",client:"Depository Trust & Clearing Corporation",industry:"Financial Services",fee:1875,lead:"Fred",invoiceDate:"2025-06-18",estPayAvg:"2025-07-26",estPayLast:"2025-06-27",payDate:"2025-09-04",paid:true,days:78},
+{invoice:"4057",serviceDate:"2025-06-13",client:"Ghidotti",industry:"Communications",fee:10110.57,lead:"Fred",invoiceDate:"2025-06-18",estPayAvg:"2025-07-07",estPayLast:"2025-07-07",payDate:"2025-07-07",paid:true,days:19},
+{invoice:"4056",serviceDate:"2025-06-11",client:"California Institute for the Arts",industry:"Higher Education",fee:16143.75,lead:"Fred",invoiceDate:"2025-06-18",estPayAvg:"2025-08-19",estPayLast:"2025-07-22",payDate:"2025-07-22",paid:true,days:34},
+{invoice:"4055",serviceDate:"2025-06-06",client:"PRSA",industry:"Public Relations",fee:991.37,lead:"Fred",invoiceDate:"2025-06-06",estPayAvg:"2025-06-25",estPayLast:"2025-06-10",payDate:"2025-06-25",paid:true,days:19},
+{invoice:"4054",serviceDate:"2025-06-05",client:"Depository Trust & Clearing Corporation",industry:"Financial Services",fee:1500,lead:"Fred",invoiceDate:"2025-06-05",estPayAvg:"2025-07-13",estPayLast:"2025-06-14",payDate:"2025-07-22",paid:true,days:47},
+{invoice:"4053",serviceDate:"2025-06-05",client:"Point72",industry:"Financial Services",fee:2250,lead:"Fred",invoiceDate:"2025-06-05",estPayAvg:"2025-07-08",estPayLast:"2025-06-16",payDate:"2025-06-26",paid:true,days:21},
+{invoice:"4052",serviceDate:"2025-06-04",client:"Humana Inc.",industry:"Insurance",fee:13180.62,lead:"Fred",invoiceDate:"2025-06-04",estPayAvg:"2025-06-28",estPayLast:"2025-06-22",payDate:"2025-06-20",paid:true,days:16},
+{invoice:"4051",serviceDate:"2025-05-30",client:"Depository Trust & Clearing Corporation",industry:"Financial Services",fee:3750,lead:"Fred",invoiceDate:"2025-05-30",estPayAvg:"2025-07-07",estPayLast:"2025-06-08",payDate:"2025-06-09",paid:true,days:10},
+{invoice:"4050",serviceDate:"2025-05-22",client:"Johnson&Johnson",industry:"Pharmaceuticals",fee:2250,lead:"Fred",invoiceDate:"2025-05-22",estPayAvg:"2025-06-18",estPayLast:"2025-06-03",payDate:"2025-05-28",paid:true,days:6},
+{invoice:"4049",serviceDate:"2025-05-20",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:12776.05,lead:"Fred",invoiceDate:"2025-05-21",estPayAvg:"2025-06-10",estPayLast:"2025-05-25",payDate:"2025-05-28",paid:true,days:7},
+{invoice:"4048",serviceDate:"2025-05-21",client:"Depository Trust & Clearing Corporation",industry:"Financial Services",fee:3000,lead:"Fred",invoiceDate:"2025-05-21",estPayAvg:"2025-06-28",estPayLast:"2025-05-30",payDate:"2025-08-21",paid:true,days:92},
+{invoice:"4047",serviceDate:"2025-05-19",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:12759.35,lead:"Fred",invoiceDate:"2025-05-21",estPayAvg:"2025-06-10",estPayLast:"2025-05-25",payDate:"2025-05-23",paid:true,days:2},
+{invoice:"4046",serviceDate:"2025-05-01",client:"Youth Villages",industry:"NGO",fee:12500,lead:"Katie",invoiceDate:"2025-05-01",estPayAvg:"2025-05-12",estPayLast:"2025-05-11",payDate:"2025-05-09",paid:true,days:8},
+{invoice:"4045",serviceDate:"2025-04-30",client:"Johnson&Johnson",industry:"Pharmaceuticals",fee:2229.33,lead:"Fred",invoiceDate:"2025-04-30",estPayAvg:"2025-05-27",estPayLast:"2025-05-12",payDate:"2025-04-30",paid:true,days:0},
+{invoice:"4044",serviceDate:"2025-04-24",client:"Biogen",industry:"Pharmaceutical",fee:12898.16,lead:"Fred",invoiceDate:"2025-04-24",estPayAvg:"2025-06-23",estPayLast:"2025-06-24",payDate:"2025-06-24",paid:true,days:61},
+{invoice:"4043",serviceDate:"2025-04-09",client:"Humana Inc.",industry:"Insurance",fee:12397.7,lead:"Fred",invoiceDate:"2025-04-10",estPayAvg:"2025-05-04",estPayLast:"2025-04-28",payDate:"2025-04-25",paid:true,days:15},
+{invoice:"4042",serviceDate:"2025-04-08",client:"Depository Trust & Clearing Corporation",industry:"Financial Services",fee:6000,lead:"Fred",invoiceDate:"2025-04-08",estPayAvg:"2025-05-16",estPayLast:"2025-04-17",payDate:"2025-05-20",paid:true,days:42},
+{invoice:"4041",serviceDate:"2025-04-01",client:"Hudson County Community College",industry:"Education",fee:3000,lead:"Fred",invoiceDate:"2025-04-01",estPayAvg:"2025-04-01",estPayLast:null,payDate:"2025-04-01",paid:true,days:0},
+{invoice:"4040",serviceDate:"2025-04-01",client:"Youth Villages",industry:"NGO",fee:12500,lead:"Katie",invoiceDate:"2025-04-01",estPayAvg:"2025-04-12",estPayLast:"2025-04-11",payDate:"2025-04-16",paid:true,days:15},
+{invoice:"4039",serviceDate:"2025-03-31",client:"Wharton School of Business",industry:"Higher Education",fee:2464.67,lead:"Fred",invoiceDate:"2025-03-31",estPayAvg:"2025-05-28",estPayLast:"2025-06-06",payDate:"2025-06-06",paid:true,days:67},
+{invoice:"4038",serviceDate:"2025-03-31",client:"Wharton School of Business",industry:"Higher Education",fee:1813.75,lead:"Fred",invoiceDate:"2025-03-31",estPayAvg:"2025-05-28",estPayLast:"2025-06-06",payDate:"2025-06-06",paid:true,days:67},
+{invoice:"4037",serviceDate:"2025-03-26",client:"Brands2Life",industry:"Public Relations",fee:2000,lead:"Katie",invoiceDate:"2025-03-28",estPayAvg:"2025-04-23",estPayLast:"2025-04-23",payDate:"2025-04-23",paid:true,days:26},
+{invoice:"4036",serviceDate:"2025-03-25",client:"Depository Trust & Clearing Corporation",industry:"Financial Services",fee:4500,lead:"Fred",invoiceDate:"2025-03-26",estPayAvg:"2025-05-03",estPayLast:"2025-04-04",payDate:"2025-04-16",paid:true,days:21},
+{invoice:"4035",serviceDate:"2025-03-20",client:"Rockefeller Capital Management",industry:"Financial Services",fee:6000,lead:"Fred",invoiceDate:"2025-03-20",estPayAvg:"2025-04-01",estPayLast:"2025-03-29",payDate:"2025-03-27",paid:true,days:7},
+{invoice:"4034",serviceDate:"2025-03-02",client:"AUTM",industry:"Manufacturing",fee:7016.01,lead:"Fred",invoiceDate:"2025-03-28",estPayAvg:"2025-04-07",estPayLast:"2025-04-02",payDate:"2025-04-02",paid:true,days:5},
+{invoice:"4033",serviceDate:"2025-03-14",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:2250,lead:"Fred",invoiceDate:"2025-03-14",estPayAvg:"2025-04-03",estPayLast:"2025-03-18",payDate:"2025-03-18",paid:true,days:4},
+{invoice:"4032",serviceDate:"2025-03-13",client:"Professional Speechwriters Association",industry:"Public Relations",fee:17638.61,lead:"Fred/Katie",invoiceDate:"2025-03-13",estPayAvg:"2025-03-27",estPayLast:"2025-04-08",payDate:"2025-03-24",paid:true,days:11},
+{invoice:"4031",serviceDate:"2025-03-06",client:"Johnson&Johnson",industry:"Pharmaceuticals",fee:1500,lead:"Fred",invoiceDate:"2025-03-06",estPayAvg:"2025-04-02",estPayLast:"2025-03-18",payDate:"2025-03-07",paid:true,days:1},
+{invoice:"4030",serviceDate:"2025-03-03",client:"UWCW",industry:"NGO",fee:811.25,lead:"Katie",invoiceDate:"2025-03-03",estPayAvg:"2025-04-19",estPayLast:"2025-05-12",payDate:"2025-05-12",paid:true,days:70},
+{invoice:"4028",serviceDate:"2025-03-03",client:"Youth Villages",industry:"NGO",fee:12500,lead:"Katie",invoiceDate:"2025-03-03",estPayAvg:"2025-03-14",estPayLast:"2025-03-13",payDate:"2025-03-13",paid:true,days:10},
+{invoice:"4027",serviceDate:"2025-02-28",client:"Biogen",industry:"Pharmaceutical",fee:25561.61,lead:"Fred",invoiceDate:"2025-02-28",estPayAvg:"2025-04-29",estPayLast:"2025-04-30",payDate:"2025-04-29",paid:true,days:60},
+{invoice:"4026",serviceDate:"2025-02-21",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:26137.76,lead:"Fred/Katie",invoiceDate:"2025-03-13",estPayAvg:"2025-04-02",estPayLast:"2025-03-17",payDate:"2025-03-15",paid:true,days:2},
+{invoice:"4025",serviceDate:"2025-02-20",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:12893.27,lead:"Katie",invoiceDate:"2025-02-27",estPayAvg:"2025-03-19",estPayLast:"2025-03-03",payDate:"2025-03-11",paid:true,days:12},
+{invoice:"4024",serviceDate:"2025-01-27",client:"Depository Trust & Clearing Corporation",industry:"Financial Services",fee:2625,lead:"Fred",invoiceDate:"2025-02-22",estPayAvg:"2025-04-01",estPayLast:"2025-03-03",payDate:"2025-03-03",paid:true,days:9},
+{invoice:"4022",serviceDate:"2025-02-06",client:"Newport News Shipbuilding",industry:"Manufacturing",fee:13311.69,lead:"Fred",invoiceDate:"2025-02-06",estPayAvg:"2025-02-25",estPayLast:"2025-04-06",payDate:"2025-02-19",paid:true,days:13},
+{invoice:"4021",serviceDate:"2025-02-03",client:"UWCW",industry:"NGO",fee:24042.5,lead:"Katie",invoiceDate:"2025-02-03",estPayAvg:"2025-03-22",estPayLast:"2025-04-14",payDate:"2025-02-28",paid:true,days:25},
+{invoice:"4020",serviceDate:"2025-02-03",client:"Youth Villages",industry:"NGO",fee:12500,lead:"Katie",invoiceDate:"2025-02-03",estPayAvg:"2025-02-14",estPayLast:"2025-02-13",payDate:"2025-02-12",paid:true,days:9},
+{invoice:"4019",serviceDate:"2025-01-27",client:"Crewcial",industry:"Financial Services",fee:3500,lead:"Katie",invoiceDate:"2025-01-27",estPayAvg:"2025-02-03",estPayLast:"2025-02-13",payDate:"2025-02-13",paid:true,days:17},
+{invoice:"4018",serviceDate:"2025-01-21",client:"Country Financial",industry:"Insurance",fee:7500,lead:"Fred",invoiceDate:"2025-01-21",estPayAvg:"2025-03-17",estPayLast:"2025-03-17",payDate:"2025-03-17",paid:true,days:55},
+{invoice:"4017",serviceDate:"2025-01-16",client:"Campus Text",industry:"Publishing",fee:377.91,lead:"Evan",invoiceDate:"2025-01-16",estPayAvg:"2025-02-11",estPayLast:"2025-02-12",payDate:"2025-02-12",paid:true,days:27},
+{invoice:"4016",serviceDate:"2025-01-10",client:"HCA Healthcare",industry:"Healthcare",fee:24000,lead:"Fred",invoiceDate:"2025-01-10",estPayAvg:"2025-02-15",estPayLast:"2025-02-18",payDate:"2025-02-18",paid:true,days:39},
+{invoice:"4015",serviceDate:"2025-01-03",client:"Youth Villages",industry:"NGO",fee:12500,lead:"Katie",invoiceDate:"2025-01-03",estPayAvg:"2025-01-14",estPayLast:"2025-01-13",payDate:"2025-01-15",paid:true,days:12},
+{invoice:"4014",serviceDate:"2025-01-03",client:"United Way",industry:"NGO",fee:3171.25,lead:"Katie",invoiceDate:"2025-01-03",estPayAvg:"2025-02-07",estPayLast:"2025-02-28",payDate:"2025-02-28",paid:true,days:56},
+{invoice:"4095",serviceDate:"2024-06-03",client:"PRSA",industry:"Public Relations",fee:750,lead:"Fred",invoiceDate:"2024-06-04",estPayAvg:"2024-06-23",estPayLast:"2024-06-23",payDate:"2024-06-12",paid:true,days:8},
+{invoice:"4013",serviceDate:"2024-12-18",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:2750,lead:"Fred",invoiceDate:"2024-12-18",estPayAvg:"2025-01-07",estPayLast:"2024-12-22",payDate:"2024-12-20",paid:true,days:2},
+{invoice:"4012",serviceDate:"2024-12-16",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:2750,lead:"Fred",invoiceDate:"2024-12-16",estPayAvg:"2025-01-05",estPayLast:"2024-12-20",payDate:"2024-12-18",paid:true,days:2},
+{invoice:"4011",serviceDate:"2024-12-16",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:12496.09,lead:"Fred",invoiceDate:"2024-12-16",estPayAvg:"2025-01-05",estPayLast:"2024-12-20",payDate:"2025-01-09",paid:true,days:24},
+{invoice:"4010",serviceDate:"2024-12-16",client:"United Way",industry:"NGO",fee:4425,lead:"Katie",invoiceDate:"2024-12-16",estPayAvg:"2025-01-20",estPayLast:"2025-02-10",payDate:"2024-12-31",paid:true,days:15},
+{invoice:"4009",serviceDate:"2024-12-10",client:"Johnson&Johnson",industry:"Pharmaceuticals",fee:2750,lead:"Fred",invoiceDate:"2024-12-10",estPayAvg:"2025-01-06",estPayLast:"2024-12-22",payDate:"2024-12-13",paid:true,days:3},
+{invoice:"4008",serviceDate:"2024-12-10",client:"Stanley Center for Peace and Security",industry:"Non-profit",fee:11000,lead:"Fred",invoiceDate:"2024-12-10",estPayAvg:"2024-12-15",estPayLast:"2024-12-14",payDate:"2024-12-13",paid:true,days:3},
+{invoice:"4007",serviceDate:"2024-11-06",client:"Mohawk Industries, Inc.",industry:"Manufacturing",fee:12512.7,lead:"Katie",invoiceDate:"2024-12-06",estPayAvg:"2025-01-02",estPayLast:"2024-12-24",payDate:"2024-12-17",paid:true,days:11},
+{invoice:"4005",serviceDate:"2024-12-01",client:"Youth Villages",industry:"NGO",fee:12500,lead:"Katie",invoiceDate:"2024-12-02",estPayAvg:"2024-12-13",estPayLast:"2024-12-12",payDate:"2024-12-19",paid:true,days:17},
+{invoice:"4004",serviceDate:"2024-11-07",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:2750,lead:"Fred",invoiceDate:"2024-11-22",estPayAvg:"2024-12-12",estPayLast:"2024-11-26",payDate:"2024-11-25",paid:true,days:3},
+{invoice:"4003",serviceDate:"2024-11-21",client:"Rockefeller Capital Management",industry:"Financial Services",fee:5500,lead:"Fred",invoiceDate:"2024-11-22",estPayAvg:"2024-12-04",estPayLast:"2024-12-01",payDate:"2024-11-29",paid:true,days:7},
+{invoice:"4002",serviceDate:"2024-11-20",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:12152.13,lead:"Katie",invoiceDate:"2024-11-21",estPayAvg:"2024-12-11",estPayLast:"2024-11-25",payDate:"2024-11-23",paid:true,days:2},
+{invoice:"4001",serviceDate:"2024-11-13",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:12108.25,lead:"Fred",invoiceDate:"2024-11-14",estPayAvg:"2024-12-04",estPayLast:"2024-11-18",payDate:"2024-11-19",paid:true,days:5},
+{invoice:"4000",serviceDate:"2024-11-08",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:5500,lead:"Fred",invoiceDate:"2024-11-08",estPayAvg:"2024-11-28",estPayLast:"2024-11-12",payDate:"2024-11-13",paid:true,days:5},
+{invoice:"3999",serviceDate:"2024-11-05",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:5500,lead:"Fred",invoiceDate:"2024-11-05",estPayAvg:"2024-11-25",estPayLast:"2024-11-09",payDate:"2024-11-08",paid:true,days:3},
+{invoice:"3998",serviceDate:"2024-11-04",client:"Youth Villages",industry:"NGO",fee:12500,lead:"Katie",invoiceDate:"2024-11-04",estPayAvg:"2024-11-15",estPayLast:"2024-11-14",payDate:"2024-11-15",paid:true,days:11},
+{invoice:"3997",serviceDate:"2024-10-29",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:4125,lead:"Fred",invoiceDate:"2024-10-29",estPayAvg:"2024-11-18",estPayLast:"2024-11-02",payDate:"2024-10-30",paid:true,days:1},
+{invoice:"3996",serviceDate:"2024-10-28",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:5500,lead:"Katie",invoiceDate:"2024-10-28",estPayAvg:"2024-11-17",estPayLast:"2024-11-01",payDate:"2024-10-29",paid:true,days:1},
+{invoice:"3995",serviceDate:"2024-10-25",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:12499.62,lead:"Katie",invoiceDate:"2024-10-25",estPayAvg:"2024-11-14",estPayLast:"2024-10-29",payDate:"2024-11-05",paid:true,days:11},
+{invoice:"3994",serviceDate:"2024-10-24",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:4125,lead:"Fred",invoiceDate:"2024-10-24",estPayAvg:"2024-11-13",estPayLast:"2024-10-28",payDate:"2024-10-25",paid:true,days:1},
+{invoice:"3993",serviceDate:"2024-10-21",client:"Johnson&Johnson",industry:"Pharmaceuticals",fee:2062.5,lead:"Fred",invoiceDate:"2024-10-21",estPayAvg:"2024-11-17",estPayLast:"2024-11-02",payDate:"2024-10-22",paid:true,days:1},
+{invoice:"3992",serviceDate:"2024-10-15",client:"McDonald's",industry:"Food Sector",fee:12000,lead:"Fred",invoiceDate:"2024-10-15",estPayAvg:"2024-11-06",estPayLast:"2024-11-05",payDate:"2024-11-05",paid:true,days:21},
+{invoice:"3991",serviceDate:"2024-10-15",client:"McDonald's",industry:"Food Sector",fee:12000,lead:"Fred",invoiceDate:"2024-10-15",estPayAvg:"2024-11-06",estPayLast:"2024-11-05",payDate:"2024-11-05",paid:true,days:21},
+{invoice:"3990",serviceDate:"2024-10-10",client:"Newport News Shipbuilding",industry:"Manufacturing",fee:13750,lead:"Fred",invoiceDate:"2024-10-10",estPayAvg:"2024-10-29",estPayLast:"2024-12-08",payDate:"2024-10-28",paid:true,days:18},
+{invoice:"3989",serviceDate:"2024-10-02",client:"Johnson&Johnson",industry:"Pharmaceuticals",fee:4125,lead:"Fred",invoiceDate:"2024-10-02",estPayAvg:"2024-10-29",estPayLast:"2024-10-14",payDate:"2024-10-22",paid:true,days:20},
+{invoice:"3988",serviceDate:"2024-10-01",client:"NowThis Media Group, LLC",industry:"Media",fee:750,lead:"Fred",invoiceDate:"2024-10-01",estPayAvg:"2024-10-24",estPayLast:"2024-10-28",payDate:"2024-10-28",paid:true,days:27},
+{invoice:"3987",serviceDate:"2024-10-01",client:"NDIA",industry:"Defense",fee:1065.27,lead:"Fred",invoiceDate:"2024-10-01",estPayAvg:"2024-10-21",estPayLast:"2024-10-21",payDate:"2024-10-21",paid:true,days:20},
+{invoice:"3986",serviceDate:"2024-10-01",client:"Youth Villages",industry:"NGO",fee:12500,lead:"Katie",invoiceDate:"2024-10-01",estPayAvg:"2024-10-12",estPayLast:"2024-10-11",payDate:"2024-10-20",paid:true,days:19},
+{invoice:"3985",serviceDate:"2024-09-25",client:"Johnson&Johnson",industry:"Pharmaceuticals",fee:21857.08,lead:"Fred",invoiceDate:"2024-09-25",estPayAvg:"2024-10-22",estPayLast:"2024-10-07",payDate:"2024-09-26",paid:true,days:1},
+{invoice:"3984",serviceDate:"2024-09-20",client:"Mohawk Industries, Inc.",industry:"Manufacturing",fee:23800.17,lead:"Katie",invoiceDate:"2024-09-20",estPayAvg:"2024-10-17",estPayLast:"2024-10-08",payDate:"2024-10-11",paid:true,days:21},
+{invoice:"3983",serviceDate:"2024-09-13",client:"Pernod Ricard USA",industry:"Consumer Products",fee:3781.25,lead:"Fred",invoiceDate:"2024-09-13",estPayAvg:"2024-10-30",estPayLast:"2024-10-17",payDate:"2024-10-17",paid:true,days:34},
+{invoice:"3982",serviceDate:"2024-09-13",client:"Humana Inc.",industry:"Insurance",fee:11998.05,lead:"Fred",invoiceDate:"2024-09-13",estPayAvg:"2024-10-07",estPayLast:"2024-10-01",payDate:"2024-09-30",paid:true,days:17},
+{invoice:"3981",serviceDate:"2024-09-11",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:11735.14,lead:"Fred",invoiceDate:"2024-09-11",estPayAvg:"2024-10-01",estPayLast:"2024-09-15",payDate:"2024-09-15",paid:true,days:4},
+{invoice:"3980",serviceDate:"2024-09-04",client:"Babcock Laboratories",industry:"Education",fee:3000,lead:"Katie",invoiceDate:"2024-09-04",estPayAvg:"2024-10-31",estPayLast:"2024-10-28",payDate:"2024-10-28",paid:true,days:54},
+{invoice:"3979",serviceDate:"2024-09-03",client:"NowThis Media Group, LLC",industry:"Media",fee:4275,lead:"Fred",invoiceDate:"2024-09-03",estPayAvg:"2024-09-26",estPayLast:"2024-09-30",payDate:"2024-09-04",paid:true,days:1},
+{invoice:"3978",serviceDate:"2024-08-29",client:"Youth Villages",industry:"NGO",fee:12500,lead:"Katie",invoiceDate:"2024-08-29",estPayAvg:"2024-09-09",estPayLast:"2024-09-08",payDate:"2024-09-11",paid:true,days:13},
+{invoice:"3977",serviceDate:"2024-08-23",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:16562,lead:"Katie",invoiceDate:"2024-08-26",estPayAvg:"2024-09-15",estPayLast:"2024-08-30",payDate:"2024-08-30",paid:true,days:4},
+{invoice:"3976",serviceDate:"2024-08-20",client:"Procter & Gamble",industry:"Consumer Goods",fee:14250,lead:"Fred",invoiceDate:"2024-08-20",estPayAvg:"2024-10-03",estPayLast:"2024-10-03",payDate:"2024-10-03",paid:true,days:44},
+{invoice:"3975",serviceDate:"2024-08-19",client:"Mission Technologies",industry:"Manufacturing",fee:2062.5,lead:"Fred",invoiceDate:"2024-08-19",estPayAvg:"2024-09-15",estPayLast:"2024-08-21",payDate:"2024-08-21",paid:true,days:2},
+{invoice:"3974",serviceDate:"2024-08-19",client:"Cigna",industry:"Insurance",fee:11045.97,lead:"Katie",invoiceDate:"2024-08-19",estPayAvg:"2024-09-30",estPayLast:"2024-10-10",payDate:"2024-10-10",paid:true,days:52},
+{invoice:"3973",serviceDate:"2024-08-15",client:"Mission Technologies",industry:"Manufacturing",fee:12099.82,lead:"Fred",invoiceDate:"2024-08-15",estPayAvg:"2024-09-11",estPayLast:"2024-08-17",payDate:"2024-10-07",paid:true,days:53},
+{invoice:"3972",serviceDate:"2024-08-12",client:"Newport News Shipbuilding",industry:"Manufacturing",fee:12570.99,lead:"Fred",invoiceDate:"2024-08-12",estPayAvg:"2024-08-31",estPayLast:"2024-10-10",payDate:"2024-08-25",paid:true,days:13},
+{invoice:"3971",serviceDate:"2024-08-05",client:"Depository Trust & Clearing Corporation",industry:"Financial Services",fee:1375,lead:"Fred",invoiceDate:"2024-08-05",estPayAvg:"2024-09-12",estPayLast:"2024-08-14",payDate:"2024-08-19",paid:true,days:14},
+{invoice:"3970",serviceDate:"2024-08-02",client:"ASHBA",industry:"NGO",fee:1000,lead:"Fred",invoiceDate:"2024-08-02",estPayAvg:"2024-08-25",estPayLast:"2024-08-25",payDate:"2024-08-25",paid:true,days:23},
+{invoice:"3969",serviceDate:"2024-08-02",client:"Youth Villages",industry:"NGO",fee:12500,lead:"Katie",invoiceDate:"2024-08-02",estPayAvg:"2024-08-13",estPayLast:"2024-08-12",payDate:"2024-08-14",paid:true,days:12},
+{invoice:"3968",serviceDate:"2024-08-12",client:"Mohawk Industries, Inc.",industry:"Manufacturing",fee:12364.43,lead:"Katie",invoiceDate:"2024-08-12",estPayAvg:"2024-09-08",estPayLast:"2024-08-30",payDate:"2024-09-10",paid:true,days:29},
+{invoice:"3967",serviceDate:"2024-07-31",client:"Rockefeller Capital Management",industry:"Financial Services",fee:4125,lead:"Fred",invoiceDate:"2024-07-31",estPayAvg:"2024-08-12",estPayLast:"2024-08-09",payDate:"2024-08-08",paid:true,days:8},
+{invoice:"3966",serviceDate:"2024-07-31",client:"WURD",industry:"Media",fee:6000,lead:"Katie",invoiceDate:"2024-07-31",estPayAvg:"2024-08-24",estPayLast:"2024-09-06",payDate:"2024-08-12",paid:true,days:12},
+{invoice:"3965",serviceDate:"2024-07-31",client:"NowThis Media Group, LLC",industry:"Media",fee:22512.5,lead:"Fred",invoiceDate:"2024-07-31",estPayAvg:"2024-08-23",estPayLast:"2024-08-27",payDate:"2024-08-23",paid:true,days:23},
+{invoice:"3963",serviceDate:"2024-07-26",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:18136.5,lead:"Katie",invoiceDate:"2024-07-26",estPayAvg:"2024-08-15",estPayLast:"2024-07-30",payDate:"2024-08-02",paid:true,days:7},
+{invoice:"3962",serviceDate:"2024-07-23",client:"Peritus PR",industry:"Communications",fee:241.08,lead:"Evan",invoiceDate:"2024-07-23",estPayAvg:"2024-07-24",estPayLast:"2024-07-24",payDate:"2024-07-24",paid:true,days:1},
+{invoice:"3961",serviceDate:"2024-07-22",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:2750,lead:"Fred",invoiceDate:"2024-07-23",estPayAvg:"2024-08-12",estPayLast:"2024-07-27",payDate:"2024-07-25",paid:true,days:2},
+{invoice:"3960",serviceDate:"2024-07-19",client:"Point72",industry:"Financial Services",fee:2750,lead:"Fred",invoiceDate:"2024-07-19",estPayAvg:"2024-08-21",estPayLast:"2024-07-30",payDate:"2024-08-21",paid:true,days:33},
+{invoice:"3959",serviceDate:"2024-07-18",client:"NowThis Media Group, LLC",industry:"Media",fee:15000,lead:"Fred",invoiceDate:"2024-07-18",estPayAvg:"2024-08-10",estPayLast:"2024-08-14",payDate:"2024-08-29",paid:true,days:42},
+{invoice:"3958",serviceDate:"2024-07-03",client:"Commercial Metals Company",industry:"Manufacturing",fee:6000,lead:"Fred",invoiceDate:"2024-07-03",estPayAvg:"2024-07-04",estPayLast:"2024-07-05",payDate:"2024-07-05",paid:true,days:2},
+{invoice:"3957",serviceDate:"2024-07-02",client:"Point72",industry:"Financial Services",fee:2750,lead:"Fred",invoiceDate:"2024-07-02",estPayAvg:"2024-08-04",estPayLast:"2024-07-13",payDate:"2024-08-21",paid:true,days:50},
+{invoice:"3956",serviceDate:"2024-07-01",client:"Youth Villages",industry:"NGO",fee:12500,lead:"Katie",invoiceDate:"2024-07-01",estPayAvg:"2024-07-12",estPayLast:"2024-07-11",payDate:"2024-07-09",paid:true,days:8},
+{invoice:"3955",serviceDate:"2024-06-28",client:"McDonald's",industry:"Food Sector",fee:13543.45,lead:"Fred",invoiceDate:"2024-06-28",estPayAvg:"2024-07-20",estPayLast:"2024-07-19",payDate:"2024-07-22",paid:true,days:24},
+{invoice:"3954",serviceDate:"2024-06-25",client:"Depository Trust & Clearing Corporation",industry:"Financial Services",fee:1375,lead:"Fred",invoiceDate:"2024-06-25",estPayAvg:"2024-08-02",estPayLast:"2024-07-04",payDate:"2024-08-15",paid:true,days:51},
+{invoice:"3953",serviceDate:"2024-06-25",client:"Pernod Ricard USA",industry:"Consumer Products",fee:10000,lead:"Fred",invoiceDate:"2024-06-25",estPayAvg:"2024-08-11",estPayLast:"2024-07-29",payDate:"2024-08-15",paid:true,days:51},
+{invoice:"3952",serviceDate:"2024-06-25",client:"Pernod Ricard USA",industry:"Consumer Products",fee:10000,lead:"Fred",invoiceDate:"2024-06-25",estPayAvg:"2024-08-11",estPayLast:"2024-07-29",payDate:"2024-07-12",paid:true,days:17},
+{invoice:"3951",serviceDate:"2024-06-24",client:"Johnson&Johnson",industry:"Pharmaceuticals",fee:12474.92,lead:"Fred",invoiceDate:"2024-06-24",estPayAvg:"2024-07-21",estPayLast:"2024-07-06",payDate:"2024-06-27",paid:true,days:3},
+{invoice:"3950",serviceDate:"2024-06-20",client:"Campus Text",industry:"Publishing",fee:1473.63,lead:"Evan",invoiceDate:"2024-06-20",estPayAvg:"2024-07-16",estPayLast:"2024-07-17",payDate:"2024-07-15",paid:true,days:25},
+{invoice:"3949",serviceDate:"2024-06-13",client:"Depository Trust & Clearing Corporation",industry:"Financial Services",fee:4125,lead:"Fred",invoiceDate:"2024-06-13",estPayAvg:"2024-07-21",estPayLast:"2024-06-22",payDate:"2024-07-23",paid:true,days:40},
+{invoice:"3946",serviceDate:"2024-06-13",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:1375,lead:"Fred",invoiceDate:"2024-06-13",estPayAvg:"2024-07-03",estPayLast:"2024-06-17",payDate:"2024-07-01",paid:true,days:18},
+{invoice:"3945",serviceDate:"2024-06-11",client:"Youth Villages",industry:"NGO",fee:12500,lead:"Katie",invoiceDate:"2024-06-11",estPayAvg:"2024-06-22",estPayLast:"2024-06-21",payDate:"2024-06-26",paid:true,days:15},
+{invoice:"3944",serviceDate:"2024-06-04",client:"Rockefeller Capital Management",industry:"Financial Services",fee:5500,lead:"Fred",invoiceDate:"2024-06-04",estPayAvg:"2024-06-16",estPayLast:"2024-06-13",payDate:"2024-06-20",paid:true,days:16},
+{invoice:"3943",serviceDate:"2024-05-28",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:17149.21,lead:"Fred",invoiceDate:"2024-05-28",estPayAvg:"2024-06-17",estPayLast:"2024-06-01",payDate:"2024-07-01",paid:true,days:34},
+{invoice:"3942",serviceDate:"2024-05-23",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:11585.2,lead:"Fred",invoiceDate:"2024-05-28",estPayAvg:"2024-06-17",estPayLast:"2024-06-01",payDate:"2024-06-07",paid:true,days:10},
+{invoice:"3941",serviceDate:"2024-05-22",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:23932.52,lead:"Fred/Katie",invoiceDate:"2024-05-28",estPayAvg:"2024-06-17",estPayLast:"2024-06-01",payDate:"2024-06-27",paid:true,days:30},
+{invoice:"3940",serviceDate:"2024-05-16",client:"Point72",industry:"Financial Services",fee:2062.5,lead:"Fred",invoiceDate:"2024-05-16",estPayAvg:"2024-06-18",estPayLast:"2024-05-27",payDate:"2024-06-11",paid:true,days:26},
+{invoice:"3939",serviceDate:"2024-05-16",client:"Point72",industry:"Financial Services",fee:1375,lead:"Fred",invoiceDate:"2024-05-16",estPayAvg:"2024-06-18",estPayLast:"2024-05-27",payDate:"2024-06-11",paid:true,days:26},
+{invoice:"3938",serviceDate:"2024-05-16",client:"The Defense Information School",industry:"Education",fee:850,lead:"Fred",invoiceDate:"2024-05-16",estPayAvg:"2024-06-13",estPayLast:"2024-06-03",payDate:"2024-06-03",paid:true,days:18},
+{invoice:"3937",serviceDate:"2024-05-14",client:"Professional Speechwriters Association",industry:"Public Relations",fee:2668.71,lead:"Fred",invoiceDate:"2024-05-14",estPayAvg:"2024-05-28",estPayLast:"2024-06-09",payDate:"2024-05-20",paid:true,days:6},
+{invoice:"3936",serviceDate:"2024-05-10",client:"Cigna",industry:"Insurance",fee:22609.77,lead:"Katie",invoiceDate:"2024-05-10",estPayAvg:"2024-06-21",estPayLast:"2024-07-01",payDate:"2024-05-23",paid:true,days:13},
+{invoice:"3935",serviceDate:"2024-05-03",client:"McCormick and Company",industry:"Consumer Products",fee:15000,lead:"Fred",invoiceDate:"2024-05-04",estPayAvg:"2024-05-27",estPayLast:"2024-05-15",payDate:"2024-05-31",paid:true,days:27},
+{invoice:"3934",serviceDate:"2024-05-03",client:"Humana Inc.",industry:"Insurance",fee:5500,lead:"Fred",invoiceDate:"2024-05-04",estPayAvg:"2024-05-28",estPayLast:"2024-05-22",payDate:"2024-06-21",paid:true,days:48},
+{invoice:"3933",serviceDate:"2024-05-01",client:"Johnson&Johnson",industry:"Pharmaceuticals",fee:2062.5,lead:"Fred",invoiceDate:"2024-05-01",estPayAvg:"2024-05-28",estPayLast:"2024-05-13",payDate:"2024-05-16",paid:true,days:15},
+{invoice:"3932",serviceDate:"2024-05-01",client:"Newport News Shipbuilding",industry:"Manufacturing",fee:12562.28,lead:"Fred",invoiceDate:"2024-05-01",estPayAvg:"2024-05-20",estPayLast:"2024-06-29",payDate:"2024-05-20",paid:true,days:19},
+{invoice:"3931",serviceDate:"2024-05-01",client:"Babcock Laboratories",industry:"Education",fee:3750,lead:"Katie",invoiceDate:"2024-05-01",estPayAvg:"2024-06-27",estPayLast:"2024-06-24",payDate:"2024-07-01",paid:true,days:61},
+{invoice:"3930",serviceDate:"2024-04-30",client:"Youth Villages",industry:"NGO",fee:12500,lead:"Katie",invoiceDate:"2024-04-30",estPayAvg:"2024-05-11",estPayLast:"2024-05-10",payDate:"2024-05-21",paid:true,days:21},
+{invoice:"3929",serviceDate:"2024-04-29",client:"Cigna",industry:"Insurance",fee:12058.48,lead:"Katie",invoiceDate:"2024-04-29",estPayAvg:"2024-06-10",estPayLast:"2024-06-20",payDate:"2024-05-23",paid:true,days:24},
+{invoice:"3928",serviceDate:"2024-04-26",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:37839.99,lead:"Fred/Katie",invoiceDate:"2024-04-26",estPayAvg:"2024-05-16",estPayLast:"2024-04-30",payDate:"2024-05-03",paid:true,days:7},
+{invoice:"3927",serviceDate:"2024-04-22",client:"Janssen Immunology",industry:"Healthcare",fee:417.31,lead:"Fred",invoiceDate:"2024-04-22",estPayAvg:"2024-05-16",estPayLast:"2024-04-29",payDate:"2024-04-22",paid:true,days:0},
+{invoice:"3926",serviceDate:"2024-04-17",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:35058.59,lead:"Fred/Katie",invoiceDate:"2024-04-17",estPayAvg:"2024-05-07",estPayLast:"2024-04-21",payDate:"2024-04-22",paid:true,days:5},
+{invoice:"3925",serviceDate:"2024-04-15",client:"Federal Laboratory Consortium",industry:"Pharmaceuticals",fee:6872.75,lead:"Fred",invoiceDate:"2024-04-15",estPayAvg:"2024-05-14",estPayLast:"2024-05-04",payDate:"2024-05-04",paid:true,days:19},
+{invoice:"3924",serviceDate:"2024-04-15",client:"PRSA",industry:"Public Relations",fee:6658.25,lead:"Fred",invoiceDate:"2024-04-15",estPayAvg:"2024-05-04",estPayLast:"2024-04-19",payDate:"2024-05-06",paid:true,days:21},
+{invoice:"3923",serviceDate:"2024-04-09",client:"Mohawk Industries, Inc.",industry:"Manufacturing",fee:12364.43,lead:"Katie",invoiceDate:"2024-04-09",estPayAvg:"2024-05-06",estPayLast:"2024-04-27",payDate:"2024-04-26",paid:true,days:17},
+{invoice:"3922",serviceDate:"2024-04-08",client:"Johnson&Johnson",industry:"Pharmaceuticals",fee:11000,lead:"Fred",invoiceDate:"2024-04-08",estPayAvg:"2024-05-05",estPayLast:"2024-04-20",payDate:"2024-04-14",paid:true,days:6},
+{invoice:"3921",serviceDate:"2024-03-28",client:"Humana Inc.",industry:"Insurance",fee:686.88,lead:"Fred",invoiceDate:"2024-03-28",estPayAvg:"2024-04-21",estPayLast:"2024-04-15",payDate:"2024-07-25",paid:true,days:119},
+{invoice:"3920",serviceDate:"2024-04-01",client:"Youth Villages",industry:"NGO",fee:12500,lead:"Katie",invoiceDate:"2024-04-01",estPayAvg:"2024-04-12",estPayLast:"2024-04-11",payDate:"2024-04-09",paid:true,days:8},
+{invoice:"3919",serviceDate:"2024-04-01",client:"Commercial Metals Company",industry:"Manufacturing",fee:6000,lead:"Fred",invoiceDate:"2024-04-01",estPayAvg:"2024-04-02",estPayLast:"2024-04-03",payDate:"2024-04-01",paid:true,days:0},
+{invoice:"3918",serviceDate:"2024-03-25",client:"Pernod Ricard USA",industry:"Consumer Products",fee:5500,lead:"Katie",invoiceDate:"2024-03-25",estPayAvg:"2024-05-11",estPayLast:"2024-04-28",payDate:"2024-04-24",paid:true,days:30},
+{invoice:"3917",serviceDate:"2024-03-28",client:"Humana Inc.",industry:"Insurance",fee:11000,lead:"Fred",invoiceDate:"2024-03-28",estPayAvg:"2024-04-21",estPayLast:"2024-04-15",payDate:"2024-04-18",paid:true,days:21},
+{invoice:"3916",serviceDate:"2024-03-28",client:"Pernod Ricard USA",industry:"Consumer Products",fee:7458.74,lead:"Fred",invoiceDate:"2024-03-28",estPayAvg:"2024-05-14",estPayLast:"2024-05-01",payDate:"2024-05-02",paid:true,days:35},
+{invoice:"3915",serviceDate:"2024-03-22",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:11917.59,lead:"Fred",invoiceDate:"2024-03-22",estPayAvg:"2024-04-11",estPayLast:"2024-03-26",payDate:"2024-03-26",paid:true,days:4},
+{invoice:"3914",serviceDate:"2024-03-28",client:"Cigna",industry:"Insurance",fee:25448.68,lead:"Katie",invoiceDate:"2024-03-20",estPayAvg:"2024-05-01",estPayLast:"2024-05-11",payDate:"2024-04-10",paid:true,days:21},
+{invoice:"3913",serviceDate:"2024-03-18",client:"Newport News Shipbuilding",industry:"Manufacturing",fee:5500,lead:"Fred",invoiceDate:"2024-03-18",estPayAvg:"2024-04-06",estPayLast:"2024-05-16",payDate:"2024-03-28",paid:true,days:10},
+{invoice:"3912",serviceDate:"2024-03-14",client:"Point72",industry:"Financial Services",fee:5500,lead:"Fred",invoiceDate:"2024-03-14",estPayAvg:"2024-04-16",estPayLast:"2024-03-25",payDate:"2024-05-03",paid:true,days:50},
+{invoice:"3911",serviceDate:"2024-03-14",client:"Pernod Ricard USA",industry:"Consumer Products",fee:12375,lead:"Katie",invoiceDate:"2024-03-14",estPayAvg:"2024-04-30",estPayLast:"2024-04-17",payDate:"2024-04-10",paid:true,days:27},
+{invoice:"3910",serviceDate:"2024-03-12",client:"Bank of America",industry:"Financial Services",fee:2750,lead:"Fred",invoiceDate:"2024-03-12",estPayAvg:"2024-03-26",estPayLast:"2024-03-15",payDate:"2024-03-15",paid:true,days:3},
+{invoice:"3909",serviceDate:"2024-03-07",client:"Cigna",industry:"Insurance",fee:24062.5,lead:"Fred/Katie",invoiceDate:"2024-03-07",estPayAvg:"2024-04-18",estPayLast:"2024-04-28",payDate:"2024-03-20",paid:true,days:13},
+{invoice:"3908",serviceDate:"2024-03-04",client:"Astellas",industry:"Pharmaceuticals",fee:11721.81,lead:"Fred",invoiceDate:"2024-03-04",estPayAvg:"2024-04-10",estPayLast:"2024-04-26",payDate:"2024-04-26",paid:true,days:53},
+{invoice:"3907",serviceDate:"2024-03-04",client:"Youth Villages",industry:"NGO",fee:12500,lead:"Katie",invoiceDate:"2024-03-04",estPayAvg:"2024-03-15",estPayLast:"2024-03-14",payDate:"2024-03-12",paid:true,days:8},
+{invoice:"3906",serviceDate:"2024-03-01",client:"Cigna",industry:"Insurance",fee:45679.46,lead:"Fred/Katie",invoiceDate:"2024-03-01",estPayAvg:"2024-04-12",estPayLast:"2024-04-22",payDate:"2024-03-20",paid:true,days:19},
+{invoice:"3905",serviceDate:"2024-02-26",client:"Wharton School of Business",industry:"Higher Education",fee:1376.08,lead:"Fred",invoiceDate:"2024-02-26",estPayAvg:"2024-04-24",estPayLast:"2024-05-03",payDate:"2024-03-20",paid:true,days:23},
+{invoice:"3904",serviceDate:"2024-02-21",client:"AUTM",industry:"Manufacturing",fee:6989.38,lead:"Fred",invoiceDate:"2024-02-21",estPayAvg:"2024-03-02",estPayLast:"2024-02-26",payDate:"2024-03-07",paid:true,days:15},
+{invoice:"3903",serviceDate:"2024-02-21",client:"Dal-Tile Corporation",industry:"Manufacturing",fee:12161.15,lead:"Fred",invoiceDate:"2024-02-21",estPayAvg:"2024-08-17",estPayLast:"2024-04-09",payDate:"2024-04-09",paid:true,days:48},
+{invoice:"3902",serviceDate:"2024-02-20",client:"Cigna",industry:"Insurance",fee:2750,lead:"Katie",invoiceDate:"2024-02-20",estPayAvg:"2024-04-02",estPayLast:"2024-04-12",payDate:"2024-03-20",paid:true,days:29},
+{invoice:"3901",serviceDate:"2024-02-20",client:"Mohawk Industries, Inc.",industry:"Manufacturing",fee:12049.13,lead:"Fred",invoiceDate:"2024-02-20",estPayAvg:"2024-03-18",estPayLast:"2024-03-09",payDate:"2024-03-15",paid:true,days:24},
+{invoice:"3900",serviceDate:"2024-02-16",client:"Youth Villages",industry:"NGO",fee:12500,lead:"Katie",invoiceDate:"2024-02-16",estPayAvg:"2024-02-27",estPayLast:"2024-02-26",payDate:"2024-02-23",paid:true,days:7},
+{invoice:"3899",serviceDate:"2024-02-08",client:"Mohawk Industries, Inc.",industry:"Manufacturing",fee:12605.09,lead:"Katie",invoiceDate:"2024-02-01",estPayAvg:"2024-02-28",estPayLast:"2024-02-19",payDate:"2024-02-16",paid:true,days:15},
+{invoice:"3898",serviceDate:"2024-02-02",client:"Rockefeller Capital Management",industry:"Financial Services",fee:5500,lead:"Katie",invoiceDate:"2024-02-01",estPayAvg:"2024-02-13",estPayLast:"2024-02-10",payDate:"2024-02-23",paid:true,days:22},
+{invoice:"3897",serviceDate:"2024-02-01",client:"Pernod Ricard USA",industry:"Consumer Products",fee:15000,lead:"Fred",invoiceDate:"2024-02-01",estPayAvg:"2024-03-19",estPayLast:"2024-03-06",payDate:"2024-03-12",paid:true,days:40},
+{invoice:"3896",serviceDate:"2024-02-01",client:"Pernod Ricard USA",industry:"Consumer Products",fee:5000,lead:"Fred",invoiceDate:"2024-02-01",estPayAvg:"2024-03-19",estPayLast:"2024-03-06",payDate:"2024-03-04",paid:true,days:32},
+{invoice:"3895",serviceDate:"2024-12-15",client:"Youth Villages",industry:"NGO",fee:44531.25,lead:"Katie",invoiceDate:"2024-01-25",estPayAvg:"2024-02-05",estPayLast:"2024-02-04",payDate:"2024-02-07",paid:true,days:13},
+{invoice:"3894",serviceDate:"2024-01-18",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:11993.27,lead:"Fred",invoiceDate:"2024-01-18",estPayAvg:"2024-02-07",estPayLast:"2024-01-22",payDate:"2024-01-23",paid:true,days:5},
+{invoice:"3893",serviceDate:"2024-01-16",client:"Mohawk Industries, Inc.",industry:"Manufacturing",fee:11000,lead:"Fred",invoiceDate:"2024-01-16",estPayAvg:"2024-02-12",estPayLast:"2024-02-03",payDate:"2024-02-02",paid:true,days:17},
+{invoice:"3891",serviceDate:"2024-01-04",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:1375,lead:"Fred",invoiceDate:"2024-01-05",estPayAvg:"2024-01-25",estPayLast:"2024-01-09",payDate:"2024-03-20",paid:true,days:75},
+{invoice:"3890",serviceDate:"2024-01-04",client:"Astellas",industry:"Pharmaceuticals",fee:5500,lead:"Fred",invoiceDate:"2024-01-04",estPayAvg:"2024-02-10",estPayLast:"2024-02-26",payDate:"2024-01-18",paid:true,days:14},
+{invoice:"3889",serviceDate:"2023-12-18",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:1375,lead:"Fred",invoiceDate:"2023-12-19",estPayAvg:"2024-01-08",estPayLast:"2023-12-23",payDate:"2023-12-21",paid:true,days:2},
+{invoice:"3888",serviceDate:"2023-12-15",client:"Campus Text",industry:"Publishing",fee:329.8,lead:"Evan",invoiceDate:"2023-12-15",estPayAvg:"2024-01-10",estPayLast:"2024-01-11",payDate:"2024-01-17",paid:true,days:33},
+{invoice:"3886",serviceDate:"2023-12-15",client:"Youth Villages",industry:"NGO",fee:66173.44,lead:"Katie",invoiceDate:"2023-12-15",estPayAvg:"2023-12-26",estPayLast:"2023-12-25",payDate:"2023-12-20",paid:true,days:5},
+{invoice:"3885",serviceDate:"2023-12-15",client:"Astellas",industry:"Pharmaceuticals",fee:2750,lead:"Fred",invoiceDate:"2023-12-15",estPayAvg:"2024-01-21",estPayLast:"2024-02-06",payDate:"2023-12-20",paid:true,days:5},
+{invoice:"3884",serviceDate:"2023-12-07",client:"Rockefeller Capital Management",industry:"Financial Services",fee:7218.75,lead:"Fred",invoiceDate:"2023-12-07",estPayAvg:"2023-12-19",estPayLast:"2023-12-16",payDate:"2023-12-21",paid:true,days:14},
+{invoice:"3883",serviceDate:"2023-12-06",client:"Janssen Immunology",industry:"Healthcare",fee:11476.21,lead:"Fred",invoiceDate:"2023-12-07",estPayAvg:"2023-12-31",estPayLast:"2023-12-14",payDate:"2023-12-14",paid:true,days:7},
+{invoice:"3882",serviceDate:"2023-12-05",client:"Neurocrine Biosciences",industry:"Healthcare",fee:27582.63,lead:"Fred",invoiceDate:"2023-12-06",estPayAvg:"2024-01-09",estPayLast:"2024-01-19",payDate:"2024-01-19",paid:true,days:44},
+{invoice:"3881",serviceDate:"2023-11-30",client:"Youth Villages",industry:"NGO",fee:30000,lead:"Katie",invoiceDate:"2023-11-30",estPayAvg:"2023-12-11",estPayLast:"2023-12-10",payDate:"2023-12-06",paid:true,days:6},
+{invoice:"3879",serviceDate:"2023-11-17",client:"Icahn School of Medicine at Mount Sinai",industry:"Higher Education",fee:5000,lead:"Katie",invoiceDate:"2023-11-20",estPayAvg:"2024-01-08",estPayLast:"2023-12-31",payDate:"2023-12-31",paid:true,days:41},
+{invoice:"3878",serviceDate:"2023-11-09",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:13104.89,lead:"Fred",invoiceDate:"2023-11-13",estPayAvg:"2023-12-03",estPayLast:"2023-11-17",payDate:"2023-11-28",paid:true,days:15},
+{invoice:"3877",serviceDate:"2023-11-06",client:"The Defense Information School",industry:"Education",fee:831,lead:"Fred",invoiceDate:"2023-11-16",estPayAvg:"2023-12-14",estPayLast:"2023-12-04",payDate:"2023-12-11",paid:true,days:25},
+{invoice:"3876",serviceDate:"2023-11-07",client:"Mohawk Industries, Inc.",industry:"Manufacturing",fee:11454.58,lead:"Fred",invoiceDate:"2023-11-07",estPayAvg:"2023-12-04",estPayLast:"2023-11-25",payDate:"2023-11-17",paid:true,days:10},
+{invoice:"3875",serviceDate:"2023-10-30",client:"Point72",industry:"Financial Services",fee:1375,lead:"Fred",invoiceDate:"2023-10-30",estPayAvg:"2023-12-02",estPayLast:"2023-11-10",payDate:"2024-01-31",paid:true,days:93},
+{invoice:"3874",serviceDate:"2023-10-30",client:"Wharton School of Business",industry:"Higher Education",fee:1811.01,lead:"Fred",invoiceDate:"2023-10-30",estPayAvg:"2023-12-27",estPayLast:"2024-01-05",payDate:"2023-12-31",paid:true,days:62},
+{invoice:"3873",serviceDate:"2023-10-25",client:"Humana Inc.",industry:"Insurance",fee:11000,lead:"Fred",invoiceDate:"2023-10-25",estPayAvg:"2023-11-18",estPayLast:"2023-11-12",payDate:"2023-11-09",paid:true,days:15},
+{invoice:"3872",serviceDate:"2023-10-25",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:4125,lead:"Fred",invoiceDate:"2023-10-25",estPayAvg:"2023-11-14",estPayLast:"2023-10-29",payDate:"2023-10-28",paid:true,days:3},
+{invoice:"3871",serviceDate:"2023-10-23",client:"Amit Kothari",industry:"Public Relations",fee:1100,lead:"Katie",invoiceDate:"2023-10-23",estPayAvg:"2023-12-06",estPayLast:"2023-11-30",payDate:"2023-11-30",paid:true,days:38},
+{invoice:"3870",serviceDate:"2023-10-23",client:"Humana Inc.",industry:"Insurance",fee:12095.19,lead:"Fred",invoiceDate:"2023-10-23",estPayAvg:"2023-11-16",estPayLast:"2023-11-10",payDate:"2023-11-14",paid:true,days:22},
+{invoice:"3869",serviceDate:"2023-10-23",client:"Peritus PR",industry:"Communications",fee:3500,lead:"Fred",invoiceDate:"2023-10-14",estPayAvg:"2023-10-15",estPayLast:"2023-10-15",payDate:"2023-10-16",paid:true,days:2},
+{invoice:"3868",serviceDate:"2023-10-18",client:"StanleyBlack&Decker",industry:"Manufacturing",fee:2750,lead:"Fred",invoiceDate:"2023-10-18",estPayAvg:"2023-12-10",estPayLast:"2023-11-22",payDate:"2023-11-22",paid:true,days:35},
+{invoice:"3867",serviceDate:"2023-10-17",client:"StanleyBlack&Decker",industry:"Manufacturing",fee:12000,lead:"Fred",invoiceDate:"2023-10-18",estPayAvg:"2023-12-10",estPayLast:"2023-11-22",payDate:"2023-11-22",paid:true,days:35},
+{invoice:"3866",serviceDate:"2023-10-11",client:"Exact Sciences",industry:"Healthcare",fee:12758.3,lead:"Fred",invoiceDate:"2023-10-11",estPayAvg:"2023-10-25",estPayLast:"2023-10-25",payDate:"2023-10-25",paid:true,days:14},
+{invoice:"3865",serviceDate:"2023-10-10",client:"Mohawk Industries, Inc.",industry:"Manufacturing",fee:13384.34,lead:"Fred",invoiceDate:"2023-10-10",estPayAvg:"2023-11-06",estPayLast:"2023-10-28",payDate:"2023-10-20",paid:true,days:10},
+{invoice:"3864",serviceDate:"2023-10-10",client:"Amit Kothari",industry:"Public Relations",fee:1100,lead:"Katie",invoiceDate:"2023-10-10",estPayAvg:"2023-11-23",estPayLast:"2023-11-17",payDate:"2023-11-30",paid:true,days:51},
+{invoice:"3863",serviceDate:"2023-10-04",client:"Astellas",industry:"Pharmaceuticals",fee:4812.5,lead:"Fred",invoiceDate:"2023-10-04",estPayAvg:"2023-11-10",estPayLast:"2023-11-26",payDate:"2023-11-14",paid:true,days:41},
+{invoice:"3862",serviceDate:"2023-10-04",client:"StanleyBlack&Decker",industry:"Manufacturing",fee:2750,lead:"Fred",invoiceDate:"2023-10-04",estPayAvg:"2023-11-26",estPayLast:"2023-11-08",payDate:"2023-11-13",paid:true,days:40},
+{invoice:"3861",serviceDate:"2023-10-03",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:2750,lead:"Fred",invoiceDate:"2023-10-03",estPayAvg:"2023-10-23",estPayLast:"2023-10-07",payDate:"2023-10-05",paid:true,days:2},
+{invoice:"3860",serviceDate:"2023-09-19",client:"Astellas",industry:"Pharmaceuticals",fee:6250,lead:"Fred",invoiceDate:"2023-09-15",estPayAvg:"2023-10-22",estPayLast:"2023-11-07",payDate:"2023-10-24",paid:true,days:39},
+{invoice:"3859",serviceDate:"2023-09-15",client:"Cigna",industry:"Insurance",fee:10677.26,lead:"Fred",invoiceDate:"2023-09-15",estPayAvg:"2023-10-27",estPayLast:"2023-11-06",payDate:"2023-09-21",paid:true,days:6},
+{invoice:"3858",serviceDate:"2023-09-15",client:"Rockefeller Capital Management",industry:"Financial Services",fee:6750,lead:"Fred",invoiceDate:"2023-09-15",estPayAvg:"2023-09-27",estPayLast:"2023-09-24",payDate:"2023-09-21",paid:true,days:6},
+{invoice:"3857",serviceDate:"2023-09-07",client:"Cigna",industry:"Insurance",fee:10636.78,lead:"Fred",invoiceDate:"2023-09-08",estPayAvg:"2023-10-20",estPayLast:"2023-10-30",payDate:"2023-09-21",paid:true,days:13},
+{invoice:"3856",serviceDate:"2023-09-05",client:"Novo Nordisk",industry:"Pharmaceuticals",fee:10656.25,lead:"Fred",invoiceDate:"2023-09-05",estPayAvg:"2023-09-17",estPayLast:"2023-09-13",payDate:"2023-09-13",paid:true,days:8},
+{invoice:"3855",serviceDate:"2023-08-21",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:1415.44,lead:"Fred",invoiceDate:"2023-08-21",estPayAvg:"2023-09-10",estPayLast:"2023-08-25",payDate:"2023-08-23",paid:true,days:2},
+{invoice:"3854",serviceDate:"2023-08-16",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:12368.57,lead:"Fred",invoiceDate:"2023-08-16",estPayAvg:"2023-09-05",estPayLast:"2023-08-20",payDate:"2023-08-20",paid:true,days:4},
+{invoice:"3853",serviceDate:"2023-08-07",client:"Depository Trust & Clearing Corporation",industry:"Financial Services",fee:2750,lead:"Fred",invoiceDate:"2023-08-08",estPayAvg:"2023-09-15",estPayLast:"2023-08-17",payDate:"2023-08-22",paid:true,days:14},
+{invoice:"3852",serviceDate:"2023-07-25",client:"StanleyBlack&Decker",industry:"Manufacturing",fee:10923.8,lead:"Fred",invoiceDate:"2023-08-08",estPayAvg:"2023-09-30",estPayLast:"2023-09-12",payDate:"2023-09-18",paid:true,days:41},
+{invoice:"3851",serviceDate:"2023-08-03",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:11000,lead:"Fred",invoiceDate:"2023-08-04",estPayAvg:"2023-08-24",estPayLast:"2023-08-08",payDate:"2023-08-09",paid:true,days:5},
+{invoice:"3850",serviceDate:"2023-08-01",client:"Pernod Ricard USA",industry:"Consumer Products",fee:10000,lead:"Fred",invoiceDate:"2023-08-01",estPayAvg:"2023-09-17",estPayLast:"2023-09-04",payDate:"2023-09-07",paid:true,days:37},
+{invoice:"3849",serviceDate:"2023-07-25",client:"Campus Text",industry:"Publishing",fee:758.54,lead:"Evan",invoiceDate:"2023-07-25",estPayAvg:"2023-08-20",estPayLast:"2023-08-21",payDate:"2023-08-23",paid:true,days:29},
+{invoice:"3848",serviceDate:"2023-07-20",client:"Everly Health",industry:"Healthcare",fee:11708.71,lead:"Fred",invoiceDate:"2023-07-20",estPayAvg:"2023-08-10",estPayLast:"2023-08-10",payDate:"2023-08-10",paid:true,days:21},
+{invoice:"3847",serviceDate:"2023-07-10",client:"American Saddlebred Horse And Breeders Association",industry:"Equestrian",fee:1500,lead:"Fred",invoiceDate:"2023-07-10",estPayAvg:"2023-07-31",estPayLast:"2023-07-31",payDate:"2023-07-31",paid:true,days:21},
+{invoice:"3846",serviceDate:"2023-07-07",client:"Mash Property",industry:"Foundation",fee:17585.37,lead:"Fred",invoiceDate:"2023-07-07",estPayAvg:"2023-07-10",estPayLast:"2023-07-08",payDate:"2023-07-12",paid:true,days:5},
+{invoice:"3845",serviceDate:"2023-06-27",client:"Novo Nordisk",industry:"Pharmaceuticals",fee:2260.12,lead:"Fred",invoiceDate:"2023-06-27",estPayAvg:"2023-07-09",estPayLast:"2023-07-05",payDate:"2023-07-14",paid:true,days:17},
+{invoice:"3844",serviceDate:"2023-06-21",client:"Depository Trust & Clearing Corporation",industry:"Financial Services",fee:2750,lead:"Fred",invoiceDate:"2023-06-26",estPayAvg:"2023-08-03",estPayLast:"2023-07-05",payDate:"2023-08-21",paid:true,days:56},
+{invoice:"3843",serviceDate:"2023-06-22",client:"Point72",industry:"Financial Services",fee:9625,lead:"Fred",invoiceDate:"2023-06-23",estPayAvg:"2023-07-26",estPayLast:"2023-07-04",payDate:"2023-08-04",paid:true,days:42},
+{invoice:"3842",serviceDate:"2023-06-20",client:"American Saddlebred Horse And Breeders Association",industry:"Equestrian",fee:1500,lead:"Fred",invoiceDate:"2023-06-21",estPayAvg:"2023-07-12",estPayLast:"2023-07-12",payDate:"2023-07-13",paid:true,days:22},
+{invoice:"3841",serviceDate:"2023-06-15",client:"Dollar Tree",industry:"Retail",fee:12242.24,lead:"Fred",invoiceDate:"2023-06-20",estPayAvg:"2023-07-21",estPayLast:"2023-07-21",payDate:"2023-07-21",paid:true,days:31},
+{invoice:"3840",serviceDate:"2023-06-20",client:"International Association of Business Communicators",industry:"Public Relations",fee:600,lead:"Fred",invoiceDate:"2023-06-20",estPayAvg:"2023-07-10",estPayLast:"2023-07-10",payDate:"2023-07-10",paid:true,days:20},
+{invoice:"3839",serviceDate:"2023-06-12",client:"Rockefeller Capital Management",industry:"Financial Services",fee:5000,lead:"Fred",invoiceDate:"2023-06-13",estPayAvg:"2023-06-25",estPayLast:"2023-06-22",payDate:"2023-06-22",paid:true,days:9},
+{invoice:"3838",serviceDate:"2023-06-08",client:"PRSA",industry:"Public Relations",fee:500,lead:"Fred",invoiceDate:"2023-06-08",estPayAvg:"2023-06-27",estPayLast:"2023-06-12",payDate:"2023-06-27",paid:true,days:19},
+{invoice:"3837",serviceDate:"2023-06-08",client:"Oceansound",industry:"Financial Services",fee:1375,lead:"Fred",invoiceDate:"2023-06-08",estPayAvg:"2023-06-17",estPayLast:"2023-06-13",payDate:"2023-06-13",paid:true,days:5},
+{invoice:"3836",serviceDate:"2023-06-07",client:"Bank of America",industry:"Financial Services",fee:2750,lead:"Fred",invoiceDate:"2023-06-08",estPayAvg:"2023-06-22",estPayLast:"2023-06-11",payDate:"2023-06-14",paid:true,days:6},
+{invoice:"3835",serviceDate:"2023-06-05",client:"Prince Street Pizza",industry:"Restaurant",fee:2800,lead:"Maida",invoiceDate:"2023-06-05",estPayAvg:"2023-06-28",estPayLast:"2023-06-27",payDate:"2023-06-27",paid:true,days:22},
+{invoice:"3834",serviceDate:"2023-06-01",client:"Newport News Shipbuilding",industry:"Manufacturing",fee:2750,lead:"Fred",invoiceDate:"2023-06-01",estPayAvg:"2023-06-20",estPayLast:"2023-07-30",payDate:"2023-06-12",paid:true,days:11},
+{invoice:"3833",serviceDate:"2023-06-01",client:"Pernod Ricard USA",industry:"Consumer Products",fee:1375,lead:"Fred",invoiceDate:"2023-06-01",estPayAvg:"2023-07-18",estPayLast:"2023-07-05",payDate:"2023-07-07",paid:true,days:36},
+{invoice:"3832",serviceDate:"2023-04-27",client:"Page Alumni Association",industry:"Government Relations",fee:175,lead:"Fred",invoiceDate:"2023-04-27",estPayAvg:"2023-04-27",estPayLast:null,payDate:"2023-04-27",paid:true,days:0},
+{invoice:"3831",serviceDate:"2023-05-31",client:"Verastem Oncology",industry:"Pharmaceuticals",fee:4125,lead:"Fred",invoiceDate:"2023-05-31",estPayAvg:"2023-07-02",estPayLast:"2023-06-29",payDate:"2023-06-29",paid:true,days:29},
+{invoice:"3830",serviceDate:"2023-05-30",client:"Astellas",industry:"Pharmaceuticals",fee:3750,lead:"Fred",invoiceDate:"2023-05-30",estPayAvg:"2023-07-06",estPayLast:"2023-07-22",payDate:"2023-07-14",paid:true,days:45},
+{invoice:"3829",serviceDate:"2023-05-25",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:33137.34,lead:"Fred",invoiceDate:"2023-05-26",estPayAvg:"2023-06-15",estPayLast:"2023-05-30",payDate:"2023-06-01",paid:true,days:6},
+{invoice:"3828",serviceDate:"2023-05-22",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:1875,lead:"Fred",invoiceDate:"2023-05-22",estPayAvg:"2023-06-11",estPayLast:"2023-05-26",payDate:"2023-05-24",paid:true,days:2},
+{invoice:"3827",serviceDate:"2023-05-22",client:"Point72",industry:"Financial Services",fee:11000,lead:"Fred",invoiceDate:"2023-05-22",estPayAvg:"2023-06-24",estPayLast:"2023-06-02",payDate:"2023-06-03",paid:true,days:12},
+{invoice:"3826",serviceDate:"2023-05-19",client:"Verastem Oncology",industry:"Pharmaceuticals",fee:5156.25,lead:"Fred",invoiceDate:"2023-05-22",estPayAvg:"2023-06-23",estPayLast:"2023-06-20",payDate:"2023-06-26",paid:true,days:35},
+{invoice:"3825",serviceDate:"2023-05-16",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:11953.41,lead:"Katie",invoiceDate:"2023-05-17",estPayAvg:"2023-06-06",estPayLast:"2023-05-21",payDate:"2023-05-26",paid:true,days:9},
+{invoice:"3824",serviceDate:"2023-05-16",client:"Depository Trust & Clearing Corporation",industry:"Financial Services",fee:2750,lead:"Fred",invoiceDate:"2023-05-16",estPayAvg:"2023-06-23",estPayLast:"2023-05-25",payDate:"2023-06-05",paid:true,days:20},
+{invoice:"3823",serviceDate:"2023-05-11",client:"Edelman Financial Engines",industry:"Financial Services",fee:5500,lead:"Fred",invoiceDate:"2023-05-16",estPayAvg:"2023-05-23",estPayLast:"2023-05-23",payDate:"2023-05-23",paid:true,days:7},
+{invoice:"3822",serviceDate:"2023-05-13",client:"Icahn School of Medicine at Mount Sinai",industry:"Higher Education",fee:15000,lead:"Katie",invoiceDate:"2023-05-15",estPayAvg:"2023-07-03",estPayLast:"2023-06-25",payDate:"2023-08-23",paid:true,days:100},
+{invoice:"3821",serviceDate:"2023-05-08",client:"Newport News Shipbuilding",industry:"Manufacturing",fee:11677.03,lead:"Fred",invoiceDate:"2023-05-15",estPayAvg:"2023-06-03",estPayLast:"2023-07-13",payDate:"2023-05-31",paid:true,days:16},
+{invoice:"3820",serviceDate:"2023-05-10",client:"Depository Trust & Clearing Corporation",industry:"Financial Services",fee:3125,lead:"Fred",invoiceDate:"2023-05-15",estPayAvg:"2023-06-22",estPayLast:"2023-05-24",payDate:"2023-05-31",paid:true,days:16},
+{invoice:"3819",serviceDate:"2023-05-08",client:"Cigna",industry:"Insurance",fee:30471.11,lead:"Fred",invoiceDate:"2023-05-08",estPayAvg:"2023-06-19",estPayLast:"2023-06-29",payDate:"2023-06-19",paid:true,days:42},
+{invoice:"3818",serviceDate:"2023-05-03",client:"Novo Nordisk",industry:"Pharmaceuticals",fee:20625,lead:"Fred",invoiceDate:"2023-05-03",estPayAvg:"2023-05-15",estPayLast:"2023-05-11",payDate:"2023-05-16",paid:true,days:13},
+{invoice:"3817",serviceDate:"2023-05-01",client:"Cigna",industry:"Insurance",fee:43263.91,lead:"Fred",invoiceDate:"2023-05-01",estPayAvg:"2023-06-12",estPayLast:"2023-06-22",payDate:"2023-07-27",paid:true,days:87},
+{invoice:"3816",serviceDate:"2023-04-17",client:"Pernod Ricard USA",industry:"Consumer Products",fee:9406.25,lead:"Fred",invoiceDate:"2023-05-01",estPayAvg:"2023-06-17",estPayLast:"2023-06-04",payDate:"2023-06-13",paid:true,days:43},
+{invoice:"3815",serviceDate:"2023-04-27",client:"StanleyBlack&Decker",industry:"Manufacturing",fee:11661.32,lead:"Fred",invoiceDate:"2023-05-01",estPayAvg:"2023-06-23",estPayLast:"2023-06-05",payDate:"2023-06-23",paid:true,days:53},
+{invoice:"3814",serviceDate:"2023-05-01",client:"Bank of America",industry:"Financial Services",fee:2750,lead:"Fred",invoiceDate:"2023-05-01",estPayAvg:"2023-05-15",estPayLast:"2023-05-04",payDate:"2023-05-18",paid:true,days:17},
+{invoice:"3813",serviceDate:"2023-04-24",client:"Crewcial",industry:"Financial Services",fee:3300,lead:"Fred",invoiceDate:"2023-05-01",estPayAvg:"2023-05-08",estPayLast:"2023-05-18",payDate:"2023-05-15",paid:true,days:14},
+{invoice:"3812",serviceDate:"2023-04-24",client:"Rockefeller Capital Management",industry:"Financial Services",fee:2500,lead:"Fred",invoiceDate:"2023-04-25",estPayAvg:"2023-05-07",estPayLast:"2023-05-04",payDate:"2023-05-04",paid:true,days:9},
+{invoice:"3811",serviceDate:"2023-04-25",client:"Prince Street Pizza",industry:"Restaurant",fee:4000,lead:"Maida",invoiceDate:"2023-04-25",estPayAvg:"2023-05-18",estPayLast:"2023-05-17",payDate:"2023-05-03",paid:true,days:8},
+{invoice:"3809",serviceDate:"2023-04-24",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:3900.84,lead:"Fred",invoiceDate:"2023-04-24",estPayAvg:"2023-05-14",estPayLast:"2023-04-28",payDate:"2023-04-27",paid:true,days:3},
+{invoice:"3808",serviceDate:"2023-04-14",client:"Bank of America",industry:"Financial Services",fee:2750,lead:"Fred",invoiceDate:"2023-04-19",estPayAvg:"2023-05-03",estPayLast:"2023-04-22",payDate:"2023-04-26",paid:true,days:7},
+{invoice:"3807",serviceDate:"2023-04-20",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:30000,lead:"Fred",invoiceDate:"2023-04-18",estPayAvg:"2023-05-08",estPayLast:"2023-04-22",payDate:"2023-04-24",paid:true,days:6},
+{invoice:"3806",serviceDate:"2023-04-17",client:"Oceansound",industry:"Financial Services",fee:1375,lead:"Fred",invoiceDate:"2023-04-17",estPayAvg:"2023-04-26",estPayLast:"2023-04-22",payDate:"2023-04-25",paid:true,days:8},
+{invoice:"3805",serviceDate:"2023-04-14",client:"Bank of America",industry:"Financial Services",fee:2750,lead:"Fred",invoiceDate:"2023-04-19",estPayAvg:"2023-05-03",estPayLast:"2023-04-22",payDate:"2023-04-26",paid:true,days:7},
+{invoice:"3803",serviceDate:"2023-03-28",client:"Federal Laboratory Consortium",industry:"Pharmaceuticals",fee:5000,lead:"Fred",invoiceDate:"2023-04-13",estPayAvg:"2023-05-12",estPayLast:"2023-05-02",payDate:"2023-05-23",paid:true,days:40},
+{invoice:"3802",serviceDate:"2023-04-11",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:11954.31,lead:"Fred",invoiceDate:"2023-04-12",estPayAvg:"2023-05-02",estPayLast:"2023-04-16",payDate:"2023-04-17",paid:true,days:5},
+{invoice:"3801",serviceDate:"2023-04-07",client:"Newport News Shipbuilding",industry:"Manufacturing",fee:12104.62,lead:"Fred",invoiceDate:"2023-04-11",estPayAvg:"2023-04-30",estPayLast:"2023-06-09",payDate:"2023-05-13",paid:true,days:32},
+{invoice:"3800",serviceDate:"2023-04-01",client:"Prince Street Pizza",industry:"Restaurant",fee:2000,lead:"Maida",invoiceDate:"2023-04-03",estPayAvg:"2023-04-26",estPayLast:"2023-04-25",payDate:"2023-04-05",paid:true,days:2},
+{invoice:"3799",serviceDate:"2023-04-03",client:"Zai Laboratories",industry:"Pharmaceuticals",fee:4687,lead:"Fred",invoiceDate:"2023-04-03",estPayAvg:"2023-04-20",estPayLast:"2023-05-13",payDate:"2023-05-13",paid:true,days:40},
+{invoice:"3798",serviceDate:"2023-03-31",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:2750,lead:"Fred",invoiceDate:"2023-04-03",estPayAvg:"2023-04-23",estPayLast:"2023-04-07",payDate:"2023-04-05",paid:true,days:2},
+{invoice:"3797",serviceDate:"2023-03-22",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:1250,lead:"Fred",invoiceDate:"2023-03-22",estPayAvg:"2023-04-11",estPayLast:"2023-03-26",payDate:"2023-03-27",paid:true,days:5},
+{invoice:"3796",serviceDate:"2023-03-22",client:"Janssen Immunology",industry:"Healthcare",fee:2750,lead:"Fred",invoiceDate:"2023-03-22",estPayAvg:"2023-04-15",estPayLast:"2023-03-29",payDate:"2023-03-31",paid:true,days:9},
+{invoice:"3795",serviceDate:"2023-03-21",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:2500,lead:"Fred",invoiceDate:"2023-03-21",estPayAvg:"2023-04-10",estPayLast:"2023-03-25",payDate:"2023-03-24",paid:true,days:3},
+{invoice:"3794",serviceDate:"2023-03-22",client:"Rockefeller Capital Management",industry:"Financial Services",fee:5937.5,lead:"Fred",invoiceDate:"2023-03-22",estPayAvg:"2023-04-03",estPayLast:"2023-03-31",payDate:"2023-04-06",paid:true,days:15},
+{invoice:"3793",serviceDate:"2023-03-16",client:"Mohawk Industries, Inc.",industry:"Manufacturing",fee:11274.44,lead:"Fred",invoiceDate:"2023-03-20",estPayAvg:"2023-04-16",estPayLast:"2023-04-07",payDate:"2023-03-24",paid:true,days:4},
+{invoice:"3792",serviceDate:"2023-03-13",client:"Oceansound",industry:"Financial Services",fee:5500,lead:"Fred",invoiceDate:"2023-03-14",estPayAvg:"2023-03-23",estPayLast:"2023-03-19",payDate:"2023-03-28",paid:true,days:14},
+{invoice:"3791",serviceDate:"2023-03-10",client:"Wharton School of Business",industry:"Higher Education",fee:1305.83,lead:"Fred",invoiceDate:"2023-03-13",estPayAvg:"2023-05-10",estPayLast:"2023-05-19",payDate:"2023-05-13",paid:true,days:61},
+{invoice:"3790",serviceDate:"2023-03-10",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:1875,lead:"Fred",invoiceDate:"2023-03-13",estPayAvg:"2023-04-02",estPayLast:"2023-03-17",payDate:"2023-03-15",paid:true,days:2},
+{invoice:"3789",serviceDate:"2023-03-10",client:"Zai Laboratories",industry:"Pharmaceuticals",fee:4687.5,lead:"Fred",invoiceDate:"2023-03-10",estPayAvg:"2023-03-27",estPayLast:"2023-04-19",payDate:"2023-03-30",paid:true,days:20},
+{invoice:"3788",serviceDate:"2023-02-28",client:"Dal-Tile Corporation",industry:"Manufacturing",fee:11086.87,lead:"Fred",invoiceDate:"2023-03-07",estPayAvg:"2023-09-01",estPayLast:"2023-04-24",payDate:"2023-03-25",paid:true,days:18},
+{invoice:"3787",serviceDate:"2023-03-07",client:"Exact Sciences",industry:"Healthcare",fee:1062.89,lead:"Fred",invoiceDate:"2023-03-06",estPayAvg:"2023-03-20",estPayLast:"2023-03-20",payDate:"2023-03-22",paid:true,days:16},
+{invoice:"3786",serviceDate:"2023-03-01",client:"Prince Street Pizza",industry:"Restaurant",fee:2000,lead:"Maida",invoiceDate:"2023-03-01",estPayAvg:"2023-03-24",estPayLast:"2023-03-23",payDate:"2023-03-21",paid:true,days:20},
+{invoice:"3785",serviceDate:"2023-02-27",client:"Astellas",industry:"Pharmaceuticals",fee:3750,lead:"Fred",invoiceDate:"2023-02-27",estPayAvg:"2023-04-05",estPayLast:"2023-04-21",payDate:"2023-03-29",paid:true,days:30},
+{invoice:"3784",serviceDate:"2023-02-14",client:"Pernod Ricard USA",industry:"Consumer Products",fee:1875,lead:"Fred",invoiceDate:"2023-02-27",estPayAvg:"2023-04-15",estPayLast:"2023-04-02",payDate:"2023-03-28",paid:true,days:29},
+{invoice:"3783",serviceDate:"2023-02-25",client:"Goldman Sachs",industry:"Financial Services",fee:3750,lead:"Fred",invoiceDate:"2023-02-27",estPayAvg:"2023-04-06",estPayLast:"2023-02-28",payDate:"2023-02-27",paid:true,days:0},
+{invoice:"3782",serviceDate:"2023-02-23",client:"Newport News Shipbuilding",industry:"Manufacturing",fee:12080.67,lead:"Fred",invoiceDate:"2023-02-23",estPayAvg:"2023-03-14",estPayLast:"2023-04-23",payDate:"2023-03-06",paid:true,days:11},
+{invoice:"3781",serviceDate:"2023-02-21",client:"Exact Sciences",industry:"Healthcare",fee:12227.08,lead:"Fred",invoiceDate:"2023-02-21",estPayAvg:"2023-03-07",estPayLast:"2023-03-07",payDate:"2023-03-02",paid:true,days:9},
+{invoice:"3780",serviceDate:"2023-02-15",client:"Goldman Sachs",industry:"Financial Services",fee:1250,lead:"Fred",invoiceDate:"2023-02-15",estPayAvg:"2023-03-25",estPayLast:"2023-02-16",payDate:"2023-02-15",paid:true,days:0},
+{invoice:"3779",serviceDate:"2023-02-15",client:"Rockefeller Capital Management",industry:"Financial Services",fee:5000,lead:"Fred",invoiceDate:"2023-02-15",estPayAvg:"2023-02-27",estPayLast:"2023-02-24",payDate:"2023-03-08",paid:true,days:21},
+{invoice:"3778",serviceDate:"2023-02-13",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:3750,lead:"Fred",invoiceDate:"2023-02-13",estPayAvg:"2023-03-05",estPayLast:"2023-02-17",payDate:"2023-02-16",paid:true,days:3},
+{invoice:"3777",serviceDate:"2023-02-10",client:"PRSA",industry:"Public Relations",fee:4700,lead:"Fred",invoiceDate:"2023-02-13",estPayAvg:"2023-03-04",estPayLast:"2023-02-17",payDate:"2023-02-23",paid:true,days:10},
+{invoice:"3775",serviceDate:"2023-02-08",client:"Cigna",industry:"Insurance",fee:20374.23,lead:"Fred",invoiceDate:"2023-03-13",estPayAvg:"2023-04-24",estPayLast:"2023-05-04",payDate:"2023-03-16",paid:true,days:3},
+{invoice:"3774",serviceDate:"2023-02-06",client:"Goldman Sachs",industry:"Financial Services",fee:1250,lead:"Fred",invoiceDate:"2023-02-06",estPayAvg:"2023-03-16",estPayLast:"2023-02-07",payDate:"2023-02-09",paid:true,days:3},
+{invoice:"3773",serviceDate:"2023-02-03",client:"Goldman Sachs",industry:"Financial Services",fee:1250,lead:"Fred",invoiceDate:"2023-02-06",estPayAvg:"2023-03-16",estPayLast:"2023-02-07",payDate:"2023-02-09",paid:true,days:3},
+{invoice:"3772",serviceDate:"2023-02-01",client:"Rockefeller Capital Management",industry:"Financial Services",fee:11875,lead:"Fred",invoiceDate:"2023-02-01",estPayAvg:"2023-02-13",estPayLast:"2023-02-10",payDate:"2023-03-02",paid:true,days:29},
+{invoice:"3771",serviceDate:"2023-02-01",client:"Prince Street Pizza",industry:"Restaurant",fee:2000,lead:"Maida",invoiceDate:"2023-02-01",estPayAvg:"2023-02-24",estPayLast:"2023-02-23",payDate:"2023-03-21",paid:true,days:48},
+{invoice:"3770",serviceDate:"2023-01-31",client:"Cigna",industry:"Insurance",fee:10601.52,lead:"Fred",invoiceDate:"2023-01-31",estPayAvg:"2023-03-14",estPayLast:"2023-03-24",payDate:"2023-04-28",paid:true,days:87},
+{invoice:"3769",serviceDate:"2022-04-25",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:2500,lead:"Fred",invoiceDate:"2023-01-31",estPayAvg:"2023-02-20",estPayLast:"2023-02-04",payDate:"2023-02-03",paid:true,days:3},
+{invoice:"3768",serviceDate:"2023-01-21",client:"Depository Trust & Clearing Corporation",industry:"Financial Services",fee:2812.5,lead:"Fred",invoiceDate:"2023-01-30",estPayAvg:"2023-03-09",estPayLast:"2023-02-08",payDate:"2023-03-06",paid:true,days:35},
+{invoice:"3767",serviceDate:"2023-01-27",client:"PRSA",industry:"Public Relations",fee:1250,lead:"Fred",invoiceDate:"2023-01-30",estPayAvg:"2023-02-18",estPayLast:"2023-02-03",payDate:"2023-02-09",paid:true,days:10},
+{invoice:"3766",serviceDate:"2023-01-28",client:"Janssen Immunology",industry:"Healthcare",fee:3437.5,lead:"Fred",invoiceDate:"2023-01-28",estPayAvg:"2023-02-21",estPayLast:"2023-02-04",payDate:"2023-01-31",paid:true,days:3},
+{invoice:"3765",serviceDate:"2023-01-27",client:"Astellas",industry:"Pharmaceuticals",fee:10000,lead:"Fred",invoiceDate:"2023-01-27",estPayAvg:"2023-03-05",estPayLast:"2023-03-21",payDate:"2023-02-10",paid:true,days:14},
+{invoice:"3764",serviceDate:"2023-01-26",client:"Mohawk Industries, Inc.",industry:"Manufacturing",fee:21774.78,lead:"Fred",invoiceDate:"2023-01-26",estPayAvg:"2023-02-22",estPayLast:"2023-02-13",payDate:"2023-02-10",paid:true,days:15},
+{invoice:"3763",serviceDate:"2023-01-23",client:"Cigna",industry:"Insurance",fee:31531.44,lead:"Fred",invoiceDate:"2023-01-23",estPayAvg:"2023-03-06",estPayLast:"2023-03-16",payDate:"2023-04-18",paid:true,days:85},
+{invoice:"3760",serviceDate:"2023-01-17",client:"Humana Inc.",industry:"Insurance",fee:2500,lead:"Fred",invoiceDate:"2023-01-18",estPayAvg:"2023-02-11",estPayLast:"2023-02-05",payDate:"2023-02-09",paid:true,days:22},
+{invoice:"3759",serviceDate:"2023-01-18",client:"POST & TELECOM PRESS CO., LTD",industry:"Publishing",fee:1507.4,lead:"Yinnan",invoiceDate:"2023-01-18",estPayAvg:"2023-03-14",estPayLast:"2023-02-22",payDate:"2023-02-22",paid:true,days:35},
+{invoice:"3758",serviceDate:"2023-01-10",client:"Professional Speechwriters Association",industry:"Public Relations",fee:29.25,lead:"Fred",invoiceDate:"2023-01-10",estPayAvg:"2023-01-24",estPayLast:"2023-02-05",payDate:"2023-01-17",paid:true,days:7},
+{invoice:"3757",serviceDate:"2023-01-13",client:"Eli Lilly & Co.",industry:"Pharmaceuticals",fee:21650.06,lead:"Fred",invoiceDate:"2023-01-17",estPayAvg:"2023-02-06",estPayLast:"2023-01-21",payDate:"2023-01-19",paid:true,days:2},
+{invoice:"3756",serviceDate:"2023-01-06",client:"Astellas",industry:"Pharmaceuticals",fee:2500,lead:"Fred",invoiceDate:"2023-01-06",estPayAvg:"2023-02-12",estPayLast:"2023-02-28",payDate:"2023-01-20",paid:true,days:14},
+{invoice:"3755",serviceDate:"2023-01-06",client:"Astellas",industry:"Pharmaceuticals",fee:8750,lead:"Fred",invoiceDate:"2023-01-06",estPayAvg:"2023-02-12",estPayLast:"2023-02-28",payDate:"2023-02-10",paid:true,days:35},
+{invoice:"3754",serviceDate:"2023-01-04",client:"Prince Street Pizza",industry:"Restaurant",fee:2000,lead:"Maida",invoiceDate:"2023-01-04",estPayAvg:"2023-01-27",estPayLast:"2023-01-26",payDate:"2023-02-02",paid:true,days:29},
+{invoice:"3753",serviceDate:"2023-01-03",client:"Crewcial",industry:"Financial Services",fee:10000,lead:"Katie",invoiceDate:"2023-01-03",estPayAvg:"2023-01-10",estPayLast:"2023-01-20",payDate:"2023-01-06",paid:true,days:3},
+];
+
+// =====================================================
+// STATE
+// =====================================================
+let invoiceData = [...rawInvoiceData];
+let invoiceSortField = 'invoiceDate';
+let invoiceSortDir = -1;
+let clientSortField = 'lastDate';
+let clientSortDir = -1;
+let invoicePage = 1;
+let clientPage = 1;
+const PAGE_SIZE = 30;
+let currentModalInvoice = null;
+
+// =====================================================
+// UTILITIES
+// =====================================================
+const fmt$ = v => v != null ? '$' + Number(v).toLocaleString('en-US', {minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
+const fmtDate = d => {
+  if (!d) return '—';
+  try { return new Date(d + (d.includes('T') ? '' : 'T12:00:00')).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); } catch(e) { return d; }
+};
+const parseDate = s => s ? new Date(s + 'T12:00:00') : null;
+const today = new Date();
+const todayStr = today.toISOString().split('T')[0];
+
+// Parse money from Sheet values like "$1,234.56" or raw numbers
+function parseMoney(val) {
+  if (val === null || val === undefined || val === '' || val === '#N/A') return null;
+  if (typeof val === 'number') return val;
+  const n = parseFloat(String(val).replace(/[$,]/g, ''));
+  return isNaN(n) ? null : n;
+}
+
+// Parse date from Sheet values (already ISO strings from Apps Script, or null)
+function parseDate(val) {
+  if (!val || val === '#N/A' || val === '') return null;
+  if (typeof val === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(val)) return val;
+  if (typeof val === 'string') {
+    const d = new Date(val);
+    if (!isNaN(d)) return d.toISOString().split('T')[0];
+  }
+  return null;
+}
+
+function parseNum(val) {
+  if (val === null || val === undefined || val === '' || val === '#N/A' || val === '#DIV/0!') return null;
+  const n = parseFloat(val);
+  return isNaN(n) ? null : n;
+}
+
+function addDays(dateStr, days) {
+  if (!dateStr || !days) return null;
+  const d = new Date(dateStr + 'T12:00:00');
+  d.setDate(d.getDate() + days);
+  return d.toISOString().split('T')[0];
+}
+
+function daysBetween(a, b) {
+  if (!a || !b) return null;
+  const da = new Date(a + 'T12:00:00'), db = new Date(b + 'T12:00:00');
+  return Math.round((db - da) / 86400000);
+}
+
+function isOverdue(inv) {
+  if (inv.paid) return false;
+  const estDate = inv.estPayAvg || inv.estPayLast;
+  if (!estDate) return false;
+  return new Date(estDate + 'T12:00:00') < today;
+}
+
+async function refreshData() {
+  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes('YOUR_APPS_SCRIPT')) {
+    showToast('No Apps Script URL configured yet.', true);
+    return;
+  }
+  showLoading('Refreshing from Google Sheets…');
+  try {
+    const data = await apiFetch({ action: 'getAll' });
+    clientData.length = 0;
+    transformClients(data.clients.rows).forEach(r => clientData.push(r));
+    const liveInvoices = transformInvoices(data.invoices.rows);
+    invoiceData.length = 0;
+    liveInvoices.forEach(r => invoiceData.push(r));
+    projectedData.length = 0;
+    transformProjected(data.projected.rows).forEach(r => projectedData.push(r));
+    const ts = new Date(data.lastUpdated);
+    document.getElementById('syncStatus').textContent = 'Live · synced ' + ts.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+    document.getElementById('syncStatus').style.color = 'var(--green)';
+    hideLoading();
+    showToast('Refreshed from Google Sheets ✓');
+    renderAll();
+  } catch(err) {
+    hideLoading();
+    showToast('Refresh failed: ' + err.message, true);
+  }
+}
+
+// =====================================================
+// INIT
+// =====================================================
+document.addEventListener('DOMContentLoaded', async () => {
+  document.getElementById('headerDate').textContent = today.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  document.getElementById('f_invoiceDate').value = todayStr;
+  document.getElementById('f_serviceDate').value = todayStr;
+
+  // If no Apps Script URL configured yet, use embedded data
+  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes('YOUR_APPS_SCRIPT')) {
+    console.warn('No Apps Script URL configured — using embedded data.');
+    renderAll();
+    return;
+  }
+
+  // Fetch live data from Google Sheet
+  showLoading('Loading live data from Google Sheets…');
+  try {
+    const data = await apiFetch({ action: 'getAll' });
+
+    // Overwrite in-memory data with live Sheet data
+    clientData.length = 0;
+    transformClients(data.clients.rows).forEach(r => clientData.push(r));
+
+    const liveInvoices = transformInvoices(data.invoices.rows);
+    invoiceData.length = 0;
+    liveInvoices.forEach(r => invoiceData.push(r));
+
+    projectedData.length = 0;
+    transformProjected(data.projected.rows).forEach(r => projectedData.push(r));
+
+    // Update last-synced indicator
+    const ts = new Date(data.lastUpdated);
+    document.getElementById('syncStatus').textContent =
+      'Live · synced ' + ts.toLocaleTimeString('en-US', {hour:'numeric',minute:'2-digit'});
+    document.getElementById('syncStatus').style.color = 'var(--green)';
+
+    hideLoading();
+    showToast('Data loaded from Google Sheets ✓');
+  } catch (err) {
+    hideLoading();
+    showToast('Could not reach Google Sheets — showing embedded data. (' + err.message + ')', true);
+    console.error('Sheets sync error:', err);
+  }
+
+  renderAll();
+});
+
+function renderAll() {
+  populateFilters();
+  renderDashboard();
+  renderInvoiceTable();
+  renderProjectedTable();
+  renderClientTable();
+  renderAnalytics();
+}
+
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// =====================================================
+// POPULATE FILTERS
+// =====================================================
+function populateFilters() {
+  // Lead filter
+  const leads = [...new Set(invoiceData.map(i => i.lead).filter(Boolean))].sort();
+  const lf = document.getElementById('invoiceLeadFilter');
+  leads.forEach(l => { const o = document.createElement('option'); o.value=l; o.textContent=l; lf.appendChild(o); });
+
+  // Client dropdown for form
+  const clients = [...new Set([...clientData.map(c => c.client), ...invoiceData.map(i => i.client)])].sort();
+  const cf = document.getElementById('f_client');
+  clients.forEach(c => { const o = document.createElement('option'); o.value=c; o.textContent=c; cf.appendChild(o); });
+
+  // Industry filter for clients
+  const industries = [...new Set(clientData.map(c => c.industry).filter(Boolean))].sort();
+  const idf = document.getElementById('clientIndustryFilter');
+  industries.forEach(i => { const o = document.createElement('option'); o.value=i; o.textContent=i; idf.appendChild(o); });
+}
+
+// =====================================================
+// DASHBOARD
+// =====================================================
+function renderDashboard() {
+  const outstanding = invoiceData.filter(i => !i.paid);
+  const outstandingAmt = outstanding.reduce((s, i) => s + (i.fee || 0), 0);
+  const overdueItems = outstanding.filter(isOverdue);
+  const overdueAmt = overdueItems.reduce((s, i) => s + (i.fee || 0), 0);
+  const projFees = projectedData.filter(p => p.fee).reduce((s, p) => s + p.fee, 0);
+
+  // 2026 YTD collected
+  const ytd2026 = invoiceData.filter(i => i.paid && i.payDate && i.payDate.startsWith('2026')).reduce((s,i) => s+i.fee,0);
+
+  const kpis = [
+    {label:'Outstanding Invoices', value: fmt$(outstandingAmt), sub: `${outstanding.length} invoices pending`, cls:''},
+    {label:'Overdue', value: fmt$(overdueAmt), sub: `${overdueItems.length} invoices past est. pay date`, cls:'rust'},
+    {label:'2026 YTD Collected', value: fmt$(ytd2026), sub: 'Payments received in 2026', cls:'green'},
+    {label:'2026 Projected Pipeline', value: fmt$(projFees), sub: `${projectedData.filter(p=>p.fee).length} engagements`, cls:''},
+  ];
+
+  document.getElementById('kpiGrid').innerHTML = kpis.map(k => `
+    <div class="kpi-card ${k.cls}">
+      <div class="kpi-label">${k.label}</div>
+      <div class="kpi-value">${k.value}</div>
+      <div class="kpi-sub">${k.sub}</div>
+    </div>`).join('');
+
+  renderCashflowChart();
+  renderAlertsPanel();
+  renderOutstandingTable();
+  renderLeadStats();
+}
+
+function renderCashflowChart() {
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const actualByMonth = Array(12).fill(0);
+  const outstandingByMonth = Array(12).fill(0);
+  const projByMonth = Array(12).fill(0);
+
+  // Layer 1: already collected in 2026
+  invoiceData.filter(i => i.paid && i.payDate && i.payDate.startsWith('2026')).forEach(i => {
+    const m = parseInt(i.payDate.split('-')[1]) - 1;
+    actualByMonth[m] += i.fee || 0;
+  });
+
+  // Layer 2: outstanding invoices with estimated payment dates in 2026
+  invoiceData.filter(i => !i.paid).forEach(i => {
+    const est = i.estPayAvg || i.estPayLast;
+    if (!est || !est.startsWith('2026')) return;
+    const m = parseInt(est.split('-')[1]) - 1;
+    outstandingByMonth[m] += i.fee || 0;
+  });
+
+  // Layer 3: projected engagements from revenue projector
+  projectedData.filter(p => p.fee && p.estPayAvg).forEach(p => {
+    const m = parseInt(p.estPayAvg.split('-')[1]) - 1;
+    projByMonth[m] += p.fee;
+  });
+
+  const combinedByMonth = months.map((_, i) => actualByMonth[i] + outstandingByMonth[i] + projByMonth[i]);
+  const maxVal = Math.max(...combinedByMonth, 1);
+
+  document.getElementById('cashflowChart').innerHTML = months.map((m, i) => {
+    const actual = actualByMonth[i];
+    const outstanding = outstandingByMonth[i];
+    const proj = projByMonth[i];
+    const total = actual + outstanding + proj;
+
+    // Stacked heights — each layer rendered on top of previous
+    const actualH = Math.round((actual / maxVal) * 110);
+    const outstandingH = Math.round(((actual + outstanding) / maxVal) * 110);
+    const projH = Math.round((total / maxVal) * 110);
+
+    return `<div class="cashflow-month">
+      <div class="cashflow-bar-wrap">
+        ${proj > 0 ? `<div class="cashflow-bar projected tooltip" style="height:${projH}px;position:absolute;bottom:0;left:0;right:0;">
+          <span class="tooltip-box">Projected engagements: ${fmt$(proj)}</span>
+        </div>` : ''}
+        ${outstanding > 0 ? `<div class="cashflow-bar outstanding tooltip" style="height:${outstandingH}px;position:absolute;bottom:0;left:0;right:0;">
+          <span class="tooltip-box">Outstanding invoices: ${fmt$(outstanding)}</span>
+        </div>` : ''}
+        ${actual > 0 ? `<div class="cashflow-bar actual tooltip" style="height:${actualH}px;position:absolute;bottom:0;left:0;right:0;">
+          <span class="tooltip-box">Collected: ${fmt$(actual)}</span>
+        </div>` : ''}
+      </div>
+      <div class="cashflow-label">${m}</div>
+      ${total > 0 ? `<div class="cashflow-amount">${total >= 1000 ? '$'+(total/1000).toFixed(0)+'k' : '$'+total.toFixed(0)}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function renderAlertsPanel() {
+  const outstanding = invoiceData.filter(i => !i.paid);
+  const overdue = outstanding.filter(isOverdue).sort((a,b) => (b.fee||0) - (a.fee||0));
+  const dueSoon = outstanding.filter(i => {
+    const est = i.estPayAvg || i.estPayLast;
+    if (!est) return false;
+    const d = daysBetween(todayStr, est);
+    return d >= 0 && d <= 14;
+  }).filter(i => !isOverdue(i)).sort((a,b) => (b.fee||0) - (a.fee||0));
+
+  const items = [
+    ...overdue.slice(0,3).map(i => ({dot:'dot-red', title:`${i.client} — Invoice #${i.invoice}`, sub:`Overdue • Est: ${fmtDate(i.estPayAvg || i.estPayLast)}`, amount:fmt$(i.fee)})),
+    ...dueSoon.slice(0,3).map(i => ({dot:'dot-gold', title:`${i.client} — Invoice #${i.invoice}`, sub:`Due in ${daysBetween(todayStr, i.estPayAvg || i.estPayLast)} days • ${fmtDate(i.estPayAvg || i.estPayLast)}`, amount:fmt$(i.fee)})),
+  ];
+
+  document.getElementById('alertsPanel').innerHTML = items.length ? items.map(item => `
+    <div class="alert-item">
+      <div class="alert-dot ${item.dot}"></div>
+      <div class="alert-text">
+        <div class="alert-title">${item.title}</div>
+        <div class="alert-sub">${item.sub}</div>
+      </div>
+      <div class="alert-amount">${item.amount}</div>
+    </div>`).join('') : '<div class="empty-state">No urgent items — all clear!</div>';
+}
+
+function renderOutstandingTable() {
+  const outstanding = invoiceData.filter(i => !i.paid).sort((a,b) => (b.fee||0) - (a.fee||0)).slice(0, 8);
+  document.getElementById('outstandingTable').innerHTML = `
+    <thead><tr>
+      <th>Invoice</th><th>Client</th><th>Fee</th><th>Est. Payment</th><th>Status</th><th></th>
+    </tr></thead>
+    <tbody>${outstanding.map(i => {
+      const over = isOverdue(i);
+      const est = i.estPayAvg || i.estPayLast;
+      const daysLeft = est ? daysBetween(todayStr, est) : null;
+      return `<tr>
+        <td class="mono">#${i.invoice}</td>
+        <td>${i.client}</td>
+        <td class="mono">${fmt$(i.fee)}</td>
+        <td>${fmtDate(est)}</td>
+        <td><span class="badge ${over ? 'badge-overdue' : 'badge-pending'}">${over ? 'Overdue' : daysLeft !== null ? 'In '+daysLeft+'d' : 'Pending'}</span></td>
+        <td><button class="btn btn-sm btn-primary" onclick="openPayModal('${i.invoice}')">Mark Paid</button></td>
+      </tr>`;
+    }).join('')}</tbody>`;
+}
+
+function renderLeadStats() {
+  const recentCutoff = '2025-01-01';
+  const byLead = {};
+  invoiceData.filter(i => i.paid && i.payDate >= recentCutoff).forEach(i => {
+    const leads = i.lead.split('/');
+    leads.forEach(l => {
+      l = l.trim();
+      if (!byLead[l]) byLead[l] = 0;
+      byLead[l] += (i.fee || 0) / leads.length;
+    });
+  });
+  const max = Math.max(...Object.values(byLead), 1);
+  const sorted = Object.entries(byLead).sort((a,b) => b[1]-a[1]);
+  document.getElementById('leadStats').innerHTML = sorted.map(([l, amt]) => `
+    <div class="lead-bar">
+      <div class="lead-name">${l}</div>
+      <div class="lead-track"><div class="lead-fill" style="width:${Math.round(amt/max*100)}%"></div></div>
+      <div class="lead-amount">${fmt$(amt)}</div>
+    </div>`).join('');
+}
+
+// =====================================================
+// INVOICE TABLE
+// =====================================================
+function sortInvoices(field) {
+  if (invoiceSortField === field) invoiceSortDir *= -1;
+  else { invoiceSortField = field; invoiceSortDir = -1; }
+  renderInvoiceTable();
+}
+
+function getFilteredInvoices() {
+  const q = document.getElementById('invoiceSearch').value.toLowerCase();
+  const status = document.getElementById('invoiceStatusFilter').value;
+  const lead = document.getElementById('invoiceLeadFilter').value;
+  const year = document.getElementById('invoiceYearFilter').value;
+
+  return invoiceData.filter(i => {
+    if (q && !i.client.toLowerCase().includes(q) && !i.invoice.includes(q)) return false;
+    if (status === 'paid' && !i.paid) return false;
+    if (status === 'outstanding' && i.paid) return false;
+    if (lead && !i.lead.includes(lead)) return false;
+    if (year && i.invoiceDate && !i.invoiceDate.startsWith(year)) return false;
+    return true;
+  }).sort((a, b) => {
+    let av = a[invoiceSortField], bv = b[invoiceSortField];
+    if (typeof av === 'string') av = av.toLowerCase();
+    if (typeof bv === 'string') bv = bv.toLowerCase();
+    if (av == null) av = '';
+    if (bv == null) bv = '';
+    return av < bv ? -invoiceSortDir : av > bv ? invoiceSortDir : 0;
+  });
+}
+
+function renderInvoiceTable() {
+  const filtered = getFilteredInvoices();
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  if (invoicePage > totalPages) invoicePage = 1;
+  const page = filtered.slice((invoicePage-1)*PAGE_SIZE, invoicePage*PAGE_SIZE);
+
+  document.getElementById('invoiceTableBody').innerHTML = page.map(i => {
+    const over = isOverdue(i);
+    const status = i.paid ? `<span class="badge badge-paid">Paid</span>` :
+      over ? `<span class="badge badge-overdue">Overdue</span>` :
+      `<span class="badge badge-pending">Pending</span>`;
+    const daysClass = i.days == null ? '' : i.days <= 10 ? 'heat-fast' : i.days <= 35 ? 'heat-avg' : 'heat-slow';
+    return `<tr>
+      <td class="mono">#${i.invoice}</td>
+      <td>${fmtDate(i.serviceDate)}</td>
+      <td>${i.client}</td>
+      <td><span class="badge badge-industry">${i.industry}</span></td>
+      <td class="mono">${fmt$(i.fee)}</td>
+      <td>${i.lead}</td>
+      <td>${fmtDate(i.invoiceDate)}</td>
+      <td>${fmtDate(i.estPayAvg)}</td>
+      <td>${fmtDate(i.estPayLast)}</td>
+      <td>${i.paid ? fmtDate(i.payDate) : '<button class="btn btn-sm btn-primary" onclick="openPayModal(\''+i.invoice+'\')">Mark Paid</button>'}</td>
+      <td>${status}</td>
+      <td class="${daysClass} mono">${i.days != null ? i.days+'d' : '—'}</td>
+    </tr>`;
+  }).join('');
+
+  // Pagination
+  const pag = document.getElementById('invoicePagination');
+  pag.innerHTML = '';
+  for (let p = 1; p <= totalPages; p++) {
+    const btn = document.createElement('button');
+    btn.className = 'page-btn' + (p === invoicePage ? ' active' : '');
+    btn.textContent = p;
+    btn.onclick = () => { invoicePage = p; renderInvoiceTable(); };
+    pag.appendChild(btn);
+  }
+}
+
+// =====================================================
+// PROJECTED TABLE
+// =====================================================
+function renderProjectedTable() {
+  const total = projectedData.filter(p=>p.fee).reduce((s,p)=>s+p.fee,0);
+  const totalAvg = projectedData.filter(p=>p.fee&&p.estPayAvg).reduce((s,p)=>s+p.fee,0);
+
+  document.getElementById('projectedTableBody').innerHTML = projectedData.map(p => {
+    const hasEst = p.estPayAvg || p.estPayLast;
+    const upcoming = p.invoiceDate && p.invoiceDate > todayStr;
+    const status = !p.fee ? `<span class="badge badge-pending">TBD</span>` :
+      !p.invoiceDate ? `<span class="badge badge-pending">No date</span>` :
+      upcoming ? `<span class="badge badge-pending">Upcoming</span>` :
+      `<span class="badge badge-overdue">Past due</span>`;
+
+    let window = '—';
+    if (p.estPayAvg && p.estPayLast) {
+      const a = parseDate(p.estPayAvg), b = parseDate(p.estPayLast);
+      const early = a < b ? p.estPayAvg : p.estPayLast;
+      const late = a < b ? p.estPayLast : p.estPayAvg;
+      const spread = Math.abs(daysBetween(p.estPayAvg, p.estPayLast));
+      window = spread <= 5 ? fmtDate(early) : `${fmtDate(early)} — ${fmtDate(late)}`;
+    } else if (p.estPayAvg || p.estPayLast) {
+      window = fmtDate(p.estPayAvg || p.estPayLast);
+    }
+
+    return `<tr class="${!p.invoiceDate ? 'projected-row' : ''}">
+      <td>${p.client}</td>
+      <td class="mono">${p.fee ? fmt$(p.fee) : '<span class="muted">TBD</span>'}</td>
+      <td>${fmtDate(p.invoiceDate)}</td>
+      <td>${fmtDate(p.estPayAvg)}</td>
+      <td>${fmtDate(p.estPayLast)}</td>
+      <td>${window}</td>
+      <td>${status}</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('projectedSummary').innerHTML = `
+    <td><strong>TOTAL</strong></td>
+    <td class="mono"><strong>${fmt$(total)}</strong></td>
+    <td colspan="5"></td>`;
+
+  // KPIs
+  const byMonth = {};
+  projectedData.filter(p=>p.fee&&p.estPayAvg).forEach(p => {
+    const m = p.estPayAvg.substring(0,7);
+    byMonth[m] = (byMonth[m]||0) + p.fee;
+  });
+  const peakMonth = Object.entries(byMonth).sort((a,b)=>b[1]-a[1])[0];
+  const noDate = projectedData.filter(p=>p.fee&&!p.invoiceDate).length;
+
+  document.getElementById('projectedKPIs').innerHTML = `
+    <div class="kpi-card"><div class="kpi-label">Total Projected 2026</div><div class="kpi-value">${fmt$(total)}</div><div class="kpi-sub">${projectedData.filter(p=>p.fee).length} engagements</div></div>
+    <div class="kpi-card green"><div class="kpi-label">Peak Month</div><div class="kpi-value">${peakMonth ? new Date(peakMonth[0]+'-15').toLocaleDateString('en-US',{month:'long'}) : '—'}</div><div class="kpi-sub">${peakMonth ? fmt$(peakMonth[1]) : ''} expected</div></div>
+    <div class="kpi-card"><div class="kpi-label">Needs Date</div><div class="kpi-value">${noDate}</div><div class="kpi-sub">Engagements without invoice date</div></div>
+    <div class="kpi-card"><div class="kpi-label">Avg per Engagement</div><div class="kpi-value">${fmt$(total / (projectedData.filter(p=>p.fee).length||1))}</div><div class="kpi-sub">Across all projected</div></div>`;
+}
+
+// =====================================================
+// CLIENT TABLE
+// =====================================================
+function sortClients(field) {
+  if (clientSortField === field) clientSortDir *= -1;
+  else { clientSortField = field; clientSortDir = -1; }
+  renderClientTable();
+}
+
+function getFilteredClients() {
+  const q = document.getElementById('clientSearch').value.toLowerCase();
+  const ind = document.getElementById('clientIndustryFilter').value;
+  const act = document.getElementById('clientActivityFilter').value;
+  const twoYearsAgo = new Date(); twoYearsAgo.setFullYear(twoYearsAgo.getFullYear() - 2);
+
+  const seen = new Set();
+  return clientData.filter(c => {
+    if (seen.has(c.client)) return false;
+    seen.add(c.client);
+    if (q && !c.client.toLowerCase().includes(q) && !c.industry?.toLowerCase().includes(q)) return false;
+    if (ind && c.industry !== ind) return false;
+    if (act === 'active' && (!c.lastDate || parseDate(c.lastDate) < twoYearsAgo)) return false;
+    if (act === 'dormant' && c.lastDate && parseDate(c.lastDate) >= twoYearsAgo) return false;
+    return true;
+  }).sort((a,b) => {
+    let av = a[clientSortField], bv = b[clientSortField];
+    if (clientSortField === 'lastDate') {
+      av = a.lastDate ? a.lastDate : '1900';
+      bv = b.lastDate ? b.lastDate : '1900';
+    }
+    if (clientSortField === 'revenue') { av = a.revenue||0; bv = b.revenue||0; }
+    if (typeof av === 'string') av = av.toLowerCase();
+    if (typeof bv === 'string') bv = bv.toLowerCase();
+    if (av == null) av = '';
+    if (bv == null) bv = '';
+    return av < bv ? -clientSortDir : av > bv ? clientSortDir : 0;
+  });
+}
+
+function renderClientTable() {
+  const filtered = getFilteredClients();
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  if (clientPage > totalPages) clientPage = 1;
+  const page = filtered.slice((clientPage-1)*PAGE_SIZE, clientPage*PAGE_SIZE);
+  const twoYearsAgo = new Date(); twoYearsAgo.setFullYear(twoYearsAgo.getFullYear()-2);
+
+  document.getElementById('clientTableBody').innerHTML = page.map(c => {
+    const isActive = c.lastDate && parseDate(c.lastDate) >= twoYearsAgo;
+    const appClass = c.app == null ? '' : c.app <= 14 ? 'heat-fast' : c.app <= 40 ? 'heat-avg' : 'heat-slow';
+    const latestClass = c.latest == null ? '' : c.latest <= 14 ? 'heat-fast' : c.latest <= 40 ? 'heat-avg' : 'heat-slow';
+    return `<tr>
+      <td><strong>${c.client}</strong></td>
+      <td><span class="badge badge-industry">${c.industry||'—'}</span></td>
+      <td class="mono text-green">${c.revenue ? fmt$(c.revenue) : '—'}</td>
+      <td>${c.lastDate && c.lastDate !== '1900-01-01' ? fmtDate(c.lastDate) : '—'}</td>
+      <td>${c.lastCategory||'—'}</td>
+      <td>${c.lastFee||'—'}</td>
+      <td class="${appClass} mono">${c.app != null ? c.app+'d' : '—'}</td>
+      <td class="${latestClass} mono">${c.latest != null ? c.latest+'d' : '—'}</td>
+      <td><span class="badge ${isActive ? 'badge-paid' : 'badge-overdue'}">${isActive ? 'Active' : 'Dormant'}</span></td>
+    </tr>`;
+  }).join('');
+
+  const pag = document.getElementById('clientPagination');
+  pag.innerHTML = '';
+  for (let p = 1; p <= totalPages; p++) {
+    const btn = document.createElement('button');
+    btn.className = 'page-btn' + (p === clientPage ? ' active' : '');
+    btn.textContent = p;
+    btn.onclick = () => { clientPage = p; renderClientTable(); };
+    pag.appendChild(btn);
+  }
+}
+
+// =====================================================
+// ANALYTICS
+// =====================================================
+function renderAnalytics() {
+  // Top clients by revenue (from invoice data, 2023+)
+  const byClient = {};
+  invoiceData.filter(i=>i.paid).forEach(i => {
+    byClient[i.client] = (byClient[i.client]||0) + (i.fee||0);
+  });
+  const topClients = Object.entries(byClient).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const maxC = topClients[0]?.[1] || 1;
+  document.getElementById('topClientsChart').innerHTML = topClients.map(([c,v]) => `
+    <div class="lead-bar">
+      <div class="lead-name" style="width:130px;font-size:11px;">${c.length > 18 ? c.slice(0,17)+'…' : c}</div>
+      <div class="lead-track"><div class="lead-fill" style="width:${Math.round(v/maxC*100)}%"></div></div>
+      <div class="lead-amount">${fmt$(v)}</div>
+    </div>`).join('');
+
+  // Industry breakdown (2023+ paid)
+  const byInd = {};
+  invoiceData.filter(i=>i.paid).forEach(i => {
+    byInd[i.industry] = (byInd[i.industry]||0) + (i.fee||0);
+  });
+  const topInd = Object.entries(byInd).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const maxI = topInd[0]?.[1] || 1;
+  document.getElementById('industryChart').innerHTML = topInd.map(([ind,v]) => `
+    <div class="lead-bar">
+      <div class="lead-name" style="width:110px;font-size:11px;">${ind}</div>
+      <div class="lead-track"><div class="lead-fill" style="width:${Math.round(v/maxI*100)}%;background:var(--slate);"></div></div>
+      <div class="lead-amount">${fmt$(v)}</div>
+    </div>`).join('');
+
+  // Payment behavior — clients with fastest/slowest payment vs their avg
+  const clientDays = {};
+  invoiceData.filter(i=>i.paid && i.days!=null).forEach(i => {
+    if (!clientDays[i.client]) clientDays[i.client] = [];
+    clientDays[i.client].push(i.days);
+  });
+  const clientAvgs = Object.entries(clientDays)
+    .filter(([,d]) => d.length >= 3)
+    .map(([c,d]) => {
+      const avg = d.reduce((s,v)=>s+v,0)/d.length;
+      const recent = d.slice(-3).reduce((s,v)=>s+v,0)/3;
+      return {client:c, avg:avg.toFixed(1), recent:recent.toFixed(1), trend: recent < avg - 3 ? '↑ Faster' : recent > avg + 3 ? '↓ Slower' : '→ Steady'};
+    })
+    .sort((a,b) => parseFloat(a.avg) - parseFloat(b.avg))
+    .slice(0,8);
+
+  document.getElementById('paymentBehaviorChart').innerHTML = `
+    <table class="data-table">
+      <thead><tr><th>Client</th><th>Avg Days</th><th>Recent Avg</th><th>Trend</th></tr></thead>
+      <tbody>${clientAvgs.map(c => `<tr>
+        <td>${c.client.length>20?c.client.slice(0,19)+'…':c.client}</td>
+        <td class="mono">${c.avg}d</td>
+        <td class="mono">${c.recent}d</td>
+        <td class="${parseFloat(c.recent)<parseFloat(c.avg)-3?'text-green':parseFloat(c.recent)>parseFloat(c.avg)+3?'text-rust':''}">${c.trend}</td>
+      </tr>`).join('')}</tbody>
+    </table>`;
+
+  // Monthly revenue 2023–2026 bar chart
+  // Build month-keyed revenue map
+  const monthRevenue = {};
+  invoiceData.filter(i=>i.paid&&i.payDate).forEach(i => {
+    const k = i.payDate.substring(0,7);
+    monthRevenue[k] = (monthRevenue[k]||0) + (i.fee||0);
+  });
+  window._monthRevenue = monthRevenue; // store for toggle
+  window._monthlyView = window._monthlyView || '3mo';
+  renderMonthlyRevChart();
+
+  // Re-engagement candidates
+  const oneYearAgo = new Date(); oneYearAgo.setFullYear(oneYearAgo.getFullYear()-1);
+  const twoYearsAgo2 = new Date(); twoYearsAgo2.setFullYear(twoYearsAgo2.getFullYear()-2);
+  const seen = new Set();
+  const reengage = clientData.filter(c => {
+    if (seen.has(c.client)) return false;
+    seen.add(c.client);
+    if (!c.lastDate || !c.revenue) return false;
+    const d = parseDate(c.lastDate);
+    return d >= twoYearsAgo2 && d < oneYearAgo;
+  }).sort((a,b) => (b.revenue||0) - (a.revenue||0)).slice(0,8);
+
+  document.getElementById('reengagePanel').innerHTML = reengage.map(c => {
+    const daysSince = daysBetween(c.lastDate, todayStr);
+    return `<div class="alert-item">
+      <div class="alert-dot dot-gold"></div>
+      <div class="alert-text">
+        <div class="alert-title">${c.client}</div>
+        <div class="alert-sub">${c.industry} • Last: ${fmtDate(c.lastDate)} (${Math.round(daysSince/30)}mo ago)</div>
+      </div>
+      <div class="alert-amount">${fmt$(c.revenue)}</div>
+    </div>`;
+  }).join('');
+}
+
+// =====================================================
+// ADD INVOICE FORM
+// =====================================================
+function autoFillClient() {
+  const name = document.getElementById('f_client').value;
+  const client = clientData.find(c => c.client === name);
+  const invoiceDate = document.getElementById('f_invoiceDate').value;
+
+  document.getElementById('f_industry').value = client ? client.industry : '';
+
+  if (client && invoiceDate) {
+    const avgEst = client.app ? addDays(invoiceDate, client.app) : null;
+    const lastEst = client.latest ? addDays(invoiceDate, client.latest) : null;
+    document.getElementById('f_estAvg').value = avgEst ? fmtDate(avgEst) : 'No history';
+    document.getElementById('f_estLast').value = lastEst ? fmtDate(lastEst) : 'No history';
+
+    const info = document.getElementById('clientAutoInfo');
+    info.innerHTML = `<strong>${name}</strong> — Avg payment: <strong>${client.app != null ? client.app+' days' : 'No data'}</strong> &nbsp;|&nbsp; Last payment: <strong>${client.latest != null ? client.latest+' days' : 'No data'}</strong> &nbsp;|&nbsp; Total revenue: <strong>${client.revenue ? fmt$(client.revenue) : 'No data'}</strong>`;
+    info.style.display = 'block';
+  }
+}
+
+async function addInvoice() {
+  const invoice = document.getElementById('f_invoice').value.trim();
+  const serviceDate = document.getElementById('f_serviceDate').value;
+  const invoiceDate = document.getElementById('f_invoiceDate').value;
+  const client = document.getElementById('f_client').value;
+  const industry = document.getElementById('f_industry').value;
+  const fee = parseFloat(document.getElementById('f_fee').value) || 0;
+  const lead = document.getElementById('f_lead').value;
+  const payDate = document.getElementById('f_payDate').value || null;
+  const notes = document.getElementById('f_notes').value;
+
+  if (!invoice || !client || !fee) {
+    alert('Please fill in Invoice #, Client, and Fee.');
+    return;
+  }
+
+  const clientInfo = clientData.find(c => c.client === client);
+  const avgEst = clientInfo?.app ? addDays(invoiceDate, clientInfo.app) : null;
+  const lastEst = clientInfo?.latest ? addDays(invoiceDate, clientInfo.latest) : null;
+  const days = payDate ? daysBetween(invoiceDate, payDate) : null;
+
+  const newInvoice = {
+    invoice, serviceDate, client, industry, fee, lead,
+    invoiceDate, estPayAvg: avgEst, estPayLast: lastEst,
+    payDate, paid: !!payDate, days, notes
+  };
+
+  invoiceData.unshift(newInvoice);
+  clearInvoiceForm();
+  renderDashboard();
+  renderInvoiceTable();
+  renderAnalytics();
+
+  // Write to Google Sheet if connected
+  if (APPS_SCRIPT_URL && !APPS_SCRIPT_URL.includes('YOUR_APPS_SCRIPT')) {
+    showLoading('Saving to Google Sheets…');
+    try {
+      // Map back to Sheet column headers
+      const row = {
+        'Invoice number':                        invoice,
+        'Date of Service':                       serviceDate,
+        'Client':                                client,
+        'Industry':                              industry,
+        'Fee':                                   fee,
+        'Lead':                                  lead,
+        'Creator':                               '',
+        'Invoice Date':                          invoiceDate,
+        'Estimated Payment (APP)':               avgEst || '',
+        'Estimated Payment (Last Payment Date)': lastEst || '',
+        'Payment Date':                          payDate || '',
+        'Identifier':                            '',
+        'Payment Term':                          notes || ''
+      };
+      await apiPost({ action: 'addInvoice', row });
+      hideLoading();
+      showToast(`Invoice #${invoice} saved to Google Sheets ✓`);
+    } catch (err) {
+      hideLoading();
+      showToast('Saved locally but could not sync to Sheet: ' + err.message, true);
+    }
+  } else {
+    showToast(`Invoice #${invoice} added (local only — configure Apps Script URL to sync)`);
+  }
+}
+
+function clearInvoiceForm() {
+  ['f_invoice','f_fee','f_notes','f_payDate','f_estAvg','f_estLast'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('f_client').value = '';
+  document.getElementById('f_industry').value = '';
+  document.getElementById('f_invoiceDate').value = todayStr;
+  document.getElementById('f_serviceDate').value = todayStr;
+  document.getElementById('clientAutoInfo').style.display = 'none';
+}
+
+// =====================================================
+// PAY MODAL
+// =====================================================
+function openPayModal(invoiceNum) {
+  const inv = invoiceData.find(i => i.invoice === invoiceNum);
+  if (!inv) return;
+  currentModalInvoice = invoiceNum;
+  document.getElementById('modal_invoice').value = '#' + inv.invoice;
+  document.getElementById('modal_client').value = inv.client;
+  document.getElementById('modal_paydate').value = todayStr;
+  document.getElementById('payModal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('payModal').classList.remove('open');
+  currentModalInvoice = null;
+}
+
+async function savePayment() {
+  const payDate = document.getElementById('modal_paydate').value;
+  if (!payDate) { alert('Please enter a payment date.'); return; }
+  const inv = invoiceData.find(i => i.invoice === currentModalInvoice);
+  if (!inv) return;
+
+  // Update local state immediately (optimistic)
+  inv.payDate = payDate;
+  inv.paid = true;
+  inv.days = daysBetween(inv.invoiceDate, payDate);
+  closeModal();
+  renderDashboard();
+  renderInvoiceTable();
+  renderAnalytics();
+
+  // Write back to Google Sheet if connected
+  if (APPS_SCRIPT_URL && !APPS_SCRIPT_URL.includes('YOUR_APPS_SCRIPT')) {
+    try {
+      await apiPost({ action: 'markPaid', invoiceNumber: currentModalInvoice, paymentDate: payDate });
+      showToast('Payment saved to Google Sheets ✓');
+    } catch (err) {
+      showToast('Saved locally but could not sync to Sheet: ' + err.message, true);
+    }
+  }
+}
+
+document.getElementById('payModal').addEventListener('click', e => {
+  if (e.target === document.getElementById('payModal')) closeModal();
+});
+
+// =====================================================
+// EXPORT
+// =====================================================
+function exportInvoicesCSV() {
+  const rows = [['Invoice','Service Date','Client','Industry','Fee','Lead','Invoice Date','Est Pay Avg','Est Pay Last','Payment Date','Paid','Days to Pay']];
+  getFilteredInvoices().forEach(i => rows.push([i.invoice, i.serviceDate, i.client, i.industry, i.fee, i.lead, i.invoiceDate, i.estPayAvg||'', i.estPayLast||'', i.payDate||'', i.paid?'Yes':'No', i.days??'']));
+  downloadCSV(rows, 'invoices.csv');
+}
+
+function exportProjectedCSV() {
+  const rows = [['Client','Fee','Invoice Date','Est Pay Avg','Est Pay Last']];
+  projectedData.forEach(p => rows.push([p.client, p.fee||'', p.invoiceDate||'', p.estPayAvg||'', p.estPayLast||'']));
+  downloadCSV(rows, 'projected_revenue.csv');
+}
+
+function downloadCSV(rows, filename) {
+  const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = filename;
+  a.click();
+}
+
+function setMonthlyView(view) {
+  window._monthlyView = view;
+  // Update button states
+  ['3mo','6mo','all'].forEach(v => {
+    const btn = document.getElementById('viewToggle'+v);
+    if (btn) {
+      btn.style.color = v === view ? 'var(--gold)' : '';
+      btn.style.borderColor = v === view ? 'var(--gold)' : '';
+    }
+  });
+  renderMonthlyRevChart();
+}
+
+function renderMonthlyRevChart() {
+  const mr = window._monthRevenue || {};
+  const view = window._monthlyView || '3mo';
+
+  // Determine which calendar months to show
+  const allKeys = Object.keys(mr).sort().filter(m => m >= '2023-01');
+  const currentMonth = todayStr.substring(0,7);
+  const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const years = ['2023','2024','2025','2026'];
+  const yearColors = {'2023':'#c4aa70','2024':'#b8943f','2025':'#2d7a4f','2026':'#1a5c38'};
+  const yearBg   = {'2023':'#f5edd8','2024':'#f0e6c8','2025':'#e8f5ee','2026':'#d0eedd'};
+
+  // Get the set of calendar months (MM) we want to display
+  let recentKeys;
+  if (view === '3mo') {
+    // Last 3 completed months + current
+    recentKeys = allKeys.filter(m => m <= currentMonth).slice(-4);
+  } else if (view === '6mo') {
+    recentKeys = allKeys.filter(m => m <= currentMonth).slice(-7);
+  } else {
+    recentKeys = allKeys.filter(m => m <= currentMonth);
+  }
+
+  // For each key, get the month number and find historical same-month data
+  // Build rows: each unique MM (01–12) that appears in recentKeys
+  const calMonths = [...new Set(recentKeys.map(k => k.slice(5)))].sort();
+
+  // Year-total summaries
+  const yearTotals = {};
+  years.forEach(yr => {
+    yearTotals[yr] = allKeys.filter(k=>k.startsWith(yr)).reduce((s,k)=>s+(mr[k]||0),0);
+  });
+
+  // For each calendar month shown, get value per year and compute YoY
+  const rows = calMonths.map(mm => {
+    const label = monthNames[parseInt(mm)-1];
+    const byYear = {};
+    years.forEach(yr => { byYear[yr] = mr[`${yr}-${mm}`] || 0; });
+
+    // YoY change: most recent year with data vs prior year same month
+    const activeYears = years.filter(yr => byYear[yr] > 0);
+    const latestYr = activeYears[activeYears.length - 1];
+    const priorYr  = latestYr ? years[years.indexOf(latestYr) - 1] : null;
+    const yoy = latestYr && priorYr && byYear[priorYr] > 0
+      ? ((byYear[latestYr] - byYear[priorYr]) / byYear[priorYr] * 100)
+      : null;
+
+    // Historical avg (excluding latest year)
+    const histYears = activeYears.slice(0, -1);
+    const histAvg = histYears.length
+      ? histYears.reduce((s,yr) => s + byYear[yr], 0) / histYears.length
+      : null;
+
+    return { mm, label, byYear, latestYr, priorYr, yoy, histAvg, activeYears };
+  });
+
+  // Max value for bar scaling
+  const maxVal = Math.max(...rows.flatMap(r => Object.values(r.byYear)), 1);
+
+  // Build HTML
+  let html = `<div style="overflow-x:auto;">`;
+
+  // Summary stat strip at top
+  const recentRevYears = years.filter(yr => yearTotals[yr] > 0);
+  const latest2 = recentRevYears.slice(-2);
+  const growthYoY = latest2.length === 2 && yearTotals[latest2[0]] > 0
+    ? ((yearTotals[latest2[1]] - yearTotals[latest2[0]]) / yearTotals[latest2[0]] * 100).toFixed(1)
+    : null;
+
+  html += `<div style="display:flex;gap:16px;margin-bottom:16px;flex-wrap:wrap;">`;
+  years.filter(yr => yearTotals[yr] > 0).forEach(yr => {
+    html += `<div style="background:${yearBg[yr]};border-radius:6px;padding:8px 14px;min-width:100px;">
+      <div style="font-family:'DM Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:1px;color:${yearColors[yr]};margin-bottom:3px;">${yr} Total</div>
+      <div style="font-family:'DM Serif Display',serif;font-size:17px;color:var(--ink);">${fmt$(yearTotals[yr])}</div>
+    </div>`;
+  });
+  if (growthYoY !== null) {
+    const sign = parseFloat(growthYoY) >= 0;
+    html += `<div style="background:${sign?'var(--green-pale)':'var(--red-pale)'};border-radius:6px;padding:8px 14px;min-width:100px;">
+      <div style="font-family:'DM Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:1px;color:${sign?'var(--green)':'var(--rust)'};margin-bottom:3px;">${latest2[0]}→${latest2[1]}</div>
+      <div style="font-family:'DM Serif Display',serif;font-size:17px;color:${sign?'var(--green)':'var(--rust)'};">${sign?'+':''}${growthYoY}%</div>
+    </div>`;
+  }
+  html += `</div>`;
+
+  // Month comparison table
+  html += `<table class="data-table" style="min-width:500px;">
+    <thead><tr>
+      <th style="width:50px;">Month</th>
+      ${years.filter(yr => rows.some(r => r.byYear[yr] > 0)).map(yr =>
+        `<th style="color:${yearColors[yr]};">${yr}</th>`
+      ).join('')}
+      <th>Hist. Avg</th>
+      <th>YoY Δ</th>
+      <th style="width:120px;">vs. Avg</th>
+    </tr></thead>
+    <tbody>`;
+
+  const activeDisplayYears = years.filter(yr => rows.some(r => r.byYear[yr] > 0));
+
+  rows.forEach(r => {
+    const latestVal = r.latestYr ? r.byYear[r.latestYr] : 0;
+    const vsAvg = r.histAvg && r.histAvg > 0 ? ((latestVal - r.histAvg) / r.histAvg * 100) : null;
+    const yoySign = r.yoy !== null && r.yoy >= 0;
+    const vsAvgSign = vsAvg !== null && vsAvg >= 0;
+
+    // Mini bar comparing all years
+    const barMax = Math.max(...activeDisplayYears.map(yr => r.byYear[yr]), 1);
+
+    html += `<tr>
+      <td style="font-weight:600;">${r.label}</td>
+      ${activeDisplayYears.map(yr => {
+        const v = r.byYear[yr];
+        const isLatest = yr === r.latestYr;
+        return `<td class="mono" style="${isLatest ? 'font-weight:600;' : 'color:var(--muted);'}">
+          ${v > 0 ? fmt$(v) : '<span style="color:var(--border);">—</span>'}
+          ${v > 0 ? `<div style="height:3px;width:${Math.round(v/barMax*60)}px;background:${yearColors[yr]};border-radius:2px;margin-top:3px;"></div>` : ''}
+        </td>`;
+      }).join('')}
+      <td class="mono muted">${r.histAvg ? fmt$(r.histAvg) : '—'}</td>
+      <td style="font-weight:500;color:${r.yoy===null?'var(--muted)':yoySign?'var(--green)':'var(--rust)'};">
+        ${r.yoy === null ? '—' : (yoySign?'+':'') + r.yoy.toFixed(1) + '%'}
+      </td>
+      <td>
+        ${vsAvg === null ? '<span class="muted">—</span>' : `
+        <div style="display:flex;align-items:center;gap:5px;">
+          <div style="flex:1;height:6px;background:var(--cream);border-radius:3px;overflow:hidden;position:relative;">
+            <div style="position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--border);"></div>
+            ${vsAvgSign
+              ? `<div style="position:absolute;left:50%;width:${Math.min(Math.abs(vsAvg)/2,50)}%;height:100%;background:var(--green);border-radius:0 3px 3px 0;"></div>`
+              : `<div style="position:absolute;right:50%;width:${Math.min(Math.abs(vsAvg)/2,50)}%;height:100%;background:var(--rust);border-radius:3px 0 0 3px;"></div>`
+            }
+          </div>
+          <span style="font-family:'DM Mono',monospace;font-size:10px;color:${vsAvgSign?'var(--green)':'var(--rust)'};">${vsAvgSign?'+':''}${vsAvg.toFixed(0)}%</span>
+        </div>`}
+      </td>
+    </tr>`;
+  });
+
+  // Running 3-month average row
+  if (rows.length >= 3) {
+    const last3 = rows.slice(-3);
+    const trailing = {};
+    activeDisplayYears.forEach(yr => {
+      const vals = last3.map(r => r.byYear[yr]).filter(v=>v>0);
+      trailing[yr] = vals.length ? vals.reduce((s,v)=>s+v,0)/vals.length : 0;
+    });
+    html += `<tr style="background:var(--cream);font-style:italic;">
+      <td style="font-size:11px;color:var(--muted);">3-mo avg</td>
+      ${activeDisplayYears.map(yr => `<td class="mono" style="font-size:11px;color:var(--muted);">${trailing[yr]>0?fmt$(trailing[yr]):'—'}</td>`).join('')}
+      <td colspan="3"></td>
+    </tr>`;
+  }
+
+  html += `</tbody></table></div>`;
+
+  document.getElementById('monthlyRevChart').innerHTML = html;
+}
+</script>
+</body>
+</html>
