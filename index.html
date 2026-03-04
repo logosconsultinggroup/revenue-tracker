@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///Users/evanchethik/Downloads/tracker_8.html -->
+<!-- saved from url=(0050)file:///Users/evanchethik/Downloads/tracker_9.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -569,7 +569,7 @@
     <div class="header-sub">Internal Business Intelligence</div>
   </div>
   <div style="display:flex;align-items:center;gap:12px;">
-    <span id="syncStatus" style="font-family: &quot;DM Mono&quot;, monospace; font-size: 11px; color: var(--green);">Live · synced 3:17 PM</span>
+    <span id="syncStatus" style="font-family: &quot;DM Mono&quot;, monospace; font-size: 11px; color: var(--green);">Live · synced 3:20 PM</span>
     <button onclick="refreshData()" style="background:none;border:1px solid var(--gold);color:var(--gold);padding:5px 12px;border-radius:4px;cursor:pointer;font-family:&#39;DM Sans&#39;,sans-serif;font-size:12px;" title="Reload from Google Sheets">↻ Refresh</button>
     <div class="header-date" id="headerDate">Wednesday, March 4, 2026</div>
   </div>
@@ -592,9 +592,9 @@
 </style>
 
 <nav class="nav">
-  <button class="nav-tab active" onclick="showSection(&#39;dashboard&#39;)">Dashboard</button>
+  <button class="nav-tab" onclick="showSection(&#39;dashboard&#39;)">Dashboard</button>
   <button class="nav-tab" onclick="showSection(&#39;invoices&#39;)">Invoice Tracker</button>
-  <button class="nav-tab" onclick="showSection(&#39;projected&#39;)">Projected Revenue</button>
+  <button class="nav-tab active" onclick="showSection(&#39;projected&#39;)">Projected Revenue</button>
   <button class="nav-tab" onclick="showSection(&#39;clients&#39;)">Client List</button>
   <button class="nav-tab" onclick="showSection(&#39;analytics&#39;)">Analytics</button>
   <button class="nav-tab" onclick="showSection(&#39;add-invoice&#39;)">+ New Invoice</button>
@@ -604,7 +604,7 @@
      DASHBOARD
      ============================ -->
 <div class="main">
-<div id="dashboard" class="section active">
+<div id="dashboard" class="section">
   <div class="kpi-grid" id="kpiGrid">
     <div class="kpi-card ">
       <div class="kpi-label">Outstanding Invoices</div>
@@ -1335,7 +1335,7 @@
 <!-- ============================
      PROJECTED REVENUE
      ============================ -->
-<div id="projected" class="section">
+<div id="projected" class="section active">
   <div class="section-title">Projected Revenue — 2026</div>
   <div class="section-desc">Upcoming engagements and estimated payment windows.</div>
 
@@ -2363,13 +2363,15 @@ function transformInvoices(rows) {
 }
 
 function transformProjected(rows) {
+  // Debug: log the first row's keys so we can verify column names
+  if (rows.length) console.log('Projected columns:', Object.keys(rows[0]));
   return rows.map(r => ({
     client:     r['Client'] || '',
     fee:        parseMoney(r['(Estimate) Fee']),
     estInvoice: parseDate(r['Estimated Invoice Date']),
     invoiceDate: parseDate(r['Estimated Invoice Date']),
-    estPayAvg:  parseDate(r['Estimate Payment Date (Average Payment Term)']),
-    estPayLast: parseDate(r['Estimated Payment Date (Based on Last Payment Term)']),
+    estPayAvg:  parseDate(r['Estimate Payment Date (Average Payment Term)']) || parseDate(r['Estimated Payment Date (Average Payment Term)']),
+    estPayLast: parseDate(r['Estimated Payment Date (Based on Last Payment Term)']) || parseDate(r['Estimate Payment Date (Based on Last Payment Term)']),
     _rowObj:    r
   })).filter(p => p.client);
 }
