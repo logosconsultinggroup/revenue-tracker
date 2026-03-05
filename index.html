@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///Users/evanchethik/Downloads/tracker_9.html -->
+<!-- saved from url=(0051)file:///Users/evanchethik/Downloads/tracker_10.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Revenue &amp; Invoice Tracker</title>
-<link href="./index_files/css2" rel="stylesheet">
+<link href="./Index_files/css2" rel="stylesheet">
 <style>
   :root {
     --ink: #1a1a1a;
@@ -569,9 +569,9 @@
     <div class="header-sub">Internal Business Intelligence</div>
   </div>
   <div style="display:flex;align-items:center;gap:12px;">
-    <span id="syncStatus" style="font-family: &quot;DM Mono&quot;, monospace; font-size: 11px; color: var(--green);">Live · synced 3:20 PM</span>
+    <span id="syncStatus" style="font-family:&#39;DM Mono&#39;,monospace;font-size:11px;color:var(--muted);"></span>
     <button onclick="refreshData()" style="background:none;border:1px solid var(--gold);color:var(--gold);padding:5px 12px;border-radius:4px;cursor:pointer;font-family:&#39;DM Sans&#39;,sans-serif;font-size:12px;" title="Reload from Google Sheets">↻ Refresh</button>
-    <div class="header-date" id="headerDate">Wednesday, March 4, 2026</div>
+    <div class="header-date" id="headerDate">Thursday, March 5, 2026</div>
   </div>
 </div>
 
@@ -585,16 +585,16 @@
 </div>
 
 <!-- Toast notification -->
-<div id="toast" style="display: none; position: fixed; bottom: 24px; right: 24px; background: var(--green); color: rgb(255, 255, 255); padding: 12px 20px; border-radius: 6px; font-size: 13px; z-index: 1001; box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 16px; max-width: 340px;">Data loaded from Google Sheets ✓</div>
+<div id="toast" style="display: none; position: fixed; bottom: 24px; right: 24px; background: var(--rust); color: rgb(255, 255, 255); padding: 12px 20px; border-radius: 6px; font-size: 13px; z-index: 1001; box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 16px; max-width: 340px;">Could not reach Google Sheets — showing embedded data. (Failed to fetch)</div>
 
 <style>
 @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 
 <nav class="nav">
-  <button class="nav-tab" onclick="showSection(&#39;dashboard&#39;)">Dashboard</button>
+  <button class="nav-tab active" onclick="showSection(&#39;dashboard&#39;)">Dashboard</button>
   <button class="nav-tab" onclick="showSection(&#39;invoices&#39;)">Invoice Tracker</button>
-  <button class="nav-tab active" onclick="showSection(&#39;projected&#39;)">Projected Revenue</button>
+  <button class="nav-tab" onclick="showSection(&#39;projected&#39;)">Projected Revenue</button>
   <button class="nav-tab" onclick="showSection(&#39;clients&#39;)">Client List</button>
   <button class="nav-tab" onclick="showSection(&#39;analytics&#39;)">Analytics</button>
   <button class="nav-tab" onclick="showSection(&#39;add-invoice&#39;)">+ New Invoice</button>
@@ -604,27 +604,27 @@
      DASHBOARD
      ============================ -->
 <div class="main">
-<div id="dashboard" class="section">
+<div id="dashboard" class="section active">
   <div class="kpi-grid" id="kpiGrid">
     <div class="kpi-card ">
       <div class="kpi-label">Outstanding Invoices</div>
-      <div class="kpi-value">$92,805.40</div>
-      <div class="kpi-sub">13 invoices pending</div>
+      <div class="kpi-value">$55,367.67</div>
+      <div class="kpi-sub">9 invoices pending</div>
     </div>
     <div class="kpi-card rust">
       <div class="kpi-label">Overdue</div>
-      <div class="kpi-value">$34,474.29</div>
-      <div class="kpi-sub">8 invoices past est. pay date</div>
+      <div class="kpi-value">$26,583.33</div>
+      <div class="kpi-sub">6 invoices past est. pay date</div>
     </div>
     <div class="kpi-card green">
       <div class="kpi-label">2026 YTD Collected</div>
-      <div class="kpi-value">$168,614.41</div>
+      <div class="kpi-value">$142,496.74</div>
       <div class="kpi-sub">Payments received in 2026</div>
     </div>
     <div class="kpi-card ">
       <div class="kpi-label">2026 Projected Pipeline</div>
-      <div class="kpi-value">$235,883.33</div>
-      <div class="kpi-sub">23 engagements</div>
+      <div class="kpi-value">$309,750.00</div>
+      <div class="kpi-sub">26 engagements</div>
     </div></div>
 
   <div class="two-col">
@@ -639,7 +639,7 @@
       <div class="cashflow-bar-wrap">
         
         
-        <div class="cashflow-bar actual tooltip" style="height:82px;position:absolute;bottom:0;left:0;right:0;">
+        <div class="cashflow-bar actual tooltip" style="height:110px;position:absolute;bottom:0;left:0;right:0;">
           <span class="tooltip-box">Collected: $110,496.22</span>
         </div>
       </div>
@@ -648,61 +648,57 @@
     </div><div class="cashflow-month">
       <div class="cashflow-bar-wrap">
         
-        <div class="cashflow-bar outstanding tooltip" style="height:49px;position:absolute;bottom:0;left:0;right:0;">
-          <span class="tooltip-box">Outstanding invoices: $18,750.00</span>
+        <div class="cashflow-bar outstanding tooltip" style="height:65px;position:absolute;bottom:0;left:0;right:0;">
+          <span class="tooltip-box">Outstanding invoices: $32,867.67</span>
         </div>
-        <div class="cashflow-bar actual tooltip" style="height:35px;position:absolute;bottom:0;left:0;right:0;">
-          <span class="tooltip-box">Collected: $47,333.85</span>
+        <div class="cashflow-bar actual tooltip" style="height:32px;position:absolute;bottom:0;left:0;right:0;">
+          <span class="tooltip-box">Collected: $32,000.52</span>
         </div>
       </div>
       <div class="cashflow-label">Feb</div>
-      <div class="cashflow-amount">$66k</div>
+      <div class="cashflow-amount">$65k</div>
     </div><div class="cashflow-month">
       <div class="cashflow-bar-wrap">
-        <div class="cashflow-bar projected tooltip" style="height:110px;position:absolute;bottom:0;left:0;right:0;">
-          <span class="tooltip-box">Projected engagements: $74,133.33</span>
+        <div class="cashflow-bar projected tooltip" style="height:99px;position:absolute;bottom:0;left:0;right:0;">
+          <span class="tooltip-box">Projected engagements: $77,000.00</span>
         </div>
-        <div class="cashflow-bar outstanding tooltip" style="height:55px;position:absolute;bottom:0;left:0;right:0;">
-          <span class="tooltip-box">Outstanding invoices: $67,331.11</span>
-        </div>
-        <div class="cashflow-bar actual tooltip" style="height:5px;position:absolute;bottom:0;left:0;right:0;">
-          <span class="tooltip-box">Collected: $6,284.34</span>
-        </div>
-      </div>
-      <div class="cashflow-label">Mar</div>
-      <div class="cashflow-amount">$148k</div>
-    </div><div class="cashflow-month">
-      <div class="cashflow-bar-wrap">
-        <div class="cashflow-bar projected tooltip" style="height:21px;position:absolute;bottom:0;left:0;right:0;">
-          <span class="tooltip-box">Projected engagements: $21,750.00</span>
-        </div>
-        <div class="cashflow-bar outstanding tooltip" style="height:4px;position:absolute;bottom:0;left:0;right:0;">
-          <span class="tooltip-box">Outstanding invoices: $6,000.00</span>
+        <div class="cashflow-bar outstanding tooltip" style="height:22px;position:absolute;bottom:0;left:0;right:0;">
+          <span class="tooltip-box">Outstanding invoices: $22,500.00</span>
         </div>
         
       </div>
-      <div class="cashflow-label">Apr</div>
-      <div class="cashflow-amount">$28k</div>
+      <div class="cashflow-label">Mar</div>
+      <div class="cashflow-amount">$100k</div>
     </div><div class="cashflow-month">
       <div class="cashflow-bar-wrap">
-        <div class="cashflow-bar projected tooltip" style="height:5px;position:absolute;bottom:0;left:0;right:0;">
-          <span class="tooltip-box">Projected engagements: $7,000.00</span>
+        <div class="cashflow-bar projected tooltip" style="height:46px;position:absolute;bottom:0;left:0;right:0;">
+          <span class="tooltip-box">Projected engagements: $45,750.00</span>
+        </div>
+        
+        
+      </div>
+      <div class="cashflow-label">Apr</div>
+      <div class="cashflow-amount">$46k</div>
+    </div><div class="cashflow-month">
+      <div class="cashflow-bar-wrap">
+        <div class="cashflow-bar projected tooltip" style="height:6px;position:absolute;bottom:0;left:0;right:0;">
+          <span class="tooltip-box">Projected engagements: $6,000.00</span>
         </div>
         
         
       </div>
       <div class="cashflow-label">May</div>
-      <div class="cashflow-amount">$7k</div>
+      <div class="cashflow-amount">$6k</div>
     </div><div class="cashflow-month">
       <div class="cashflow-bar-wrap">
-        <div class="cashflow-bar projected tooltip" style="height:19px;position:absolute;bottom:0;left:0;right:0;">
-          <span class="tooltip-box">Projected engagements: $25,500.00</span>
+        <div class="cashflow-bar projected tooltip" style="height:49px;position:absolute;bottom:0;left:0;right:0;">
+          <span class="tooltip-box">Projected engagements: $49,500.00</span>
         </div>
         
         
       </div>
       <div class="cashflow-label">Jun</div>
-      <div class="cashflow-amount">$26k</div>
+      <div class="cashflow-amount">$50k</div>
     </div><div class="cashflow-month">
       <div class="cashflow-bar-wrap">
         
@@ -721,14 +717,14 @@
       
     </div><div class="cashflow-month">
       <div class="cashflow-bar-wrap">
-        <div class="cashflow-bar projected tooltip" style="height:27px;position:absolute;bottom:0;left:0;right:0;">
-          <span class="tooltip-box">Projected engagements: $36,000.00</span>
+        <div class="cashflow-bar projected tooltip" style="height:60px;position:absolute;bottom:0;left:0;right:0;">
+          <span class="tooltip-box">Projected engagements: $60,000.00</span>
         </div>
         
         
       </div>
       <div class="cashflow-label">Sep</div>
-      <div class="cashflow-amount">$36k</div>
+      <div class="cashflow-amount">$60k</div>
     </div><div class="cashflow-month">
       <div class="cashflow-bar-wrap">
         
@@ -741,15 +737,13 @@
       <div class="cashflow-bar-wrap">
         
         
-        <div class="cashflow-bar actual tooltip" style="height:3px;position:absolute;bottom:0;left:0;right:0;">
-          <span class="tooltip-box">Collected: $4,500.00</span>
-        </div>
+        
       </div>
       <div class="cashflow-label">Nov</div>
-      <div class="cashflow-amount">$5k</div>
+      
     </div><div class="cashflow-month">
       <div class="cashflow-bar-wrap">
-        <div class="cashflow-bar projected tooltip" style="height:11px;position:absolute;bottom:0;left:0;right:0;">
+        <div class="cashflow-bar projected tooltip" style="height:15px;position:absolute;bottom:0;left:0;right:0;">
           <span class="tooltip-box">Projected engagements: $15,000.00</span>
         </div>
         
@@ -776,47 +770,39 @@
       <div class="alert-dot dot-red"></div>
       <div class="alert-text">
         <div class="alert-title">Point72 — Invoice #4122</div>
-        <div class="alert-sub">Overdue • Est: Feb 9, 2026</div>
+        <div class="alert-sub">Overdue • Est: Feb 12, 2026</div>
       </div>
       <div class="alert-amount">$12,000.00</div>
     </div>
     <div class="alert-item">
       <div class="alert-dot dot-red"></div>
       <div class="alert-text">
-        <div class="alert-title">Brookfield Wealth Management — Invoice #4136</div>
-        <div class="alert-sub">Overdue • Est: Mar 16, 2026</div>
-      </div>
-      <div class="alert-amount">$9,000.00</div>
-    </div>
-    <div class="alert-item">
-      <div class="alert-dot dot-red"></div>
-      <div class="alert-text">
-        <div class="alert-title">Velas Resorts Mexico — Invoice #4140</div>
-        <div class="alert-sub">Overdue • Est: Apr 2, 2026</div>
+        <div class="alert-title">Bank of America — Invoice #4133</div>
+        <div class="alert-sub">Overdue • Est: Feb 19, 2026</div>
       </div>
       <div class="alert-amount">$6,000.00</div>
     </div>
     <div class="alert-item">
-      <div class="alert-dot dot-gold"></div>
+      <div class="alert-dot dot-red"></div>
       <div class="alert-text">
-        <div class="alert-title">McCormick and Company — Invoice #4135</div>
-        <div class="alert-sub">Due in 11 days • Mar 15, 2026</div>
+        <div class="alert-title">Youth Villages — Invoice #4125</div>
+        <div class="alert-sub">Overdue • Est: Feb 14, 2026</div>
       </div>
-      <div class="alert-amount">$19,250.00</div>
+      <div class="alert-amount">$3,333.33</div>
     </div>
     <div class="alert-item">
       <div class="alert-dot dot-gold"></div>
       <div class="alert-text">
-        <div class="alert-title">Eli Lilly &amp; Co. — Invoice #4139</div>
-        <div class="alert-sub">Due in 10 days • Mar 14, 2026</div>
+        <div class="alert-title">Depository Trust &amp; Clearing Corporation — Invoice #4128</div>
+        <div class="alert-sub">Due in 12 days • Mar 17, 2026</div>
       </div>
-      <div class="alert-amount">$13,247.78</div>
+      <div class="alert-amount">$12,000.00</div>
     </div>
     <div class="alert-item">
       <div class="alert-dot dot-gold"></div>
       <div class="alert-text">
         <div class="alert-title">Point72 — Invoice #4132</div>
-        <div class="alert-sub">Due in 6 days • Mar 10, 2026</div>
+        <div class="alert-sub">Due in 8 days • Mar 13, 2026</div>
       </div>
       <div class="alert-amount">$10,500.00</div>
     </div></div>
@@ -836,61 +822,61 @@
       <th>Invoice</th><th>Client</th><th>Fee</th><th>Est. Payment</th><th>Status</th><th></th>
     </tr></thead>
     <tbody><tr>
-        <td class="mono">#4135</td>
-        <td>McCormick and Company</td>
-        <td class="mono">$19,250.00</td>
-        <td><span style="color:var(--gold);" title="based on 4 invoices, ±12d">◑ Mar 15, 2026 (Mar 1, 2026–Mar 29, 2026)</span></td>
-        <td><span class="badge badge-pending">In 11d</span></td>
-        <td><button class="btn btn-sm btn-primary" onclick="openPayModal(&#39;4135&#39;)">Mark Paid</button></td>
-      </tr><tr>
-        <td class="mono">#4139</td>
-        <td>Eli Lilly &amp; Co.</td>
-        <td class="mono">$13,247.78</td>
-        <td><span style="color:var(--muted);" title="based on 241 invoices, ±21d">○ Mar 14, 2026 (—–Apr 4, 2026)</span></td>
-        <td><span class="badge badge-pending">In 10d</span></td>
-        <td><button class="btn btn-sm btn-primary" onclick="openPayModal(&#39;4139&#39;)">Mark Paid</button></td>
-      </tr><tr>
         <td class="mono">#4128</td>
         <td>Depository Trust &amp; Clearing Corporation</td>
         <td class="mono">$12,000.00</td>
-        <td><span style="color:var(--muted);" title="based on 35 invoices, ±34d">○ Mar 20, 2026 (Feb 14, 2026–Apr 23, 2026)</span></td>
-        <td><span class="badge badge-pending">In 16d</span></td>
+        <td><span style="color:var(--muted);" title="based on 16 invoices, ±25d">○ Mar 17, 2026 (Feb 20, 2026–Apr 11, 2026)</span></td>
+        <td><span class="badge badge-pending">In 12d</span></td>
         <td><button class="btn btn-sm btn-primary" onclick="openPayModal(&#39;4128&#39;)">Mark Paid</button></td>
       </tr><tr>
         <td class="mono">#4122</td>
         <td>Point72</td>
         <td class="mono">$12,000.00</td>
-        <td><span style="color:var(--muted);" title="based on 21 invoices, ±22d">○ Feb 9, 2026 (Jan 18, 2026–Mar 3, 2026)</span></td>
+        <td><span style="color:var(--muted);" title="based on 10 invoices, ±23d">○ Feb 12, 2026 (Jan 20, 2026–Mar 7, 2026)</span></td>
         <td><span class="badge badge-overdue">Overdue</span></td>
         <td><button class="btn btn-sm btn-primary" onclick="openPayModal(&#39;4122&#39;)">Mark Paid</button></td>
       </tr><tr>
         <td class="mono">#4132</td>
         <td>Point72</td>
         <td class="mono">$10,500.00</td>
-        <td><span style="color:var(--muted);" title="based on 21 invoices, ±22d">○ Mar 10, 2026 (Feb 16, 2026–Apr 1, 2026)</span></td>
-        <td><span class="badge badge-pending">In 6d</span></td>
+        <td><span style="color:var(--muted);" title="based on 10 invoices, ±23d">○ Mar 13, 2026 (Feb 18, 2026–Apr 5, 2026)</span></td>
+        <td><span class="badge badge-pending">In 8d</span></td>
         <td><button class="btn btn-sm btn-primary" onclick="openPayModal(&#39;4132&#39;)">Mark Paid</button></td>
       </tr><tr>
-        <td class="mono">#4136</td>
-        <td>Brookfield Wealth Management</td>
-        <td class="mono">$9,000.00</td>
-        <td><span style="color:var(--muted);" title="industry avg (no client history)">○ Mar 16, 2026 (Mar 6, 2026–Apr 4, 2026)</span></td>
-        <td><span class="badge badge-overdue">Overdue</span></td>
-        <td><button class="btn btn-sm btn-primary" onclick="openPayModal(&#39;4136&#39;)">Mark Paid</button></td>
+        <td class="mono">#4129</td>
+        <td>PTC Therapeutics</td>
+        <td class="mono">$6,284.34</td>
+        <td><span style="color:var(--muted);" title="industry avg (no client history)">○ Feb 10, 2026 (Feb 8, 2026–Feb 20, 2026)</span></td>
+        <td><span class="badge badge-pending">In -23d</span></td>
+        <td><button class="btn btn-sm btn-primary" onclick="openPayModal(&#39;4129&#39;)">Mark Paid</button></td>
       </tr><tr>
-        <td class="mono">#4140</td>
-        <td>Velas Resorts Mexico</td>
+        <td class="mono">#4133</td>
+        <td>Bank of America</td>
         <td class="mono">$6,000.00</td>
-        <td><span style="color:var(--muted);" title="default estimate">○ Apr 2, 2026 (Mar 23, 2026–Apr 17, 2026)</span></td>
+        <td><span style="color:var(--gold);" title="based on 13 invoices, ±12d">◑ Feb 19, 2026 (—–Mar 6, 2026)</span></td>
         <td><span class="badge badge-overdue">Overdue</span></td>
-        <td><button class="btn btn-sm btn-primary" onclick="openPayModal(&#39;4140&#39;)">Mark Paid</button></td>
+        <td><button class="btn btn-sm btn-primary" onclick="openPayModal(&#39;4133&#39;)">Mark Paid</button></td>
       </tr><tr>
-        <td class="mono">#4138</td>
+        <td class="mono">#4125</td>
         <td>Youth Villages</td>
         <td class="mono">$3,333.33</td>
-        <td><span style="color:var(--green);" title="based on 27 invoices, ±4d">● Mar 15, 2026</span></td>
-        <td><span class="badge badge-pending">In 11d</span></td>
-        <td><button class="btn btn-sm btn-primary" onclick="openPayModal(&#39;4138&#39;)">Mark Paid</button></td>
+        <td><span style="color:var(--green);" title="based on 26 invoices, ±4d">● Feb 14, 2026</span></td>
+        <td><span class="badge badge-overdue">Overdue</span></td>
+        <td><button class="btn btn-sm btn-primary" onclick="openPayModal(&#39;4125&#39;)">Mark Paid</button></td>
+      </tr><tr>
+        <td class="mono">#4124</td>
+        <td>Point72</td>
+        <td class="mono">$2,250.00</td>
+        <td><span style="color:var(--muted);" title="based on 10 invoices, ±23d">○ Feb 22, 2026 (Jan 30, 2026–Mar 17, 2026)</span></td>
+        <td><span class="badge badge-overdue">Overdue</span></td>
+        <td><button class="btn btn-sm btn-primary" onclick="openPayModal(&#39;4124&#39;)">Mark Paid</button></td>
+      </tr><tr>
+        <td class="mono">#4126</td>
+        <td>Bank of America</td>
+        <td class="mono">$1,500.00</td>
+        <td><span style="color:var(--gold);" title="based on 13 invoices, ±12d">◑ Feb 12, 2026 (—–Feb 27, 2026)</span></td>
+        <td><span class="badge badge-overdue">Overdue</span></td>
+        <td><button class="btn btn-sm btn-primary" onclick="openPayModal(&#39;4126&#39;)">Mark Paid</button></td>
       </tr></tbody></table>
       </div>
     </div>
@@ -904,12 +890,12 @@
     <div class="lead-bar">
       <div class="lead-name">Fred</div>
       <div class="lead-track"><div class="lead-fill" style="width:100%"></div></div>
-      <div class="lead-amount">$673,492.52</div>
+      <div class="lead-amount">$657,716.81</div>
     </div>
     <div class="lead-bar">
       <div class="lead-name">Katie</div>
-      <div class="lead-track"><div class="lead-fill" style="width:53%"></div></div>
-      <div class="lead-amount">$354,660.25</div>
+      <div class="lead-track"><div class="lead-fill" style="width:52%"></div></div>
+      <div class="lead-amount">$343,242.58</div>
     </div>
     <div class="lead-bar">
       <div class="lead-name">Evan</div>
@@ -936,7 +922,7 @@
     </select>
     <select id="invoiceLeadFilter" onchange="renderInvoiceTable()">
       <option value="">All Leads</option>
-    <option value="Adam">Adam</option><option value="Anthony">Anthony</option><option value="Barbara">Barbara</option><option value="Evan">Evan</option><option value="Fred">Fred</option><option value="Fred ">Fred </option><option value="Fred/Katie">Fred/Katie</option><option value="Holly">Holly</option><option value="Iris">Iris</option><option value="Katie">Katie</option><option value="Kristin">Kristin</option><option value="Maida">Maida</option><option value="Oksana">Oksana</option><option value="Raleigh">Raleigh</option><option value="Yinnan">Yinnan</option></select>
+    <option value="Evan">Evan</option><option value="Fred">Fred</option><option value="Fred/Katie">Fred/Katie</option><option value="Katie">Katie</option><option value="Maida">Maida</option><option value="Yinnan">Yinnan</option></select>
     <select id="invoiceYearFilter" onchange="renderInvoiceTable()">
       <option value="">All Years</option>
       <option value="2026">2026</option>
@@ -966,78 +952,6 @@
           </tr>
         </thead>
         <tbody id="invoiceTableBody"><tr>
-      <td class="mono">#4140</td>
-      <td>Mar 3, 2026</td>
-      <td>Velas Resorts Mexico</td>
-      <td><span class="badge badge-industry">Hospitality</span></td>
-      <td class="mono">$6,000.00</td>
-      <td>Fred</td>
-      <td>Mar 3, 2026</td>
-      <td><span style="color:var(--muted);" title="default estimate">○ Apr 2, 2026 (Mar 23, 2026–Apr 17, 2026)</span></td>
-      <td><button class="btn btn-sm btn-primary" onclick="openPayModal(&#39;4140&#39;)">Mark Paid</button></td>
-      <td><span class="badge badge-overdue">Overdue</span></td>
-      <td class=" mono">—</td>
-    </tr><tr>
-      <td class="mono">#4139</td>
-      <td>Mar 3, 2026</td>
-      <td>Eli Lilly &amp; Co.</td>
-      <td><span class="badge badge-industry">Pharmaceuticals</span></td>
-      <td class="mono">$13,247.78</td>
-      <td>Katie</td>
-      <td>Mar 3, 2026</td>
-      <td><span style="color:var(--muted);" title="based on 241 invoices, ±21d">○ Mar 14, 2026 (—–Apr 4, 2026)</span></td>
-      <td><button class="btn btn-sm btn-primary" onclick="openPayModal(&#39;4139&#39;)">Mark Paid</button></td>
-      <td><span class="badge badge-pending">Pending</span></td>
-      <td class=" mono">—</td>
-    </tr><tr>
-      <td class="mono">#4138</td>
-      <td>Mar 2, 2026</td>
-      <td>Youth Villages</td>
-      <td><span class="badge badge-industry">NGO</span></td>
-      <td class="mono">$3,333.33</td>
-      <td>Katie</td>
-      <td>Mar 2, 2026</td>
-      <td><span style="color:var(--green);" title="based on 27 invoices, ±4d">● Mar 15, 2026</span></td>
-      <td><button class="btn btn-sm btn-primary" onclick="openPayModal(&#39;4138&#39;)">Mark Paid</button></td>
-      <td><span class="badge badge-pending">Pending</span></td>
-      <td class=" mono">—</td>
-    </tr><tr>
-      <td class="mono">#4136</td>
-      <td>Feb 27, 2026</td>
-      <td>Brookfield Wealth Management</td>
-      <td><span class="badge badge-industry">Financial Services</span></td>
-      <td class="mono">$9,000.00</td>
-      <td>Fred</td>
-      <td>Feb 27, 2026</td>
-      <td><span style="color:var(--muted);" title="industry avg (no client history)">○ Mar 16, 2026 (Mar 6, 2026–Apr 4, 2026)</span></td>
-      <td><button class="btn btn-sm btn-primary" onclick="openPayModal(&#39;4136&#39;)">Mark Paid</button></td>
-      <td><span class="badge badge-overdue">Overdue</span></td>
-      <td class=" mono">—</td>
-    </tr><tr>
-      <td class="mono">#4135</td>
-      <td>Feb 19, 2026</td>
-      <td>McCormick and Company</td>
-      <td><span class="badge badge-industry">Consumer Products</span></td>
-      <td class="mono">$19,250.00</td>
-      <td>Katie</td>
-      <td>Feb 19, 2026</td>
-      <td><span style="color:var(--gold);" title="based on 4 invoices, ±12d">◑ Mar 15, 2026 (Mar 1, 2026–Mar 29, 2026)</span></td>
-      <td><button class="btn btn-sm btn-primary" onclick="openPayModal(&#39;4135&#39;)">Mark Paid</button></td>
-      <td><span class="badge badge-pending">Pending</span></td>
-      <td class=" mono">—</td>
-    </tr><tr>
-      <td class="mono">#4134</td>
-      <td>Feb 18, 2026</td>
-      <td>Rockefeller Capital Management</td>
-      <td><span class="badge badge-industry">Financial Services</span></td>
-      <td class="mono">$6,000.00</td>
-      <td>Fred</td>
-      <td>Feb 18, 2026</td>
-      <td>—</td>
-      <td>Feb 26, 2026</td>
-      <td><span class="badge badge-paid">Paid</span></td>
-      <td class=" mono">—</td>
-    </tr><tr>
       <td class="mono">#4132</td>
       <td>Feb 11, 2026</td>
       <td>Point72</td>
@@ -1045,7 +959,7 @@
       <td class="mono">$10,500.00</td>
       <td>Fred</td>
       <td>Feb 11, 2026</td>
-      <td><span style="color:var(--muted);" title="based on 21 invoices, ±22d">○ Mar 10, 2026 (Feb 16, 2026–Apr 1, 2026)</span></td>
+      <td><span style="color:var(--muted);" title="based on 10 invoices, ±23d">○ Mar 13, 2026 (Feb 18, 2026–Apr 5, 2026)</span></td>
       <td><button class="btn btn-sm btn-primary" onclick="openPayModal(&#39;4132&#39;)">Mark Paid</button></td>
       <td><span class="badge badge-pending">Pending</span></td>
       <td class=" mono">—</td>
@@ -1057,9 +971,9 @@
       <td class="mono">$6,000.00</td>
       <td>Fred</td>
       <td>Feb 10, 2026</td>
-      <td>—</td>
-      <td>Feb 24, 2026</td>
-      <td><span class="badge badge-paid">Paid</span></td>
+      <td><span style="color:var(--gold);" title="based on 13 invoices, ±12d">◑ Feb 19, 2026 (—–Mar 6, 2026)</span></td>
+      <td><button class="btn btn-sm btn-primary" onclick="openPayModal(&#39;4133&#39;)">Mark Paid</button></td>
+      <td><span class="badge badge-overdue">Overdue</span></td>
       <td class=" mono">—</td>
     </tr><tr>
       <td class="mono">#4131</td>
@@ -1072,7 +986,7 @@
       <td>—</td>
       <td>Feb 9, 2026</td>
       <td><span class="badge badge-paid">Paid</span></td>
-      <td class=" mono">—</td>
+      <td class="heat-fast mono">0d</td>
     </tr><tr>
       <td class="mono">#4130</td>
       <td>Feb 6, 2026</td>
@@ -1084,7 +998,7 @@
       <td>—</td>
       <td>Feb 6, 2026</td>
       <td><span class="badge badge-paid">Paid</span></td>
-      <td class=" mono">—</td>
+      <td class="heat-fast mono">0d</td>
     </tr><tr>
       <td class="mono">#4129</td>
       <td>Feb 5, 2026</td>
@@ -1093,9 +1007,9 @@
       <td class="mono">$6,284.34</td>
       <td>Katie</td>
       <td>Feb 5, 2026</td>
-      <td>—</td>
-      <td>Mar 4, 2026</td>
-      <td><span class="badge badge-paid">Paid</span></td>
+      <td><span style="color:var(--muted);" title="industry avg (no client history)">○ Feb 10, 2026 (Feb 8, 2026–Feb 20, 2026)</span></td>
+      <td><button class="btn btn-sm btn-primary" onclick="openPayModal(&#39;4129&#39;)">Mark Paid</button></td>
+      <td><span class="badge badge-pending">Pending</span></td>
       <td class=" mono">—</td>
     </tr><tr>
       <td class="mono">#4128</td>
@@ -1105,7 +1019,7 @@
       <td class="mono">$12,000.00</td>
       <td>Fred</td>
       <td>Feb 5, 2026</td>
-      <td><span style="color:var(--muted);" title="based on 35 invoices, ±34d">○ Mar 20, 2026 (Feb 14, 2026–Apr 23, 2026)</span></td>
+      <td><span style="color:var(--muted);" title="based on 16 invoices, ±25d">○ Mar 17, 2026 (Feb 20, 2026–Apr 11, 2026)</span></td>
       <td><button class="btn btn-sm btn-primary" onclick="openPayModal(&#39;4128&#39;)">Mark Paid</button></td>
       <td><span class="badge badge-pending">Pending</span></td>
       <td class=" mono">—</td>
@@ -1117,7 +1031,7 @@
       <td class="mono">$1,500.00</td>
       <td>Fred</td>
       <td>Feb 3, 2026</td>
-      <td><span style="color:var(--muted);" title="based on 23 invoices, ±21d">○ Feb 14, 2026 (—–Mar 7, 2026)</span></td>
+      <td><span style="color:var(--gold);" title="based on 13 invoices, ±12d">◑ Feb 12, 2026 (—–Feb 27, 2026)</span></td>
       <td><button class="btn btn-sm btn-primary" onclick="openPayModal(&#39;4126&#39;)">Mark Paid</button></td>
       <td><span class="badge badge-overdue">Overdue</span></td>
       <td class=" mono">—</td>
@@ -1132,7 +1046,7 @@
       <td>—</td>
       <td>Feb 6, 2026</td>
       <td><span class="badge badge-paid">Paid</span></td>
-      <td class=" mono">—</td>
+      <td class="heat-fast mono">3d</td>
     </tr><tr>
       <td class="mono">#4125</td>
       <td>Feb 2, 2026</td>
@@ -1141,9 +1055,9 @@
       <td class="mono">$3,333.33</td>
       <td>Katie</td>
       <td>Feb 2, 2026</td>
-      <td>—</td>
-      <td>Feb 20, 2026</td>
-      <td><span class="badge badge-paid">Paid</span></td>
+      <td><span style="color:var(--green);" title="based on 26 invoices, ±4d">● Feb 14, 2026</span></td>
+      <td><button class="btn btn-sm btn-primary" onclick="openPayModal(&#39;4125&#39;)">Mark Paid</button></td>
+      <td><span class="badge badge-overdue">Overdue</span></td>
       <td class=" mono">—</td>
     </tr><tr>
       <td class="mono">#4124</td>
@@ -1153,7 +1067,7 @@
       <td class="mono">$2,250.00</td>
       <td>Fred</td>
       <td>Jan 23, 2026</td>
-      <td><span style="color:var(--muted);" title="based on 21 invoices, ±22d">○ Feb 19, 2026 (Jan 28, 2026–Mar 13, 2026)</span></td>
+      <td><span style="color:var(--muted);" title="based on 10 invoices, ±23d">○ Feb 22, 2026 (Jan 30, 2026–Mar 17, 2026)</span></td>
       <td><button class="btn btn-sm btn-primary" onclick="openPayModal(&#39;4124&#39;)">Mark Paid</button></td>
       <td><span class="badge badge-overdue">Overdue</span></td>
       <td class=" mono">—</td>
@@ -1168,7 +1082,7 @@
       <td>—</td>
       <td>Feb 9, 2026</td>
       <td><span class="badge badge-paid">Paid</span></td>
-      <td class=" mono">—</td>
+      <td class="heat-avg mono">18d</td>
     </tr><tr>
       <td class="mono">#4122</td>
       <td>Jan 13, 2026</td>
@@ -1177,7 +1091,7 @@
       <td class="mono">$12,000.00</td>
       <td>Fred</td>
       <td>Jan 13, 2026</td>
-      <td><span style="color:var(--muted);" title="based on 21 invoices, ±22d">○ Feb 9, 2026 (Jan 18, 2026–Mar 3, 2026)</span></td>
+      <td><span style="color:var(--muted);" title="based on 10 invoices, ±23d">○ Feb 12, 2026 (Jan 20, 2026–Mar 7, 2026)</span></td>
       <td><button class="btn btn-sm btn-primary" onclick="openPayModal(&#39;4122&#39;)">Mark Paid</button></td>
       <td><span class="badge badge-overdue">Overdue</span></td>
       <td class=" mono">—</td>
@@ -1192,7 +1106,7 @@
       <td>—</td>
       <td>Jan 12, 2026</td>
       <td><span class="badge badge-paid">Paid</span></td>
-      <td class=" mono">—</td>
+      <td class="heat-fast mono">0d</td>
     </tr><tr>
       <td class="mono">#4120</td>
       <td>Jan 9, 2026</td>
@@ -1204,7 +1118,7 @@
       <td>—</td>
       <td>Jan 20, 2026</td>
       <td><span class="badge badge-paid">Paid</span></td>
-      <td class=" mono">—</td>
+      <td class="heat-fast mono">8d</td>
     </tr><tr>
       <td class="mono">#4119</td>
       <td>Jan 8, 2026</td>
@@ -1216,7 +1130,7 @@
       <td>—</td>
       <td>Jan 12, 2026</td>
       <td><span class="badge badge-paid">Paid</span></td>
-      <td class=" mono">—</td>
+      <td class="heat-fast mono">4d</td>
     </tr><tr>
       <td class="mono">#4118</td>
       <td>Jan 6, 2026</td>
@@ -1225,19 +1139,7 @@
       <td class="mono">$1,500.00</td>
       <td>Katie</td>
       <td>Jan 6, 2026</td>
-      <td><span style="color:var(--muted);" title="based on 26 invoices, ±21d">○ Feb 5, 2026 (Jan 15, 2026–Feb 26, 2026)</span></td>
-      <td><button class="btn btn-sm btn-primary" onclick="openPayModal(&#39;4118&#39;)">Mark Paid</button></td>
-      <td><span class="badge badge-overdue">Overdue</span></td>
-      <td class=" mono">—</td>
-    </tr><tr>
-      <td class="mono">#4118</td>
-      <td>Jan 6, 2026</td>
-      <td>Mohawk Industries, Inc.</td>
-      <td><span class="badge badge-industry">Manufacturing</span></td>
-      <td class="mono">$1,500.00</td>
-      <td>Katie</td>
-      <td>Jan 6, 2026</td>
-      <td><span style="color:var(--muted);" title="based on 26 invoices, ±21d">○ Feb 5, 2026 (Jan 15, 2026–Feb 26, 2026)</span></td>
+      <td><span style="color:var(--gold);" title="based on 19 invoices, ±13d">◑ Feb 2, 2026 (Jan 18, 2026–Feb 17, 2026)</span></td>
       <td><button class="btn btn-sm btn-primary" onclick="openPayModal(&#39;4118&#39;)">Mark Paid</button></td>
       <td><span class="badge badge-overdue">Overdue</span></td>
       <td class=" mono">—</td>
@@ -1252,7 +1154,7 @@
       <td>—</td>
       <td>Jan 15, 2026</td>
       <td><span class="badge badge-paid">Paid</span></td>
-      <td class=" mono">—</td>
+      <td class="heat-fast mono">10d</td>
     </tr><tr>
       <td class="mono">#4116</td>
       <td>Dec 19, 2025</td>
@@ -1264,7 +1166,7 @@
       <td>—</td>
       <td>Feb 3, 2026</td>
       <td><span class="badge badge-paid">Paid</span></td>
-      <td class=" mono">—</td>
+      <td class="heat-slow mono">46d</td>
     </tr><tr>
       <td class="mono">#4115</td>
       <td>Dec 19, 2025</td>
@@ -1276,7 +1178,7 @@
       <td>—</td>
       <td>Dec 23, 2025</td>
       <td><span class="badge badge-paid">Paid</span></td>
-      <td class=" mono">—</td>
+      <td class="heat-fast mono">4d</td>
     </tr><tr>
       <td class="mono">#4114</td>
       <td>Dec 19, 2025</td>
@@ -1288,7 +1190,7 @@
       <td>—</td>
       <td>Dec 30, 2025</td>
       <td><span class="badge badge-paid">Paid</span></td>
-      <td class=" mono">—</td>
+      <td class="heat-avg mono">11d</td>
     </tr><tr>
       <td class="mono">#4113</td>
       <td>Dec 19, 2025</td>
@@ -1300,7 +1202,7 @@
       <td>—</td>
       <td>Jan 6, 2026</td>
       <td><span class="badge badge-paid">Paid</span></td>
-      <td class=" mono">—</td>
+      <td class="heat-avg mono">18d</td>
     </tr><tr>
       <td class="mono">#4112</td>
       <td>Dec 17, 2025</td>
@@ -1312,7 +1214,7 @@
       <td>—</td>
       <td>Dec 23, 2025</td>
       <td><span class="badge badge-paid">Paid</span></td>
-      <td class=" mono">—</td>
+      <td class="heat-fast mono">6d</td>
     </tr><tr>
       <td class="mono">#4111</td>
       <td>Dec 15, 2025</td>
@@ -1324,26 +1226,110 @@
       <td>—</td>
       <td>Dec 19, 2025</td>
       <td><span class="badge badge-paid">Paid</span></td>
+      <td class="heat-fast mono">4d</td>
+    </tr><tr>
+      <td class="mono">#4110</td>
+      <td>Dec 11, 2025</td>
+      <td>Eli Lilly &amp; Co.</td>
+      <td><span class="badge badge-industry">Pharmaceuticals</span></td>
+      <td class="mono">$12,838.46</td>
+      <td>Fred</td>
+      <td>Dec 11, 2025</td>
+      <td>—</td>
+      <td>Dec 15, 2025</td>
+      <td><span class="badge badge-paid">Paid</span></td>
+      <td class="heat-fast mono">4d</td>
+    </tr><tr>
+      <td class="mono">#4109</td>
+      <td>Dec 10, 2025</td>
+      <td>Humana Inc.</td>
+      <td><span class="badge badge-industry">Insurance</span></td>
+      <td class="mono">$342.93</td>
+      <td>Fred</td>
+      <td>Dec 10, 2025</td>
+      <td>—</td>
+      <td>Dec 26, 2025</td>
+      <td><span class="badge badge-paid">Paid</span></td>
+      <td class="heat-avg mono">16d</td>
+    </tr><tr>
+      <td class="mono">#4108</td>
+      <td>Dec 4, 2025</td>
+      <td>Johnson&amp;Johnson</td>
+      <td><span class="badge badge-industry">Pharmaceuticals</span></td>
+      <td class="mono">$3,000.00</td>
+      <td>Fred</td>
+      <td>Dec 4, 2025</td>
+      <td>—</td>
+      <td>Dec 10, 2025</td>
+      <td><span class="badge badge-paid">Paid</span></td>
       <td class=" mono">—</td>
+    </tr><tr>
+      <td class="mono">#4107</td>
+      <td>Dec 1, 2025</td>
+      <td>Newport News Shipbuilding</td>
+      <td><span class="badge badge-industry">Manufacturing</span></td>
+      <td class="mono">$66,000.00</td>
+      <td>Fred</td>
+      <td>Dec 1, 2025</td>
+      <td>—</td>
+      <td>Jan 29, 2026</td>
+      <td><span class="badge badge-paid">Paid</span></td>
+      <td class="heat-slow mono">59d</td>
+    </tr><tr>
+      <td class="mono">#4106</td>
+      <td>Dec 1, 2025</td>
+      <td>Bank of America</td>
+      <td><span class="badge badge-industry">Financial Services</span></td>
+      <td class="mono">$6,000.00</td>
+      <td>Fred</td>
+      <td>Dec 1, 2025</td>
+      <td>—</td>
+      <td>Dec 4, 2025</td>
+      <td><span class="badge badge-paid">Paid</span></td>
+      <td class="heat-fast mono">3d</td>
+    </tr><tr>
+      <td class="mono">#4105</td>
+      <td>Dec 1, 2025</td>
+      <td>Humana Inc.</td>
+      <td><span class="badge badge-industry">Insurance</span></td>
+      <td class="mono">$12,486.19</td>
+      <td>Fred</td>
+      <td>Dec 1, 2025</td>
+      <td>—</td>
+      <td>Dec 16, 2025</td>
+      <td><span class="badge badge-paid">Paid</span></td>
+      <td class="heat-avg mono">15d</td>
+    </tr><tr>
+      <td class="mono">#4104</td>
+      <td>Dec 1, 2025</td>
+      <td>Youth Villages</td>
+      <td><span class="badge badge-industry">NGO</span></td>
+      <td class="mono">$3,333.33</td>
+      <td>Katie</td>
+      <td>Dec 1, 2025</td>
+      <td>—</td>
+      <td>Dec 18, 2025</td>
+      <td><span class="badge badge-paid">Paid</span></td>
+      <td class="heat-avg mono">17d</td>
     </tr></tbody>
       </table>
     </div>
-    <div class="pagination" id="invoicePagination"><button class="page-btn active">1</button><button class="page-btn">2</button><button class="page-btn">3</button><button class="page-btn">4</button><button class="page-btn">5</button><button class="page-btn">6</button><button class="page-btn">7</button><button class="page-btn">8</button><button class="page-btn">9</button><button class="page-btn">10</button><button class="page-btn">11</button><button class="page-btn">12</button><button class="page-btn">13</button><button class="page-btn">14</button><button class="page-btn">15</button><button class="page-btn">16</button><button class="page-btn">17</button><button class="page-btn">18</button><button class="page-btn">19</button><button class="page-btn">20</button><button class="page-btn">21</button><button class="page-btn">22</button><button class="page-btn">23</button><button class="page-btn">24</button><button class="page-btn">25</button><button class="page-btn">26</button><button class="page-btn">27</button><button class="page-btn">28</button><button class="page-btn">29</button><button class="page-btn">30</button><button class="page-btn">31</button><button class="page-btn">32</button><button class="page-btn">33</button><button class="page-btn">34</button><button class="page-btn">35</button><button class="page-btn">36</button><button class="page-btn">37</button><button class="page-btn">38</button><button class="page-btn">39</button><button class="page-btn">40</button><button class="page-btn">41</button><button class="page-btn">42</button><button class="page-btn">43</button><button class="page-btn">44</button><button class="page-btn">45</button><button class="page-btn">46</button><button class="page-btn">47</button><button class="page-btn">48</button><button class="page-btn">49</button><button class="page-btn">50</button><button class="page-btn">51</button><button class="page-btn">52</button><button class="page-btn">53</button><button class="page-btn">54</button><button class="page-btn">55</button><button class="page-btn">56</button><button class="page-btn">57</button><button class="page-btn">58</button><button class="page-btn">59</button><button class="page-btn">60</button><button class="page-btn">61</button><button class="page-btn">62</button><button class="page-btn">63</button><button class="page-btn">64</button><button class="page-btn">65</button><button class="page-btn">66</button><button class="page-btn">67</button><button class="page-btn">68</button></div>
+    <div class="pagination" id="invoicePagination"><button class="page-btn active">1</button><button class="page-btn">2</button><button class="page-btn">3</button><button class="page-btn">4</button><button class="page-btn">5</button><button class="page-btn">6</button><button class="page-btn">7</button><button class="page-btn">8</button><button class="page-btn">9</button><button class="page-btn">10</button><button class="page-btn">11</button><button class="page-btn">12</button><button class="page-btn">13</button></div>
   </div>
 </div>
 
 <!-- ============================
      PROJECTED REVENUE
      ============================ -->
-<div id="projected" class="section active">
+<div id="projected" class="section">
   <div class="section-title">Projected Revenue — 2026</div>
   <div class="section-desc">Upcoming engagements and estimated payment windows.</div>
 
   <div class="kpi-grid" id="projectedKPIs">
-    <div class="kpi-card"><div class="kpi-label">Total Projected 2026</div><div class="kpi-value">$235,883.33</div><div class="kpi-sub">23 engagements</div></div>
-    <div class="kpi-card green"><div class="kpi-label">Peak Month</div><div class="kpi-value">March</div><div class="kpi-sub">$74,133.33 expected</div></div>
+    <div class="kpi-card"><div class="kpi-label">Total Projected 2026</div><div class="kpi-value">$309,750.00</div><div class="kpi-sub">26 engagements</div></div>
+    <div class="kpi-card green"><div class="kpi-label">Peak Month</div><div class="kpi-value">March</div><div class="kpi-sub">$77,000.00 expected</div></div>
     <div class="kpi-card"><div class="kpi-label">Needs Date</div><div class="kpi-value">1</div><div class="kpi-sub">Engagements without invoice date</div></div>
-    <div class="kpi-card"><div class="kpi-label">Avg per Engagement</div><div class="kpi-value">$10,255.80</div><div class="kpi-sub">Across all projected</div></div></div>
+    <div class="kpi-card"><div class="kpi-label">Avg per Engagement</div><div class="kpi-value">$11,913.46</div><div class="kpi-sub">Across all projected</div></div></div>
 
   <div class="panel">
     <div class="panel-header">
@@ -1364,12 +1350,36 @@
           </tr>
         </thead>
         <tbody id="projectedTableBody"><tr class="">
-      <td>Humana Inc.</td>
-      <td class="mono">$2,250.00</td>
-      <td>Feb 24, 2026</td>
-      <td>Mar 20, 2026</td>
-      <td>Mar 20, 2026</td>
-      <td>Mar 20, 2026</td>
+      <td>Rockefeller Capital Management</td>
+      <td class="mono">$6,000.00</td>
+      <td>Feb 17, 2026</td>
+      <td>Mar 1, 2026</td>
+      <td>Feb 26, 2026</td>
+      <td>Feb 26, 2026</td>
+      <td><span class="badge badge-overdue">Past due</span></td>
+    </tr><tr class="">
+      <td>Point72</td>
+      <td class="mono">$1,500.00</td>
+      <td>Feb 18, 2026</td>
+      <td>Mar 23, 2026</td>
+      <td>Mar 1, 2026</td>
+      <td>Mar 1, 2026 — Mar 23, 2026</td>
+      <td><span class="badge badge-overdue">Past due</span></td>
+    </tr><tr class="">
+      <td>Point72</td>
+      <td class="mono">$1,500.00</td>
+      <td>Feb 19, 2026</td>
+      <td>Mar 24, 2026</td>
+      <td>Mar 2, 2026</td>
+      <td>Mar 2, 2026 — Mar 24, 2026</td>
+      <td><span class="badge badge-overdue">Past due</span></td>
+    </tr><tr class="">
+      <td>Depository Trust &amp; Clearing Corporation</td>
+      <td class="mono">$24,000.00</td>
+      <td>Feb 25, 2026</td>
+      <td>Apr 4, 2026</td>
+      <td>Mar 6, 2026</td>
+      <td>Mar 6, 2026 — Apr 4, 2026</td>
       <td><span class="badge badge-overdue">Past due</span></td>
     </tr><tr class="">
       <td>Brookfield</td>
@@ -1396,28 +1406,12 @@
       <td>Mar 11, 2026 — Mar 23, 2026</td>
       <td><span class="badge badge-overdue">Past due</span></td>
     </tr><tr class="">
-      <td>WURD</td>
-      <td class="mono">$550.00</td>
-      <td>Mar 2, 2026</td>
-      <td>Mar 26, 2026</td>
-      <td>Mar 26, 2026</td>
-      <td>Mar 26, 2026</td>
-      <td><span class="badge badge-overdue">Past due</span></td>
-    </tr><tr class="">
-      <td>Youth Villages</td>
-      <td class="mono">$3,333.33</td>
-      <td>Mar 2, 2026</td>
-      <td>Mar 13, 2026</td>
-      <td>Mar 13, 2026</td>
-      <td>Mar 13, 2026</td>
-      <td><span class="badge badge-overdue">Past due</span></td>
-    </tr><tr class="">
       <td>Eli Lilly &amp; Co.</td>
       <td class="mono">$12,000.00</td>
-      <td>Mar 3, 2026</td>
-      <td>Mar 23, 2026</td>
-      <td>Mar 7, 2026</td>
-      <td>Mar 7, 2026 — Mar 23, 2026</td>
+      <td>Mar 2, 2026</td>
+      <td>Mar 22, 2026</td>
+      <td>Mar 6, 2026</td>
+      <td>Mar 6, 2026 — Mar 22, 2026</td>
       <td><span class="badge badge-overdue">Past due</span></td>
     </tr><tr class="">
       <td>Humana Inc.</td>
@@ -1440,8 +1434,8 @@
       <td class="mono">$12,000.00</td>
       <td>Mar 6, 2026</td>
       <td>Mar 20, 2026</td>
-      <td>Mar 20, 2026</td>
-      <td>Mar 20, 2026</td>
+      <td>Mar 9, 2026</td>
+      <td>Mar 9, 2026 — Mar 20, 2026</td>
       <td><span class="badge badge-pending">Upcoming</span></td>
     </tr><tr class="">
       <td>Eli Lilly &amp; Co.</td>
@@ -1456,12 +1450,12 @@
       <td class="mono">$2,250.00</td>
       <td>Mar 23, 2026</td>
       <td>Apr 6, 2026</td>
-      <td>Apr 6, 2026</td>
-      <td>Apr 6, 2026</td>
+      <td>Mar 26, 2026</td>
+      <td>Mar 26, 2026 — Apr 6, 2026</td>
       <td><span class="badge badge-pending">Upcoming</span></td>
     </tr><tr class="">
       <td>Wharton School of Business</td>
-      <td class="mono">$4,000.00</td>
+      <td class="mono">$3,000.00</td>
       <td>Mar 27, 2026</td>
       <td>May 24, 2026</td>
       <td>Jun 2, 2026</td>
@@ -1480,8 +1474,8 @@
       <td class="mono">$6,000.00</td>
       <td>Apr 14, 2026</td>
       <td>Apr 28, 2026</td>
-      <td>Apr 28, 2026</td>
-      <td>Apr 28, 2026</td>
+      <td>Apr 17, 2026</td>
+      <td>Apr 17, 2026 — Apr 28, 2026</td>
       <td><span class="badge badge-pending">Upcoming</span></td>
     </tr><tr class="">
       <td>Goldman Sachs</td>
@@ -1514,6 +1508,22 @@
       <td>Jun 26, 2026</td>
       <td>May 28, 2026</td>
       <td>May 28, 2026 — Jun 26, 2026</td>
+      <td><span class="badge badge-pending">Upcoming</span></td>
+    </tr><tr class="">
+      <td>Depository Trust &amp; Clearing Corporation</td>
+      <td class="mono">$24,000.00</td>
+      <td>May 19, 2026</td>
+      <td>Jun 26, 2026</td>
+      <td>May 28, 2026</td>
+      <td>May 28, 2026 — Jun 26, 2026</td>
+      <td><span class="badge badge-pending">Upcoming</span></td>
+    </tr><tr class="">
+      <td>Depository Trust &amp; Clearing Corporation</td>
+      <td class="mono">$24,000.00</td>
+      <td>Aug 6, 2026</td>
+      <td>Sep 13, 2026</td>
+      <td>Aug 15, 2026</td>
+      <td>Aug 15, 2026 — Sep 13, 2026</td>
       <td><span class="badge badge-pending">Upcoming</span></td>
     </tr><tr class="">
       <td>Depository Trust &amp; Clearing Corporation</td>
@@ -1558,7 +1568,7 @@
     </tr></tbody>
         <tfoot><tr class="summary-row" id="projectedSummary">
     <td><strong>TOTAL</strong></td>
-    <td class="mono"><strong>$235,883.33</strong></td>
+    <td class="mono"><strong>$309,750.00</strong></td>
     <td colspan="5"></td></tr></tfoot>
       </table>
     </div>
@@ -1576,7 +1586,7 @@
     <input type="text" class="search-input" placeholder="Search client..." id="clientSearch" oninput="renderClientTable()">
     <select id="clientIndustryFilter" onchange="renderClientTable()">
       <option value="">All Industries</option>
-    <option value="Automotive">Automotive</option><option value="Book Sales">Book Sales</option><option value="Chemicals">Chemicals</option><option value="Communications">Communications</option><option value="Consumer Goods">Consumer Goods</option><option value="Consumer Products">Consumer Products</option><option value="Cryptocurrency">Cryptocurrency</option><option value="Cybersecurity">Cybersecurity</option><option value="Defense">Defense</option><option value="Design">Design</option><option value="Education">Education</option><option value="Electronics">Electronics</option><option value="Energy">Energy</option><option value="Equestrian">Equestrian</option><option value="Financial Services">Financial Services</option><option value="Food">Food</option><option value="Food Sector">Food Sector</option><option value="Foundation">Foundation</option><option value="Government">Government</option><option value="Government Relations">Government Relations</option><option value="Healthcare">Healthcare</option><option value="Higher Education">Higher Education</option><option value="Hospitality">Hospitality</option><option value="Individual">Individual</option><option value="Information Services">Information Services</option><option value="Insurance">Insurance</option><option value="Law">Law</option><option value="Leadership">Leadership</option><option value="Life Sciences">Life Sciences</option><option value="Manufacturing">Manufacturing</option><option value="Media">Media</option><option value="Military">Military</option><option value="NGO">NGO</option><option value="Non-profit">Non-profit</option><option value="Pharmaceutical">Pharmaceutical</option><option value="Pharmaceuticals">Pharmaceuticals</option><option value="Professional Services">Professional Services</option><option value="Public Relations">Public Relations</option><option value="Publishing">Publishing</option><option value="Real Estate">Real Estate</option><option value="Restaurant">Restaurant</option><option value="Retail">Retail</option><option value="Science &amp; Technology">Science &amp; Technology</option><option value="Services">Services</option><option value="Technology">Technology</option><option value="Travel Services">Travel Services</option></select>
+    <option value="Communications">Communications</option><option value="Consumer Goods">Consumer Goods</option><option value="Consumer Products">Consumer Products</option><option value="Defense">Defense</option><option value="Education">Education</option><option value="Electronics">Electronics</option><option value="Financial Services">Financial Services</option><option value="Food">Food</option><option value="Food Sector">Food Sector</option><option value="Government">Government</option><option value="Healthcare">Healthcare</option><option value="Higher Education">Higher Education</option><option value="Insurance">Insurance</option><option value="Law">Law</option><option value="Leadership">Leadership</option><option value="Life Sciences">Life Sciences</option><option value="Manufacturing">Manufacturing</option><option value="Media">Media</option><option value="NGO">NGO</option><option value="Non-profit">Non-profit</option><option value="Pharmaceutical">Pharmaceutical</option><option value="Pharmaceuticals">Pharmaceuticals</option><option value="Professional Services">Professional Services</option><option value="Public Relations">Public Relations</option><option value="Publishing">Publishing</option><option value="Restaurant">Restaurant</option><option value="Retail">Retail</option></select>
     <select id="clientActivityFilter" onchange="renderClientTable()">
       <option value="">All Clients</option>
       <option value="active">Active (last 2 years)</option>
@@ -1601,63 +1611,13 @@
           </tr>
         </thead>
         <tbody id="clientTableBody"><tr>
-      <td><strong>Eli Lilly &amp; Co.</strong></td>
-      <td><span class="badge badge-industry">Pharmaceuticals</span></td>
-      <td class="mono text-green">$1,930,438.16</td>
-      <td>Mar 3, 2026</td>
-      <td>Educational Service</td>
-      <td>Financial Services</td>
-      <td class="heat-avg mono">20.545454545454547d</td>
-      <td class="heat-fast mono">4d</td>
-      <td><span class="badge badge-overdue">Dormant</span></td>
-    </tr><tr>
-      <td><strong>Velas Resorts Mexico</strong></td>
-      <td><span class="badge badge-industry">Hospitality</span></td>
-      <td class="mono text-green">$6,000.00</td>
-      <td>Mar 3, 2026</td>
-      <td>Consulting</td>
-      <td>#N/A</td>
-      <td class=" mono">—</td>
-      <td class=" mono">—</td>
-      <td><span class="badge badge-overdue">Dormant</span></td>
-    </tr><tr>
-      <td><strong>Youth Villages</strong></td>
-      <td><span class="badge badge-industry">NGO</span></td>
-      <td class="mono text-green">$370,704.66</td>
-      <td>Mar 2, 2026</td>
-      <td>—</td>
-      <td>—</td>
-      <td class="heat-fast mono">11.555555555555555d</td>
-      <td class="heat-avg mono">18d</td>
-      <td><span class="badge badge-overdue">Dormant</span></td>
-    </tr><tr>
-      <td><strong>Brookfield Wealth Management</strong></td>
-      <td><span class="badge badge-industry">Financial Services</span></td>
-      <td class="mono text-green">$9,000.00</td>
-      <td>Feb 27, 2026</td>
-      <td>Consulting</td>
-      <td>#N/A</td>
-      <td class=" mono">—</td>
-      <td class=" mono">—</td>
-      <td><span class="badge badge-overdue">Dormant</span></td>
-    </tr><tr>
-      <td><strong>Rockefeller Capital Management</strong></td>
-      <td><span class="badge badge-industry">Financial Services</span></td>
-      <td class="mono text-green">$94,781.25</td>
-      <td>Feb 18, 2026</td>
-      <td>Coahcing</td>
-      <td>Financial Services</td>
-      <td class="heat-fast mono">12.625d</td>
-      <td class="heat-fast mono">8d</td>
-      <td><span class="badge badge-overdue">Dormant</span></td>
-    </tr><tr>
       <td><strong>Point72</strong></td>
       <td><span class="badge badge-industry">Financial Services</span></td>
       <td class="mono text-green">$126,689.17</td>
       <td>Feb 11, 2026</td>
       <td>Coaching</td>
-      <td>Financial Services</td>
-      <td class="heat-avg mono">33.142857142857146d</td>
+      <td>—</td>
+      <td class="heat-avg mono">33d</td>
       <td class="heat-fast mono">11d</td>
       <td><span class="badge badge-overdue">Dormant</span></td>
     </tr><tr>
@@ -1666,9 +1626,9 @@
       <td class="mono text-green">$102,245.50</td>
       <td>Feb 10, 2026</td>
       <td>Consulting</td>
-      <td>Financial Services</td>
-      <td class="heat-avg mono">14.434782608695652d</td>
+      <td>—</td>
       <td class="heat-fast mono">14d</td>
+      <td class="heat-fast mono">3d</td>
       <td><span class="badge badge-overdue">Dormant</span></td>
     </tr><tr>
       <td><strong>Goldman Sachs</strong></td>
@@ -1676,8 +1636,8 @@
       <td class="mono text-green">$411,886.41</td>
       <td>Feb 9, 2026</td>
       <td>Coaching</td>
-      <td>Financial Services</td>
-      <td class="heat-avg mono">38.762962962962966d</td>
+      <td>—</td>
+      <td class="heat-avg mono">39d</td>
       <td class="heat-fast mono">1d</td>
       <td><span class="badge badge-overdue">Dormant</span></td>
     </tr><tr>
@@ -1686,9 +1646,9 @@
       <td class="mono text-green">$200.00</td>
       <td>Feb 6, 2026</td>
       <td>Consulting</td>
-      <td>#N/A</td>
-      <td class="heat-fast mono">0d</td>
-      <td class=" mono">—</td>
+      <td>—</td>
+      <td class="heat-fast mono">1d</td>
+      <td class="heat-fast mono">1d</td>
       <td><span class="badge badge-overdue">Dormant</span></td>
     </tr><tr>
       <td><strong>Depository Trust &amp; Clearing Corporation</strong></td>
@@ -1696,8 +1656,8 @@
       <td class="mono text-green">$208,748.44</td>
       <td>Feb 5, 2026</td>
       <td>Coaching</td>
-      <td>Financial Services</td>
-      <td class="heat-avg mono">38.861111111111114d</td>
+      <td>—</td>
+      <td class="heat-avg mono">39d</td>
       <td class="heat-fast mono">9d</td>
       <td><span class="badge badge-overdue">Dormant</span></td>
     </tr><tr>
@@ -1706,9 +1666,19 @@
       <td class="mono text-green">$6,284.34</td>
       <td>Feb 5, 2026</td>
       <td>Consulting</td>
-      <td>#N/A</td>
-      <td class=" mono">—</td>
-      <td class=" mono">—</td>
+      <td>—</td>
+      <td class="heat-avg mono">30d</td>
+      <td class="heat-avg mono">30d</td>
+      <td><span class="badge badge-overdue">Dormant</span></td>
+    </tr><tr>
+      <td><strong>Youth Villages</strong></td>
+      <td><span class="badge badge-industry">NGO</span></td>
+      <td class="mono text-green">$367,371.33</td>
+      <td>Feb 2, 2026</td>
+      <td>—</td>
+      <td>—</td>
+      <td class="heat-fast mono">11d</td>
+      <td class="heat-fast mono">10d</td>
       <td><span class="badge badge-overdue">Dormant</span></td>
     </tr><tr>
       <td><strong>Humana Inc.</strong></td>
@@ -1716,8 +1686,8 @@
       <td class="mono text-green">$145,016.15</td>
       <td>Jan 21, 2026</td>
       <td>Consulting</td>
-      <td>Insurance</td>
-      <td class="heat-avg mono">24.11111111111111d</td>
+      <td>—</td>
+      <td class="heat-avg mono">24d</td>
       <td class="heat-avg mono">18d</td>
       <td><span class="badge badge-overdue">Dormant</span></td>
     </tr><tr>
@@ -1726,7 +1696,7 @@
       <td class="mono text-green">$358,982.46</td>
       <td>Jan 6, 2026</td>
       <td>Educational Service</td>
-      <td>Manufacturing</td>
+      <td>—</td>
       <td class="heat-avg mono">27d</td>
       <td class="heat-avg mono">18d</td>
       <td><span class="badge badge-overdue">Dormant</span></td>
@@ -1736,7 +1706,7 @@
       <td class="mono text-green">$27,518.51</td>
       <td>Dec 19, 2025</td>
       <td>Coaching</td>
-      <td>Healthcare</td>
+      <td>—</td>
       <td class="heat-slow mono">41d</td>
       <td class="heat-fast mono">4d</td>
       <td><span class="badge badge-overdue">Dormant</span></td>
@@ -1746,8 +1716,18 @@
       <td class="mono text-green">$83,731.85</td>
       <td>Dec 15, 2025</td>
       <td>Educational Service</td>
-      <td>Consumer Products</td>
-      <td class="heat-avg mono">19.571428571428573d</td>
+      <td>—</td>
+      <td class="heat-avg mono">20d</td>
+      <td class="heat-fast mono">4d</td>
+      <td><span class="badge badge-overdue">Dormant</span></td>
+    </tr><tr>
+      <td><strong>Eli Lilly &amp; Co.</strong></td>
+      <td><span class="badge badge-industry">Pharmaceuticals</span></td>
+      <td class="mono text-green">$1,917,190.38</td>
+      <td>Dec 11, 2025</td>
+      <td>Educational Service</td>
+      <td>—</td>
+      <td class="heat-avg mono">21d</td>
       <td class="heat-fast mono">4d</td>
       <td><span class="badge badge-overdue">Dormant</span></td>
     </tr><tr>
@@ -1756,8 +1736,8 @@
       <td class="mono text-green">$172,772.83</td>
       <td>Dec 4, 2025</td>
       <td>Coaching</td>
-      <td>Pharmaceuticals</td>
-      <td class="heat-avg mono">27.166666666666668d</td>
+      <td>—</td>
+      <td class="heat-avg mono">27d</td>
       <td class="heat-fast mono">12d</td>
       <td><span class="badge badge-overdue">Dormant</span></td>
     </tr><tr>
@@ -1766,8 +1746,8 @@
       <td class="mono text-green">$329,563.83</td>
       <td>Dec 1, 2025</td>
       <td>Coaching</td>
-      <td>Manufacturing</td>
-      <td class="heat-avg mono">19.130434782608695d</td>
+      <td>—</td>
+      <td class="heat-avg mono">19d</td>
       <td class="heat-slow mono">59d</td>
       <td><span class="badge badge-overdue">Dormant</span></td>
     </tr><tr>
@@ -1776,7 +1756,7 @@
       <td class="mono text-green">$38,177.86</td>
       <td>Nov 5, 2025</td>
       <td>Consulting</td>
-      <td>#N/A</td>
+      <td>—</td>
       <td class="heat-avg mono">30d</td>
       <td class="heat-avg mono">30d</td>
       <td><span class="badge badge-overdue">Dormant</span></td>
@@ -1786,8 +1766,8 @@
       <td class="mono text-green">$26,486.15</td>
       <td>Oct 28, 2025</td>
       <td>Educational Service</td>
-      <td>Public Relations</td>
-      <td class="heat-avg mono">14.5d</td>
+      <td>—</td>
+      <td class="heat-avg mono">15d</td>
       <td class="heat-avg mono">26d</td>
       <td><span class="badge badge-overdue">Dormant</span></td>
     </tr><tr>
@@ -1806,9 +1786,19 @@
       <td class="mono text-green">$6,000.00</td>
       <td>Oct 8, 2025</td>
       <td>Consulting</td>
-      <td>#N/A</td>
+      <td>—</td>
       <td class="heat-slow mono">69d</td>
       <td class="heat-slow mono">69d</td>
+      <td><span class="badge badge-overdue">Dormant</span></td>
+    </tr><tr>
+      <td><strong>Rockefeller Capital Management</strong></td>
+      <td><span class="badge badge-industry">Financial Services</span></td>
+      <td class="mono text-green">$88,781.25</td>
+      <td>Oct 7, 2025</td>
+      <td>Coaching</td>
+      <td>—</td>
+      <td class="heat-fast mono">13d</td>
+      <td class="heat-fast mono">9d</td>
       <td><span class="badge badge-overdue">Dormant</span></td>
     </tr><tr>
       <td><strong>WURD</strong></td>
@@ -1817,7 +1807,7 @@
       <td>Sep 15, 2025</td>
       <td>—</td>
       <td>—</td>
-      <td class="heat-avg mono">24.5d</td>
+      <td class="heat-avg mono">25d</td>
       <td class="heat-avg mono">37d</td>
       <td><span class="badge badge-overdue">Dormant</span></td>
     </tr><tr>
@@ -1826,7 +1816,7 @@
       <td class="mono text-green">$1,800.00</td>
       <td>Aug 26, 2025</td>
       <td>Consulting</td>
-      <td>#N/A</td>
+      <td>—</td>
       <td class=" mono">—</td>
       <td class=" mono">—</td>
       <td><span class="badge badge-overdue">Dormant</span></td>
@@ -1836,8 +1826,8 @@
       <td class="mono text-green">$68,000.00</td>
       <td>Jul 14, 2025</td>
       <td>Consulting</td>
-      <td>Non-profit</td>
-      <td class="heat-fast mono">5.285714285714286d</td>
+      <td>—</td>
+      <td class="heat-fast mono">5d</td>
       <td class="heat-fast mono">4d</td>
       <td><span class="badge badge-overdue">Dormant</span></td>
     </tr><tr>
@@ -1846,8 +1836,8 @@
       <td class="mono text-green">$7,880.98</td>
       <td>Jul 11, 2025</td>
       <td>Educational Service</td>
-      <td>Pharmaceuticals</td>
-      <td class="heat-avg mono">26.785714285714285d</td>
+      <td>—</td>
+      <td class="heat-avg mono">27d</td>
       <td class="heat-avg mono">27d</td>
       <td><span class="badge badge-overdue">Dormant</span></td>
     </tr><tr>
@@ -1876,7 +1866,7 @@
       <td class="mono text-green">$26,573.24</td>
       <td>Jun 11, 2025</td>
       <td>Consulting</td>
-      <td>Financial Services</td>
+      <td>—</td>
       <td class="heat-slow mono">62d</td>
       <td class="heat-avg mono">34d</td>
       <td><span class="badge badge-overdue">Dormant</span></td>
@@ -1886,24 +1876,44 @@
       <td class="mono text-green">$38,459.77</td>
       <td>Apr 24, 2025</td>
       <td>Coaching</td>
-      <td>#N/A</td>
-      <td class="heat-slow mono">60.5d</td>
+      <td>—</td>
+      <td class="heat-slow mono">61d</td>
       <td class="heat-slow mono">61d</td>
       <td><span class="badge badge-overdue">Dormant</span></td>
     </tr><tr>
-      <td><strong>Hudson County Community College</strong></td>
-      <td><span class="badge badge-industry">Education</span></td>
-      <td class="mono text-green">$3,000.00</td>
-      <td>Apr 1, 2025</td>
+      <td><strong>Wharton School of Business</strong></td>
+      <td><span class="badge badge-industry">Higher Education</span></td>
+      <td class="mono text-green">$37,602.29</td>
+      <td>Mar 31, 2025</td>
+      <td>Educational Service</td>
+      <td>—</td>
+      <td class="heat-slow mono">59d</td>
+      <td class="heat-slow mono">67d</td>
+      <td><span class="badge badge-overdue">Dormant</span></td>
+    </tr><tr>
+      <td><strong>Brands2Life</strong></td>
+      <td><span class="badge badge-industry">Public Relations</span></td>
+      <td class="mono text-green">$2,000.00</td>
+      <td>Mar 26, 2025</td>
       <td>—</td>
       <td>—</td>
-      <td class="heat-fast mono">0d</td>
-      <td class=" mono">—</td>
+      <td class="heat-avg mono">26d</td>
+      <td class="heat-avg mono">26d</td>
+      <td><span class="badge badge-overdue">Dormant</span></td>
+    </tr><tr>
+      <td><strong>UWCW</strong></td>
+      <td><span class="badge badge-industry">NGO</span></td>
+      <td class="mono text-green">$24,853.75</td>
+      <td>Mar 3, 2025</td>
+      <td>Coaching</td>
+      <td>—</td>
+      <td class="heat-slow mono">48d</td>
+      <td class="heat-slow mono">70d</td>
       <td><span class="badge badge-overdue">Dormant</span></td>
     </tr></tbody>
       </table>
     </div>
-    <div class="pagination" id="clientPagination"><button class="page-btn active">1</button><button class="page-btn">2</button><button class="page-btn">3</button><button class="page-btn">4</button><button class="page-btn">5</button><button class="page-btn">6</button><button class="page-btn">7</button><button class="page-btn">8</button><button class="page-btn">9</button><button class="page-btn">10</button></div>
+    <div class="pagination" id="clientPagination"><button class="page-btn active">1</button><button class="page-btn">2</button><button class="page-btn">3</button></div>
   </div>
 </div>
 
@@ -1920,44 +1930,44 @@
       <div class="panel-header"><span class="panel-title">Top Clients by Revenue</span></div>
       <div class="panel-body" id="topClientsChart">
     <div class="lead-bar">
-      <div class="lead-name" style="width:130px;font-size:11px;">AbbVie</div>
-      <div class="lead-track"><div class="lead-fill" style="width:100%"></div></div>
-      <div class="lead-amount">$2,143,862.16</div>
-    </div>
-    <div class="lead-bar">
       <div class="lead-name" style="width:130px;font-size:11px;">Eli Lilly &amp; Co.</div>
-      <div class="lead-track"><div class="lead-fill" style="width:89%"></div></div>
-      <div class="lead-amount">$1,917,190.38</div>
+      <div class="lead-track"><div class="lead-fill" style="width:100%"></div></div>
+      <div class="lead-amount">$672,540.77</div>
     </div>
     <div class="lead-bar">
-      <div class="lead-name" style="width:130px;font-size:11px;">State Farm</div>
-      <div class="lead-track"><div class="lead-fill" style="width:74%"></div></div>
-      <div class="lead-amount">$1,581,822.23</div>
+      <div class="lead-name" style="width:130px;font-size:11px;">Youth Villages</div>
+      <div class="lead-track"><div class="lead-fill" style="width:54%"></div></div>
+      <div class="lead-amount">$364,038.00</div>
     </div>
     <div class="lead-bar">
-      <div class="lead-name" style="width:130px;font-size:11px;">BofA/ML</div>
-      <div class="lead-track"><div class="lead-fill" style="width:28%"></div></div>
-      <div class="lead-amount">$603,584.77</div>
+      <div class="lead-name" style="width:130px;font-size:11px;">Cigna</div>
+      <div class="lead-track"><div class="lead-fill" style="width:45%"></div></div>
+      <div class="lead-amount">$301,211.11</div>
     </div>
     <div class="lead-bar">
-      <div class="lead-name" style="width:130px;font-size:11px;">GoldenTree Asset …</div>
-      <div class="lead-track"><div class="lead-fill" style="width:25%"></div></div>
-      <div class="lead-amount">$538,836.55</div>
+      <div class="lead-name" style="width:130px;font-size:11px;">Mohawk Industries…</div>
+      <div class="lead-track"><div class="lead-fill" style="width:40%"></div></div>
+      <div class="lead-amount">$269,676.70</div>
     </div>
     <div class="lead-bar">
-      <div class="lead-name" style="width:130px;font-size:11px;">Crewcial</div>
+      <div class="lead-name" style="width:130px;font-size:11px;">Newport News Ship…</div>
       <div class="lead-track"><div class="lead-fill" style="width:24%"></div></div>
-      <div class="lead-amount">$509,843.75</div>
+      <div class="lead-amount">$162,307.28</div>
+    </div>
+    <div class="lead-bar">
+      <div class="lead-name" style="width:130px;font-size:11px;">Humana Inc.</div>
+      <div class="lead-track"><div class="lead-fill" style="width:18%"></div></div>
+      <div class="lead-amount">$118,625.54</div>
     </div>
     <div class="lead-bar">
       <div class="lead-name" style="width:130px;font-size:11px;">Pernod Ricard USA</div>
-      <div class="lead-track"><div class="lead-fill" style="width:22%"></div></div>
-      <div class="lead-amount">$481,320.79</div>
+      <div class="lead-track"><div class="lead-fill" style="width:14%"></div></div>
+      <div class="lead-amount">$91,771.24</div>
     </div>
     <div class="lead-bar">
-      <div class="lead-name" style="width:130px;font-size:11px;">StanleyBlack&amp;Deck…</div>
-      <div class="lead-track"><div class="lead-fill" style="width:20%"></div></div>
-      <div class="lead-amount">$433,870.36</div>
+      <div class="lead-name" style="width:130px;font-size:11px;">Rockefeller Capit…</div>
+      <div class="lead-track"><div class="lead-fill" style="width:11%"></div></div>
+      <div class="lead-amount">$76,906.25</div>
     </div></div>
     </div>
 
@@ -1966,44 +1976,44 @@
       <div class="panel-header"><span class="panel-title">Revenue by Industry (2023+)</span></div>
       <div class="panel-body" id="industryChart">
     <div class="lead-bar">
-      <div class="lead-name" style="width:110px;font-size:11px;">Financial Services</div>
-      <div class="lead-track"><div class="lead-fill" style="width:100%;background:var(--slate);"></div></div>
-      <div class="lead-amount">$3,413,781.52</div>
-    </div>
-    <div class="lead-bar">
       <div class="lead-name" style="width:110px;font-size:11px;">Pharmaceuticals</div>
-      <div class="lead-track"><div class="lead-fill" style="width:84%;background:var(--slate);"></div></div>
-      <div class="lead-amount">$2,873,983.42</div>
-    </div>
-    <div class="lead-bar">
-      <div class="lead-name" style="width:110px;font-size:11px;">Life Sciences</div>
-      <div class="lead-track"><div class="lead-fill" style="width:63%;background:var(--slate);"></div></div>
-      <div class="lead-amount">$2,164,974.22</div>
-    </div>
-    <div class="lead-bar">
-      <div class="lead-name" style="width:110px;font-size:11px;">Insurance</div>
-      <div class="lead-track"><div class="lead-fill" style="width:63%;background:var(--slate);"></div></div>
-      <div class="lead-amount">$2,161,970.60</div>
+      <div class="lead-track"><div class="lead-fill" style="width:100%;background:var(--slate);"></div></div>
+      <div class="lead-amount">$868,067.74</div>
     </div>
     <div class="lead-bar">
       <div class="lead-name" style="width:110px;font-size:11px;">Manufacturing</div>
-      <div class="lead-track"><div class="lead-fill" style="width:42%;background:var(--slate);"></div></div>
-      <div class="lead-amount">$1,420,136.81</div>
+      <div class="lead-track"><div class="lead-fill" style="width:62%;background:var(--slate);"></div></div>
+      <div class="lead-amount">$535,484.83</div>
     </div>
     <div class="lead-bar">
-      <div class="lead-name" style="width:110px;font-size:11px;">Healthcare</div>
-      <div class="lead-track"><div class="lead-fill" style="width:21%;background:var(--slate);"></div></div>
-      <div class="lead-amount">$703,713.95</div>
-    </div>
-    <div class="lead-bar">
-      <div class="lead-name" style="width:110px;font-size:11px;">Consumer Products</div>
-      <div class="lead-track"><div class="lead-fill" style="width:16%;background:var(--slate);"></div></div>
-      <div class="lead-amount">$535,129.90</div>
+      <div class="lead-name" style="width:110px;font-size:11px;">Insurance</div>
+      <div class="lead-track"><div class="lead-fill" style="width:49%;background:var(--slate);"></div></div>
+      <div class="lead-amount">$427,336.65</div>
     </div>
     <div class="lead-bar">
       <div class="lead-name" style="width:110px;font-size:11px;">NGO</div>
-      <div class="lead-track"><div class="lead-fill" style="width:12%;background:var(--slate);"></div></div>
-      <div class="lead-amount">$399,288.00</div>
+      <div class="lead-track"><div class="lead-fill" style="width:46%;background:var(--slate);"></div></div>
+      <div class="lead-amount">$397,488.00</div>
+    </div>
+    <div class="lead-bar">
+      <div class="lead-name" style="width:110px;font-size:11px;">Financial Services</div>
+      <div class="lead-track"><div class="lead-fill" style="width:40%;background:var(--slate);"></div></div>
+      <div class="lead-amount">$350,384.11</div>
+    </div>
+    <div class="lead-bar">
+      <div class="lead-name" style="width:110px;font-size:11px;">Consumer Products</div>
+      <div class="lead-track"><div class="lead-fill" style="width:17%;background:var(--slate);"></div></div>
+      <div class="lead-amount">$145,580.35</div>
+    </div>
+    <div class="lead-bar">
+      <div class="lead-name" style="width:110px;font-size:11px;">Healthcare</div>
+      <div class="lead-track"><div class="lead-fill" style="width:14%;background:var(--slate);"></div></div>
+      <div class="lead-amount">$120,170.63</div>
+    </div>
+    <div class="lead-bar">
+      <div class="lead-name" style="width:110px;font-size:11px;">Media</div>
+      <div class="lead-track"><div class="lead-fill" style="width:6%;background:var(--slate);"></div></div>
+      <div class="lead-amount">$51,187.50</div>
     </div></div>
     </div>
 
@@ -2016,7 +2026,47 @@
       <div class="panel-body" id="paymentBehaviorChart">
     <table class="data-table">
       <thead><tr><th>Client</th><th>Avg Days</th><th>Recent Avg</th><th>Trend</th></tr></thead>
-      <tbody></tbody>
+      <tbody><tr>
+        <td>Goldman Sachs</td>
+        <td class="mono">1.0d</td>
+        <td class="mono">2.0d</td>
+        <td class="">→ Steady</td>
+      </tr><tr>
+        <td>Janssen Immunology</td>
+        <td class="mono">4.8d</td>
+        <td class="mono">6.3d</td>
+        <td class="">→ Steady</td>
+      </tr><tr>
+        <td>Eli Lilly &amp; Co.</td>
+        <td class="mono">8.2d</td>
+        <td class="mono">2.7d</td>
+        <td class="text-green">↑ Faster</td>
+      </tr><tr>
+        <td>Oceansound</td>
+        <td class="mono">9.0d</td>
+        <td class="mono">9.0d</td>
+        <td class="">→ Steady</td>
+      </tr><tr>
+        <td>Johnson&amp;Johnson</td>
+        <td class="mono">9.7d</td>
+        <td class="mono">8.0d</td>
+        <td class="">→ Steady</td>
+      </tr><tr>
+        <td>Youth Villages</td>
+        <td class="mono">11.3d</td>
+        <td class="mono">8.0d</td>
+        <td class="text-green">↑ Faster</td>
+      </tr><tr>
+        <td>Crewcial</td>
+        <td class="mono">11.3d</td>
+        <td class="mono">11.3d</td>
+        <td class="">→ Steady</td>
+      </tr><tr>
+        <td>Professional Speech…</td>
+        <td class="mono">12.5d</td>
+        <td class="mono">8.0d</td>
+        <td class="text-green">↑ Faster</td>
+      </tr></tbody>
     </table></div>
     </div>
   </div>
@@ -2026,19 +2076,19 @@
       <div class="panel-header"><span class="panel-title">Monthly Revenue — Year over Year</span><div style="display:flex;gap:6px;"><button class="export-btn" id="viewToggle3mo" onclick="setMonthlyView(&#39;3mo&#39;)" style="color:var(--gold);border-color:var(--gold);">Last 3 Months</button><button class="export-btn" id="viewToggle6mo" onclick="setMonthlyView(&#39;6mo&#39;)">Last 6 Months</button><button class="export-btn" id="viewToggleAll" onclick="setMonthlyView(&#39;all&#39;)">All Months</button></div></div>
       <div class="panel-body" id="monthlyRevChart"><div style="overflow-x:auto;"><div style="display:flex;gap:16px;margin-bottom:16px;flex-wrap:wrap;"><div style="background:#f5edd8;border-radius:6px;padding:8px 14px;min-width:100px;">
       <div style="font-family:&#39;DM Mono&#39;,monospace;font-size:9px;text-transform:uppercase;letter-spacing:1px;color:#c4aa70;margin-bottom:3px;">2023 Total</div>
-      <div style="font-family:&#39;DM Serif Display&#39;,serif;font-size:17px;color:var(--ink);">$1,044,879.09</div>
+      <div style="font-family:&#39;DM Serif Display&#39;,serif;font-size:17px;color:var(--ink);">$991,508.14</div>
     </div><div style="background:#f0e6c8;border-radius:6px;padding:8px 14px;min-width:100px;">
       <div style="font-family:&#39;DM Mono&#39;,monospace;font-size:9px;text-transform:uppercase;letter-spacing:1px;color:#b8943f;margin-bottom:3px;">2024 Total</div>
       <div style="font-family:&#39;DM Serif Display&#39;,serif;font-size:17px;color:var(--ink);">$1,189,955.88</div>
     </div><div style="background:#e8f5ee;border-radius:6px;padding:8px 14px;min-width:100px;">
       <div style="font-family:&#39;DM Mono&#39;,monospace;font-size:9px;text-transform:uppercase;letter-spacing:1px;color:#2d7a4f;margin-bottom:3px;">2025 Total</div>
-      <div style="font-family:&#39;DM Serif Display&#39;,serif;font-size:17px;color:var(--ink);">$859,916.27</div>
+      <div style="font-family:&#39;DM Serif Display&#39;,serif;font-size:17px;color:var(--ink);">$858,840.56</div>
     </div><div style="background:#d0eedd;border-radius:6px;padding:8px 14px;min-width:100px;">
       <div style="font-family:&#39;DM Mono&#39;,monospace;font-size:9px;text-transform:uppercase;letter-spacing:1px;color:#1a5c38;margin-bottom:3px;">2026 Total</div>
-      <div style="font-family:&#39;DM Serif Display&#39;,serif;font-size:17px;color:var(--ink);">$168,614.41</div>
+      <div style="font-family:&#39;DM Serif Display&#39;,serif;font-size:17px;color:var(--ink);">$142,496.74</div>
     </div><div style="background:var(--red-pale);border-radius:6px;padding:8px 14px;min-width:100px;">
       <div style="font-family:&#39;DM Mono&#39;,monospace;font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--rust);margin-bottom:3px;">2025→2026</div>
-      <div style="font-family:&#39;DM Serif Display&#39;,serif;font-size:17px;color:var(--rust);">-80.4%</div>
+      <div style="font-family:&#39;DM Serif Display&#39;,serif;font-size:17px;color:var(--rust);">-83.4%</div>
     </div></div><table class="data-table" style="min-width:500px;">
     <thead><tr>
       <th style="width:50px;">Month</th>
@@ -2050,8 +2100,8 @@
     <tbody><tr>
       <td style="font-weight:600;">Jan</td>
       <td class="mono" style="color:var(--muted);">
-          $66,975.57
-          <div style="height:3px;width:36px;background:#c4aa70;border-radius:2px;margin-top:3px;"></div>
+          $37,616.81
+          <div style="height:3px;width:20px;background:#c4aa70;border-radius:2px;margin-top:3px;"></div>
         </td><td class="mono" style="color:var(--muted);">
           $46,780.70
           <div style="height:3px;width:25px;background:#b8943f;border-radius:2px;margin-top:3px;"></div>
@@ -2062,7 +2112,7 @@
           $110,496.22
           <div style="height:3px;width:60px;background:#1a5c38;border-radius:2px;margin-top:3px;"></div>
         </td>
-      <td class="mono muted">$46,250.79</td>
+      <td class="mono muted">$36,464.53</td>
       <td style="font-weight:500;color:var(--green);">
         +342.1%
       </td>
@@ -2073,14 +2123,14 @@
             <div style="position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--border);"></div>
             <div style="position:absolute;left:50%;width:50%;height:100%;background:var(--green);border-radius:0 3px 3px 0;"></div>
           </div>
-          <span style="font-family:&#39;DM Mono&#39;,monospace;font-size:10px;color:var(--green);">+139%</span>
+          <span style="font-family:&#39;DM Mono&#39;,monospace;font-size:10px;color:var(--green);">+203%</span>
         </div>
       </td>
     </tr><tr>
       <td style="font-weight:600;">Feb</td>
       <td class="mono" style="color:var(--muted);">
-          $67,482.18
-          <div style="height:3px;width:47px;background:#c4aa70;border-radius:2px;margin-top:3px;"></div>
+          $66,232.18
+          <div style="height:3px;width:46px;background:#c4aa70;border-radius:2px;margin-top:3px;"></div>
         </td><td class="mono" style="color:var(--muted);">
           $86,136.34
           <div style="height:3px;width:60px;background:#b8943f;border-radius:2px;margin-top:3px;"></div>
@@ -2088,50 +2138,50 @@
           $80,903.35
           <div style="height:3px;width:56px;background:#2d7a4f;border-radius:2px;margin-top:3px;"></div>
         </td><td class="mono" style="font-weight:600;">
-          $47,333.85
-          <div style="height:3px;width:33px;background:#1a5c38;border-radius:2px;margin-top:3px;"></div>
+          $32,000.52
+          <div style="height:3px;width:22px;background:#1a5c38;border-radius:2px;margin-top:3px;"></div>
         </td>
-      <td class="mono muted">$78,173.96</td>
+      <td class="mono muted">$77,757.29</td>
       <td style="font-weight:500;color:var(--rust);">
-        -41.5%
+        -60.4%
       </td>
       <td>
         
         <div style="display:flex;align-items:center;gap:5px;">
           <div style="flex:1;height:6px;background:var(--cream);border-radius:3px;overflow:hidden;position:relative;">
             <div style="position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--border);"></div>
-            <div style="position:absolute;right:50%;width:19.725307494776494%;height:100%;background:var(--rust);border-radius:3px 0 0 3px;"></div>
+            <div style="position:absolute;right:50%;width:29.422816818847465%;height:100%;background:var(--rust);border-radius:3px 0 0 3px;"></div>
           </div>
-          <span style="font-family:&#39;DM Mono&#39;,monospace;font-size:10px;color:var(--rust);">-39%</span>
+          <span style="font-family:&#39;DM Mono&#39;,monospace;font-size:10px;color:var(--rust);">-59%</span>
         </div>
       </td>
     </tr><tr>
-      <td style="font-weight:600;">Mar</td>
+      <td style="font-weight:600;">Nov</td>
       <td class="mono" style="color:var(--muted);">
-          $127,342.37
-          <div style="height:3px;width:52px;background:#c4aa70;border-radius:2px;margin-top:3px;"></div>
+          $72,167.16
+          <div style="height:3px;width:47px;background:#c4aa70;border-radius:2px;margin-top:3px;"></div>
         </td><td class="mono" style="color:var(--muted);">
-          $146,949.14
+          $92,510.00
           <div style="height:3px;width:60px;background:#b8943f;border-radius:2px;margin-top:3px;"></div>
-        </td><td class="mono" style="color:var(--muted);">
-          $92,419.64
-          <div style="height:3px;width:38px;background:#2d7a4f;border-radius:2px;margin-top:3px;"></div>
         </td><td class="mono" style="font-weight:600;">
-          $6,284.34
-          <div style="height:3px;width:3px;background:#1a5c38;border-radius:2px;margin-top:3px;"></div>
+          $42,685.02
+          <div style="height:3px;width:28px;background:#2d7a4f;border-radius:2px;margin-top:3px;"></div>
+        </td><td class="mono" style="color:var(--muted);">
+          <span style="color:var(--border);">—</span>
+          
         </td>
-      <td class="mono muted">$122,237.05</td>
+      <td class="mono muted">$82,338.58</td>
       <td style="font-weight:500;color:var(--rust);">
-        -93.2%
+        -53.9%
       </td>
       <td>
         
         <div style="display:flex;align-items:center;gap:5px;">
           <div style="flex:1;height:6px;background:var(--cream);border-radius:3px;overflow:hidden;position:relative;">
             <div style="position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--border);"></div>
-            <div style="position:absolute;right:50%;width:47.42944549136289%;height:100%;background:var(--rust);border-radius:3px 0 0 3px;"></div>
+            <div style="position:absolute;right:50%;width:24.079574848145302%;height:100%;background:var(--rust);border-radius:3px 0 0 3px;"></div>
           </div>
-          <span style="font-family:&#39;DM Mono&#39;,monospace;font-size:10px;color:var(--rust);">-95%</span>
+          <span style="font-family:&#39;DM Mono&#39;,monospace;font-size:10px;color:var(--rust);">-48%</span>
         </div>
       </td>
     </tr><tr>
@@ -2165,7 +2215,7 @@
       </td>
     </tr><tr style="background:var(--cream);font-style:italic;">
       <td style="font-size:11px;color:var(--muted);">3-mo avg</td>
-      <td class="mono" style="font-size:11px;color:var(--muted);">$107,153.32</td><td class="mono" style="font-size:11px;color:var(--muted);">$93,924.39</td><td class="mono" style="font-size:11px;color:var(--muted);">$103,003.73</td><td class="mono" style="font-size:11px;color:var(--muted);">$26,809.10</td>
+      <td class="mono" style="font-size:11px;color:var(--muted);">$88,344.92</td><td class="mono" style="font-size:11px;color:var(--muted);">$75,778.01</td><td class="mono" style="font-size:11px;color:var(--muted);">$86,425.52</td><td class="mono" style="font-size:11px;color:var(--muted);">$32,000.52</td>
       <td colspan="3"></td>
     </tr></tbody></table></div></div>
     </div>
@@ -2202,7 +2252,7 @@
           <label>Client</label>
           <select id="f_client" onchange="autoFillClient()">
             <option value="">— Select client —</option>
-          <option value="3M">3M</option><option value="A&amp;M Capital Advisors">A&amp;M Capital Advisors</option><option value="AAA Northern California, Nevada &amp; Utah">AAA Northern California, Nevada &amp; Utah</option><option value="AIG">AIG</option><option value="AIG Life and Retirement">AIG Life and Retirement</option><option value="ALisa Casas">ALisa Casas</option><option value="ANA Enterprise">ANA Enterprise</option><option value="ARADO">ARADO</option><option value="ASHBA">ASHBA</option><option value="AUTM">AUTM</option><option value="AVNET, Inc.">AVNET, Inc.</option><option value="AbbVie">AbbVie</option><option value="Abbott">Abbott</option><option value="Actavis">Actavis</option><option value="Alexion">Alexion</option><option value="Allergan">Allergan</option><option value="American Institute of Certified Public Accountants">American Institute of Certified Public Accountants</option><option value="American Saddlebred Horse And Breeders Association">American Saddlebred Horse And Breeders Association</option><option value="American Speech-Language-Hearing Association (ASHA)">American Speech-Language-Hearing Association (ASHA)</option><option value="Amit Kothari">Amit Kothari</option><option value="Apollo Global Management, Inc.">Apollo Global Management, Inc.</option><option value="Aspen Insurance">Aspen Insurance</option><option value="Assurant, Inc.">Assurant, Inc.</option><option value="Astellas">Astellas</option><option value="Atalaya Capital Management LP">Atalaya Capital Management LP</option><option value="Aurora">Aurora</option><option value="B2C2 Ltd.">B2C2 Ltd.</option><option value="Babcock Laboratories">Babcock Laboratories</option><option value="Ball State University">Ball State University</option><option value="Bank of America">Bank of America</option><option value="Bayberry Capital Partners, LP">Bayberry Capital Partners, LP</option><option value="Becker, Glynn, Melamed &amp; Muffly LLP">Becker, Glynn, Melamed &amp; Muffly LLP</option><option value="Berman Rosenbach">Berman Rosenbach</option><option value="Better Holdco, Inc.">Better Holdco, Inc.</option><option value="Better.com">Better.com</option><option value="BigBear.ai">BigBear.ai</option><option value="Biogen">Biogen</option><option value="BlackRock">BlackRock</option><option value="BofA/ML">BofA/ML</option><option value="BofA/ML Wealth Management">BofA/ML Wealth Management</option><option value="BofA/ML-Global Research">BofA/ML-Global Research</option><option value="Bon Secours Health System, Inc.">Bon Secours Health System, Inc.</option><option value="Brands2Life">Brands2Life</option><option value="BritBox, LLC">BritBox, LLC</option><option value="Brodeur">Brodeur</option><option value="Brookfield Wealth Management">Brookfield Wealth Management</option><option value="CASAColumbia">CASAColumbia</option><option value="CUC">CUC</option><option value="CUNY School of Medicine">CUNY School of Medicine</option><option value="Cadence Pharmaceuticals, Inc.">Cadence Pharmaceuticals, Inc.</option><option value="California Institute for the Arts">California Institute for the Arts</option><option value="Campus Text">Campus Text</option><option value="Cargill">Cargill</option><option value="Cathy Carl">Cathy Carl</option><option value="Cedars-Sinai Medical Center">Cedars-Sinai Medical Center</option><option value="Chamberlain Healthcare Public Relations">Chamberlain Healthcare Public Relations</option><option value="Charles River Laboratories International, Inc.">Charles River Laboratories International, Inc.</option><option value="ChemTreat, Inc.">ChemTreat, Inc.</option><option value="ChildFund Alliance">ChildFund Alliance</option><option value="Chosun Issue Forum 2015">Chosun Issue Forum 2015</option><option value="Cigna">Cigna</option><option value="Cinema Arts Centre">Cinema Arts Centre</option><option value="Citizens Financial Group">Citizens Financial Group</option><option value="Climb Leadership Consulting">Climb Leadership Consulting</option><option value="Commercial Metals Company">Commercial Metals Company</option><option value="Connecticut Council for Education Reform">Connecticut Council for Education Reform</option><option value="Country Financial">Country Financial</option><option value="Courtenay Casey">Courtenay Casey</option><option value="Covidien">Covidien</option><option value="CrashChampions">CrashChampions</option><option value="Credit Suisse">Credit Suisse</option><option value="Crewcial">Crewcial</option><option value="Critical Mass">Critical Mass</option><option value="DSM Nutritional Products AG">DSM Nutritional Products AG</option><option value="Dal-Tile Corporation">Dal-Tile Corporation</option><option value="Danaher">Danaher</option><option value="Day of Prayer and Action for Children">Day of Prayer and Action for Children</option><option value="Dechert LLP">Dechert LLP</option><option value="Depository Trust &amp; Clearing Corporation">Depository Trust &amp; Clearing Corporation</option><option value="Diabetes Research Institute Foundation">Diabetes Research Institute Foundation</option><option value="Dollar Tree">Dollar Tree</option><option value="EUPRIO">EUPRIO</option><option value="Edelman">Edelman</option><option value="Edelman Financial Engines">Edelman Financial Engines</option><option value="Eli Lilly &amp; Co.">Eli Lilly &amp; Co.</option><option value="Elizabeth Mason">Elizabeth Mason</option><option value="Epsilon Data Management, LLC">Epsilon Data Management, LLC</option><option value="Essence Digital">Essence Digital</option><option value="Everly Health">Everly Health</option><option value="Exact Sciences">Exact Sciences</option><option value="Executive Communications Council ">Executive Communications Council </option><option value="FM Global">FM Global</option><option value="Federal Air Marshal Service">Federal Air Marshal Service</option><option value="Federal Laboratory Consortium">Federal Laboratory Consortium</option><option value="Federal Reserve Bank of Boston">Federal Reserve Bank of Boston</option><option value="Fels Institute of Government">Fels Institute of Government</option><option value="FibroGen, Inc.">FibroGen, Inc.</option><option value="Fidelity Investments">Fidelity Investments</option><option value="Fieldston Ethical Culture School">Fieldston Ethical Culture School</option><option value="Forest Laboratories">Forest Laboratories</option><option value="Frontier Derm Partners">Frontier Derm Partners</option><option value="G6 Partners">G6 Partners</option><option value="GS Petershill">GS Petershill</option><option value="GTIS Partners">GTIS Partners</option><option value="George’s Bay Limited">George’s Bay Limited</option><option value="Ghidotti">Ghidotti</option><option value="Giant Tiger">Giant Tiger</option><option value="Global Atlantic">Global Atlantic</option><option value="GoldenTree Asset Management, LP">GoldenTree Asset Management, LP</option><option value="Goldman Sachs">Goldman Sachs</option><option value="Grace Global Capital">Grace Global Capital</option><option value="H&amp;M">H&amp;M</option><option value="HCA Healthcare">HCA Healthcare</option><option value="HSBC USA">HSBC USA</option><option value="Harley-Davidson Motor Company">Harley-Davidson Motor Company</option><option value="Harsith Chandrakumar">Harsith Chandrakumar</option><option value="Hartford Life Insurance Companies">Hartford Life Insurance Companies</option><option value="Hudson County Community College">Hudson County Community College</option><option value="Humana Inc.">Humana Inc.</option><option value="HyphaMetrics, Inc.">HyphaMetrics, Inc.</option><option value="ICAP">ICAP</option><option value="ICE">ICE</option><option value="ICMA Retirement Corporation">ICMA Retirement Corporation</option><option value="ING">ING</option><option value="ING Americas-Dana Ripley">ING Americas-Dana Ripley</option><option value="ING Financial Services">ING Financial Services</option><option value="IPRA">IPRA</option><option value="Icahn School of Medicine at Mount Sinai">Icahn School of Medicine at Mount Sinai</option><option value="Intercontinental Exchange">Intercontinental Exchange</option><option value="Interfaith Center on Corporate Responsibility">Interfaith Center on Corporate Responsibility</option><option value="International Association of Business Communicators">International Association of Business Communicators</option><option value="International House">International House</option><option value="International House-New York">International House-New York</option><option value="Invesco">Invesco</option><option value="JLG">JLG</option><option value="JLG Industries(OSK)">JLG Industries(OSK)</option><option value="JP Morgan">JP Morgan</option><option value="JP Morgan Chase">JP Morgan Chase</option><option value="Janssen Immunology">Janssen Immunology</option><option value="Janssen R&amp;D, L.L.C.">Janssen R&amp;D, L.L.C.</option><option value="Jeremy Schiffman">Jeremy Schiffman</option><option value="John Doorley">John Doorley</option><option value="Johnson Controls, Inc.">Johnson Controls, Inc.</option><option value="Johnson&amp;Johnson">Johnson&amp;Johnson</option><option value="Jonathan Shiff/BofA">Jonathan Shiff/BofA</option><option value="KAICIID">KAICIID</option><option value="KWE Partners">KWE Partners</option><option value="Kaplan, Inc.">Kaplan, Inc.</option><option value="Karos Pharmaceuticals">Karos Pharmaceuticals</option><option value="Kentucky State University">Kentucky State University</option><option value="Lippe Taylor">Lippe Taylor</option><option value="Littlejohn &amp; Co. LLC">Littlejohn &amp; Co. LLC</option><option value="London School of Economics">London School of Economics</option><option value="Louise Oliver">Louise Oliver</option><option value="Lycoming College">Lycoming College</option><option value="MASH Property">MASH Property</option><option value="Makovsky+Company">Makovsky+Company</option><option value="Mantle 314">Mantle 314</option><option value="Marine Corps">Marine Corps</option><option value="MarkIt">MarkIt</option><option value="Mash Property">Mash Property</option><option value="McCormick and Company">McCormick and Company</option><option value="McDonald&#39;s">McDonald's</option><option value="Meadville Lombard Theological School">Meadville Lombard Theological School</option><option value="Merck &amp; Co. Inc.">Merck &amp; Co. Inc.</option><option value="Merck Serono">Merck Serono</option><option value="Mission Technologies">Mission Technologies</option><option value="Mizuho Americas">Mizuho Americas</option><option value="Mohawk Industries, Inc.">Mohawk Industries, Inc.</option><option value="Montieth &amp; Co.">Montieth &amp; Co.</option><option value="Morgan Stanley">Morgan Stanley</option><option value="NDIA">NDIA</option><option value="NDRC">NDRC</option><option value="NGAM Advisors L.P.">NGAM Advisors L.P.</option><option value="National Dance Institute">National Dance Institute</option><option value="National Security Agency">National Security Agency</option><option value="Natixis Global Asset Management">Natixis Global Asset Management</option><option value="Nazareth College">Nazareth College</option><option value="NeighborWorks America">NeighborWorks America</option><option value="Neurocrine Biosciences">Neurocrine Biosciences</option><option value="New York Film Academy">New York Film Academy</option><option value="New York Institute of Finance">New York Institute of Finance</option><option value="New York Stock Exchange">New York Stock Exchange</option><option value="Newport News Shipbuilding">Newport News Shipbuilding</option><option value="Nexon">Nexon</option><option value="Nomura Securities">Nomura Securities</option><option value="Novo Nordisk">Novo Nordisk</option><option value="NowThis Media Group, LLC">NowThis Media Group, LLC</option><option value="Oceansound">Oceansound</option><option value="Oppenheimer Funds, Inc.">Oppenheimer Funds, Inc.</option><option value="OshKosh Corporation">OshKosh Corporation</option><option value="POST &amp; TELECOM PRESS CO., LTD">POST &amp; TELECOM PRESS CO., LTD</option><option value="PRSA">PRSA</option><option value="PTC Therapeutics">PTC Therapeutics</option><option value="Page Alumni Association">Page Alumni Association</option><option value="Palladium">Palladium</option><option value="Palo Alto Foundation Medical Group">Palo Alto Foundation Medical Group</option><option value="Par Pharmaceutical Companies, Inc.">Par Pharmaceutical Companies, Inc.</option><option value="Peritus PR">Peritus PR</option><option value="Pernod Ricard USA">Pernod Ricard USA</option><option value="Plaid">Plaid</option><option value="Platinum Partners">Platinum Partners</option><option value="Plexus, Inc.">Plexus, Inc.</option><option value="Point72">Point72</option><option value="PricewaterhouseCoopers LLP">PricewaterhouseCoopers LLP</option><option value="Prince Street Pizza">Prince Street Pizza</option><option value="Procter &amp; Gamble">Procter &amp; Gamble</option><option value="Prof. Development Coaching Practice">Prof. Development Coaching Practice</option><option value="Professional Speechwriters Association">Professional Speechwriters Association</option><option value="Purchase College">Purchase College</option><option value="RBS">RBS</option><option value="Razorfish">Razorfish</option><option value="Real Chemistry">Real Chemistry</option><option value="Religion News Service">Religion News Service</option><option value="Rock the Post">Rock the Post</option><option value="Rockefeller Capital Management">Rockefeller Capital Management</option><option value="Rocket Pharma">Rocket Pharma</option><option value="SFDA">SFDA</option><option value="SVP Global">SVP Global</option><option value="Sabra Dipping Company LLC">Sabra Dipping Company LLC</option><option value="Saint Mary’s College of California">Saint Mary’s College of California</option><option value="SandRidge">SandRidge</option><option value="Sandra Regina Tartaglia">Sandra Regina Tartaglia</option><option value="School of the New York Times">School of the New York Times</option><option value="ServiceLink">ServiceLink</option><option value="Solstice Residential Group, LLC">Solstice Residential Group, LLC</option><option value="SpaceX">SpaceX</option><option value="Stanley Center for Peace and Security">Stanley Center for Peace and Security</option><option value="StanleyBlack&amp;Decker">StanleyBlack&amp;Decker</option><option value="State Farm">State Farm</option><option value="Stericycle">Stericycle</option><option value="Steve Sposari">Steve Sposari</option><option value="Sublease - Chuck">Sublease - Chuck</option><option value="Sublease - Grace">Sublease - Grace</option><option value="Sumitomo Electric USA Holdings, Inc.">Sumitomo Electric USA Holdings, Inc.</option><option value="Susan Walton">Susan Walton</option><option value="Susan Wolf">Susan Wolf</option><option value="Swiss Federal Institute of Technology (ETH)">Swiss Federal Institute of Technology (ETH)</option><option value="THE LAB h">THE LAB h</option><option value="TIAA-CREF - Jack Florea">TIAA-CREF - Jack Florea</option><option value="TIAA-CREF - Rene Sherrod">TIAA-CREF - Rene Sherrod</option><option value="TIAA-CREF-Elena French">TIAA-CREF-Elena French</option><option value="TIC Gums">TIC Gums</option><option value="TPG Capital">TPG Capital</option><option value="Target">Target</option><option value="Teed and Brown">Teed and Brown</option><option value="Teva Pharmaceutical Industries">Teva Pharmaceutical Industries</option><option value="The Chicago Limited Partnership">The Chicago Limited Partnership</option><option value="The Chicago Limited Project">The Chicago Limited Project</option><option value="The Defense Information School">The Defense Information School</option><option value="The George Washington University">The George Washington University</option><option value="The Hartford">The Hartford</option><option value="The Hartford Pam Rekow">The Hartford Pam Rekow</option><option value="The Weinstein Company">The Weinstein Company</option><option value="TogoRun PO# 000000053">TogoRun PO# 000000053</option><option value="Tsingua University">Tsingua University</option><option value="Twist Mktg">Twist Mktg</option><option value="UPMC Pinnacle">UPMC Pinnacle</option><option value="US Army Forces Command (FORSCOM)">US Army Forces Command (FORSCOM)</option><option value="US Defense Logistics Agency">US Defense Logistics Agency</option><option value="USAA">USAA</option><option value="UWCW">UWCW</option><option value="Unitarian Universalist-Jon Hurley">Unitarian Universalist-Jon Hurley</option><option value="United States Air Force">United States Air Force</option><option value="United Way">United Way</option><option value="University of Florida">University of Florida</option><option value="University of Michigan">University of Michigan</option><option value="University of North Dakota">University of North Dakota</option><option value="University of Pittsburgh Medical Center">University of Pittsburgh Medical Center</option><option value="Varde">Varde</option><option value="Velas Resorts Mexico">Velas Resorts Mexico</option><option value="Verastem Oncology">Verastem Oncology</option><option value="Voya Financial">Voya Financial</option><option value="Värde Partners">Värde Partners</option><option value="WIlliam Blair">WIlliam Blair</option><option value="WURD">WURD</option><option value="Walgreens">Walgreens</option><option value="Warner Media">Warner Media</option><option value="Weber Shandwick">Weber Shandwick</option><option value="West End Strategy">West End Strategy</option><option value="Western Returned Scholars Association">Western Returned Scholars Association</option><option value="Wharton School of Business">Wharton School of Business</option><option value="Wharton West Executive MBA">Wharton West Executive MBA</option><option value="Whelen">Whelen</option><option value="Whelen Engineering Company">Whelen Engineering Company</option><option value="William Blair">William Blair</option><option value="William Blair and Company">William Blair and Company</option><option value="Willis Group">Willis Group</option><option value="World Conference of Religions for Peace">World Conference of Religions for Peace</option><option value="XL Catlin">XL Catlin</option><option value="XL Global Services, Inc.">XL Global Services, Inc.</option><option value="Xaverian High School">Xaverian High School</option><option value="Young Life">Young Life</option><option value="Young People&#39;s Chorus">Young People's Chorus</option><option value="Youth Villages">Youth Villages</option><option value="Zai Laboratories">Zai Laboratories</option><option value="dnata MG&amp;E">dnata MG&amp;E</option></select>
+          <option value="ASHBA">ASHBA</option><option value="AUTM">AUTM</option><option value="AVNET, Inc.">AVNET, Inc.</option><option value="AbbVie">AbbVie</option><option value="American Saddlebred Horse And Breeders Association">American Saddlebred Horse And Breeders Association</option><option value="Amit Kothari">Amit Kothari</option><option value="Assurant, Inc.">Assurant, Inc.</option><option value="Astellas">Astellas</option><option value="Babcock Laboratories">Babcock Laboratories</option><option value="Bank of America">Bank of America</option><option value="Better Holdco, Inc.">Better Holdco, Inc.</option><option value="Biogen">Biogen</option><option value="BlackRock">BlackRock</option><option value="BofA/ML">BofA/ML</option><option value="BofA/ML Wealth Management">BofA/ML Wealth Management</option><option value="Brands2Life">Brands2Life</option><option value="Brookfield">Brookfield</option><option value="California Institute for the Arts">California Institute for the Arts</option><option value="Campus Text">Campus Text</option><option value="Charles River Laboratories International, Inc.">Charles River Laboratories International, Inc.</option><option value="ChildFund Alliance">ChildFund Alliance</option><option value="Chosun Issue Forum 2015">Chosun Issue Forum 2015</option><option value="Cigna">Cigna</option><option value="Commercial Metals Company">Commercial Metals Company</option><option value="Country Financial">Country Financial</option><option value="Credit Suisse">Credit Suisse</option><option value="Crewcial">Crewcial</option><option value="Dal-Tile Corporation">Dal-Tile Corporation</option><option value="Dechert LLP">Dechert LLP</option><option value="Depository Trust &amp; Clearing Corporation">Depository Trust &amp; Clearing Corporation</option><option value="Dollar Tree">Dollar Tree</option><option value="Edelman Financial Engines">Edelman Financial Engines</option><option value="Eli Lilly &amp; Co.">Eli Lilly &amp; Co.</option><option value="Everly Health">Everly Health</option><option value="Exact Sciences">Exact Sciences</option><option value="Executive Communications Council">Executive Communications Council</option><option value="Federal Laboratory Consortium">Federal Laboratory Consortium</option><option value="Federal Research Consortium">Federal Research Consortium</option><option value="George&#39;s Bay Limited">George's Bay Limited</option><option value="Ghidotti">Ghidotti</option><option value="GoldenTree Asset Management, LP">GoldenTree Asset Management, LP</option><option value="Goldman Sachs">Goldman Sachs</option><option value="H&amp;M">H&amp;M</option><option value="HCA Healthcare">HCA Healthcare</option><option value="HSBC USA">HSBC USA</option><option value="Harsith Chandrakumar">Harsith Chandrakumar</option><option value="Hartford Life Insurance Companies">Hartford Life Insurance Companies</option><option value="Hudson County Community College">Hudson County Community College</option><option value="Humana Inc.">Humana Inc.</option><option value="Icahn School of Medicine at Mount Sinai">Icahn School of Medicine at Mount Sinai</option><option value="International Association of Business Communicators">International Association of Business Communicators</option><option value="Invesco">Invesco</option><option value="Janssen Immunology">Janssen Immunology</option><option value="Janssen R&amp;D, L.L.C.">Janssen R&amp;D, L.L.C.</option><option value="Johnson&amp;Johnson">Johnson&amp;Johnson</option><option value="Mash Property">Mash Property</option><option value="McCormick and Company">McCormick and Company</option><option value="McDonald&#39;s">McDonald's</option><option value="Merck &amp; Co. Inc.">Merck &amp; Co. Inc.</option><option value="Mission Technologies">Mission Technologies</option><option value="Mohawk Industries, Inc.">Mohawk Industries, Inc.</option><option value="NDIA">NDIA</option><option value="National Dance Institute">National Dance Institute</option><option value="Natixis Global Asset Management">Natixis Global Asset Management</option><option value="NeighborWorks America">NeighborWorks America</option><option value="Neurocrine Biosciences">Neurocrine Biosciences</option><option value="New York Stock Exchange">New York Stock Exchange</option><option value="Newport News Shipbuilding">Newport News Shipbuilding</option><option value="Novo Nordisk">Novo Nordisk</option><option value="NowThis Media Group, LLC">NowThis Media Group, LLC</option><option value="Oceansound">Oceansound</option><option value="OshKosh Corporation">OshKosh Corporation</option><option value="POST &amp; TELECOM PRESS CO., LTD">POST &amp; TELECOM PRESS CO., LTD</option><option value="PRSA">PRSA</option><option value="PTC Therapeutics">PTC Therapeutics</option><option value="Page Alumni Association">Page Alumni Association</option><option value="Peritus PR">Peritus PR</option><option value="Pernod Ricard USA">Pernod Ricard USA</option><option value="Plaid">Plaid</option><option value="Point72">Point72</option><option value="Prince Street Pizza">Prince Street Pizza</option><option value="Procter &amp; Gamble">Procter &amp; Gamble</option><option value="Professional Speechwriters Association">Professional Speechwriters Association</option><option value="Real Chemistry">Real Chemistry</option><option value="Religion News Service">Religion News Service</option><option value="Rockefeller Capital Management">Rockefeller Capital Management</option><option value="Sabra Dipping Company LLC">Sabra Dipping Company LLC</option><option value="Saint Mary&#39;s College of California">Saint Mary's College of California</option><option value="School of the New York Times">School of the New York Times</option><option value="Stanley Center for Peace and Security">Stanley Center for Peace and Security</option><option value="StanleyBlack&amp;Decker">StanleyBlack&amp;Decker</option><option value="Stericycle">Stericycle</option><option value="The Defense Information School">The Defense Information School</option><option value="The Hartford">The Hartford</option><option value="USAA">USAA</option><option value="UWCW">UWCW</option><option value="United Way">United Way</option><option value="Verastem Oncology">Verastem Oncology</option><option value="WURD">WURD</option><option value="Wharton School of Business">Wharton School of Business</option><option value="Young Life">Young Life</option><option value="Youth Villages">Youth Villages</option><option value="Zai Laboratories">Zai Laboratories</option></select>
         </div>
         <div class="form-group">
           <label>Industry</label>
@@ -3703,26 +3753,26 @@ async function addInvoice() {
     showLoading('Saving to Google Sheets…');
     try {
       // Map back to Sheet column headers
+      const est = getPaymentEstimate(client, industry, invoiceDate);
       const row = {
-        'Invoice number':                        invoice,
-        'Date of Service':                       serviceDate,
-        'Client':                                client,
-        'Industry':                              industry,
-        'Fee':                                   fee,
-        'Lead':                                  lead,
-        'Creator':                               '',
-        'Invoice Date':                          invoiceDate,
-        'Estimated Payment (APP)':               avgEst || '',
-        'Estimated Payment (Last Payment Date)': lastEst || '',
-        'Payment Date':                          payDate || '',
-        'Identifier':                            '',
-        'Payment Term':                          notes || ''
+        'Invoice number':  invoice,
+        'Date of Service': serviceDate,
+        'Client':          client,
+        'Industry':        industry,
+        'Fee':             fee,
+        'Lead':            lead,
+        'Creator':         '',
+        'Invoice Date':    invoiceDate,
+        'Payment Date':    payDate || '',
+        'Identifier':      '',
+        'Payment Term':    notes || ''
       };
       await apiPost({ action: 'addInvoice', row });
       hideLoading();
       showToast(`Invoice #${invoice} saved to Google Sheets ✓`);
     } catch (err) {
       hideLoading();
+      console.error('Write failed:', err);
       showToast('Saved locally but could not sync to Sheet: ' + err.message, true);
     }
   } else {
