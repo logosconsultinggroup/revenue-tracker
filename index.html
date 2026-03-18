@@ -598,9 +598,9 @@
 </style>
 
 <nav class="nav">
-  <button class="nav-tab active" onclick="showSection(&#39;dashboard&#39;, this)">Dashboard</button>
+  <button class="nav-tab" onclick="showSection(&#39;dashboard&#39;, this)">Dashboard</button>
   <button class="nav-tab" onclick="showSection(&#39;invoices&#39;, this)">Invoice Tracker</button>
-  <button class="nav-tab" onclick="showSection(&#39;projected&#39;, this)">Projected Revenue</button>
+  <button class="nav-tab active" onclick="showSection(&#39;projected&#39;, this)">Projected Revenue</button>
   <button class="nav-tab" onclick="showSection(&#39;clients&#39;, this)">Client List</button>
   <button class="nav-tab" onclick="showSection(&#39;analytics&#39;, this)">Analytics</button>
   <button class="nav-tab" onclick="showSection(&#39;add-invoice&#39;, this)">+ New Invoice</button>
@@ -610,7 +610,7 @@
      DASHBOARD
      ============================ -->
 <div class="main">
-<div id="dashboard" class="section active">
+<div id="dashboard" class="section">
   <div class="kpi-grid" id="kpiGrid">
     <div class="kpi-card ">
       <div class="kpi-label">Outstanding Invoices</div>
@@ -1943,7 +1943,7 @@
 <!-- ============================
      PROJECTED REVENUE
      ============================ -->
-<div id="projected" class="section">
+<div id="projected" class="section active">
   <div class="section-title">Projected Revenue — 2026</div>
   <div class="section-desc">Upcoming engagements and estimated payment windows.</div>
 
