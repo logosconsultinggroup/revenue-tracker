@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0051)file:///Users/evanchethik/Downloads/tracker_23.html -->
+<!-- saved from url=(0051)file:///Users/evanchethik/Downloads/tracker_24.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -4860,6 +4860,9 @@ async function savePayment() {
   const inv = invoiceData.find(i => i.invoice === currentModalInvoice);
   if (!inv) return;
 
+  // Capture before closeModal() clears it
+  const invoiceNum = String(currentModalInvoice).trim();
+
   // Update local state immediately (optimistic)
   inv.payDate = payDate;
   inv.paid = true;
@@ -4872,7 +4875,7 @@ async function savePayment() {
   // Write back to Google Sheet if connected
   if (APPS_SCRIPT_URL && !APPS_SCRIPT_URL.includes('YOUR_APPS_SCRIPT')) {
     try {
-      await apiFetch({ action: 'markPaid', invoiceNumber: encodeURIComponent(String(currentModalInvoice).trim()), paymentDate: payDate });
+      await apiFetch({ action: 'markPaid', invoiceNumber: encodeURIComponent(invoiceNum), paymentDate: payDate });
       showToast('Payment saved to Google Sheets ✓');
     } catch (err) {
       showToast('Saved locally but could not sync to Sheet: ' + err.message, true);
