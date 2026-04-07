@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0051)file:///Users/evanchethik/Downloads/tracker_28.html -->
+<!-- saved from url=(0051)file:///Users/evanchethik/Downloads/tracker_30.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -577,7 +577,7 @@
   <div style="display:flex;align-items:center;gap:12px;">
     <span id="syncStatus" style="font-family:&#39;DM Mono&#39;,monospace;font-size:11px;color:var(--muted);"></span>
     <button onclick="refreshData()" style="background:none;border:1px solid var(--gold);color:var(--gold);padding:5px 12px;border-radius:4px;cursor:pointer;font-family:&#39;DM Sans&#39;,sans-serif;font-size:12px;" title="Reload from Google Sheets">↻ Refresh</button>
-    <div class="header-date" id="headerDate">Wednesday, March 18, 2026</div>
+    <div class="header-date" id="headerDate">Tuesday, April 7, 2026</div>
   </div>
 </div>
 
@@ -598,9 +598,9 @@
 </style>
 
 <nav class="nav">
-  <button class="nav-tab" onclick="showSection(&#39;dashboard&#39;, this)">Dashboard</button>
+  <button class="nav-tab active" onclick="showSection(&#39;dashboard&#39;, this)">Dashboard</button>
   <button class="nav-tab" onclick="showSection(&#39;invoices&#39;, this)">Invoice Tracker</button>
-  <button class="nav-tab active" onclick="showSection(&#39;projected&#39;, this)">Projected Revenue</button>
+  <button class="nav-tab" onclick="showSection(&#39;projected&#39;, this)">Projected Revenue</button>
   <button class="nav-tab" onclick="showSection(&#39;clients&#39;, this)">Client List</button>
   <button class="nav-tab" onclick="showSection(&#39;analytics&#39;, this)">Analytics</button>
   <button class="nav-tab" onclick="showSection(&#39;add-invoice&#39;, this)">+ New Invoice</button>
@@ -610,7 +610,7 @@
      DASHBOARD
      ============================ -->
 <div class="main">
-<div id="dashboard" class="section">
+<div id="dashboard" class="section active">
   <div class="kpi-grid" id="kpiGrid">
     <div class="kpi-card ">
       <div class="kpi-label">Outstanding Invoices</div>
@@ -1943,7 +1943,7 @@
 <!-- ============================
      PROJECTED REVENUE
      ============================ -->
-<div id="projected" class="section active">
+<div id="projected" class="section">
   <div class="section-title">Projected Revenue — 2026</div>
   <div class="section-desc">Upcoming engagements and estimated payment windows.</div>
 
@@ -1962,17 +1962,41 @@
       <table class="data-table">
         <thead>
           <tr>
-            <th style="width:48px;"></th>
-            <th>Client</th>
-            <th>Est. Fee</th>
-            <th>Est. Invoice Date</th>
-            <th>Est. Payment</th>
+            <th style="width:80px;"></th>
+            <th onclick="sortProjected(&#39;client&#39;)" style="cursor:pointer;">Client <span id="psort_client"></span></th>
+            <th onclick="sortProjected(&#39;fee&#39;)" style="cursor:pointer;">Est. Fee <span id="psort_fee"></span></th>
+            <th onclick="sortProjected(&#39;invoiceDate&#39;)" style="cursor:pointer;">Est. Invoice Date <span id="psort_invoiceDate">▲</span></th>
+            <th onclick="sortProjected(&#39;estPay&#39;)" style="cursor:pointer;">Est. Payment <span id="psort_estPay"></span></th>
             <th>Payment Range</th>
-            <th>Confidence</th>
-            <th>Status</th>
+            <th onclick="sortProjected(&#39;confidence&#39;)" style="cursor:pointer;">Confidence <span id="psort_confidence"></span></th>
+            <th onclick="sortProjected(&#39;status&#39;)" style="cursor:pointer;">Status <span id="psort_status"></span></th>
           </tr>
         </thead>
-        <tbody id="projectedTableBody"><tr class="">
+        <tbody id="projectedTableBody"><tr class="projected-row">
+      <td style="text-align:center;white-space:nowrap;">
+        <button onclick="addFromProjected(25)" style="background:var(--gold);color:var(--ink);border:none;border-radius:50%;width:26px;height:26px;cursor:pointer;font-size:16px;line-height:1;font-weight:bold;margin-right:4px;" title="Add invoice for Pernod Ricard USA">+</button>
+        <button onclick="deleteProjected(25)" style="background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:50%;width:26px;height:26px;cursor:pointer;font-size:18px;line-height:1;font-weight:300;" title="Remove from pipeline">−</button>
+      </td>
+      <td>Pernod Ricard USA</td>
+      <td class="mono"><span class="muted">TBD</span></td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+      <td><span class="badge badge-pending">TBD</span></td>
+    </tr><tr class="projected-row">
+      <td style="text-align:center;white-space:nowrap;">
+        <button onclick="addFromProjected(26)" style="background:var(--gold);color:var(--ink);border:none;border-radius:50%;width:26px;height:26px;cursor:pointer;font-size:16px;line-height:1;font-weight:bold;margin-right:4px;" title="Add invoice for Biogen">+</button>
+        <button onclick="deleteProjected(26)" style="background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:50%;width:26px;height:26px;cursor:pointer;font-size:18px;line-height:1;font-weight:300;" title="Remove from pipeline">−</button>
+      </td>
+      <td>Biogen</td>
+      <td class="mono">$38,500.00</td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+      <td><span class="badge badge-pending">No date</span></td>
+    </tr><tr class="">
       <td style="text-align:center;white-space:nowrap;">
         <button onclick="addFromProjected(0)" style="background:var(--gold);color:var(--ink);border:none;border-radius:50%;width:26px;height:26px;cursor:pointer;font-size:16px;line-height:1;font-weight:bold;margin-right:4px;" title="Add invoice for Rockefeller Capital Management">+</button>
         <button onclick="deleteProjected(0)" style="background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:50%;width:26px;height:26px;cursor:pointer;font-size:18px;line-height:1;font-weight:300;" title="Remove from pipeline">−</button>
@@ -2127,7 +2151,7 @@
       <td><strong>Apr 1, 2026</strong></td>
       <td><span style="font-size:12px;">— — Apr 16, 2026</span></td>
       <td><span style="color:var(--gold);font-size:12px;" title="based on 13 invoices, ±12d">◑ Medium</span></td>
-      <td><span class="badge badge-pending">Upcoming</span></td>
+      <td><span class="badge badge-overdue">Past due</span></td>
     </tr><tr class="">
       <td style="text-align:center;white-space:nowrap;">
         <button onclick="addFromProjected(13)" style="background:var(--gold);color:var(--ink);border:none;border-radius:50%;width:26px;height:26px;cursor:pointer;font-size:16px;line-height:1;font-weight:bold;margin-right:4px;" title="Add invoice for Wharton School of Business">+</button>
@@ -2139,7 +2163,7 @@
       <td><strong>May 22, 2026</strong></td>
       <td><span style="font-size:12px;">May 5, 2026 — Jun 8, 2026</span></td>
       <td><span style="color:var(--muted);font-size:12px;" title="based on 5 invoices, ±17d">○ Low</span></td>
-      <td><span class="badge badge-pending">Upcoming</span></td>
+      <td><span class="badge badge-overdue">Past due</span></td>
     </tr><tr class="">
       <td style="text-align:center;white-space:nowrap;">
         <button onclick="addFromProjected(14)" style="background:var(--gold);color:var(--ink);border:none;border-radius:50%;width:26px;height:26px;cursor:pointer;font-size:16px;line-height:1;font-weight:bold;margin-right:4px;" title="Add invoice for Goldman Sachs">+</button>
@@ -2272,30 +2296,6 @@
       <td><span style="font-size:12px;">Dec 5, 2026 — Dec 25, 2026</span></td>
       <td><span style="color:var(--gold);font-size:12px;" title="based on 4 invoices, ±8d">◑ Medium</span></td>
       <td><span class="badge badge-pending">Upcoming</span></td>
-    </tr><tr class="projected-row">
-      <td style="text-align:center;white-space:nowrap;">
-        <button onclick="addFromProjected(25)" style="background:var(--gold);color:var(--ink);border:none;border-radius:50%;width:26px;height:26px;cursor:pointer;font-size:16px;line-height:1;font-weight:bold;margin-right:4px;" title="Add invoice for Pernod Ricard USA">+</button>
-        <button onclick="deleteProjected(25)" style="background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:50%;width:26px;height:26px;cursor:pointer;font-size:18px;line-height:1;font-weight:300;" title="Remove from pipeline">−</button>
-      </td>
-      <td>Pernod Ricard USA</td>
-      <td class="mono"><span class="muted">TBD</span></td>
-      <td>—</td>
-      <td>—</td>
-      <td>—</td>
-      <td>—</td>
-      <td><span class="badge badge-pending">TBD</span></td>
-    </tr><tr class="projected-row">
-      <td style="text-align:center;white-space:nowrap;">
-        <button onclick="addFromProjected(26)" style="background:var(--gold);color:var(--ink);border:none;border-radius:50%;width:26px;height:26px;cursor:pointer;font-size:16px;line-height:1;font-weight:bold;margin-right:4px;" title="Add invoice for Biogen">+</button>
-        <button onclick="deleteProjected(26)" style="background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:50%;width:26px;height:26px;cursor:pointer;font-size:18px;line-height:1;font-weight:300;" title="Remove from pipeline">−</button>
-      </td>
-      <td>Biogen</td>
-      <td class="mono">$38,500.00</td>
-      <td>—</td>
-      <td>—</td>
-      <td>—</td>
-      <td>—</td>
-      <td><span class="badge badge-pending">No date</span></td>
     </tr></tbody>
         <tfoot><tr class="summary-row" id="projectedSummary">
     <td></td>
@@ -2353,8 +2353,8 @@
     <option value="Communications">Communications</option><option value="Consumer Goods">Consumer Goods</option><option value="Consumer Products">Consumer Products</option><option value="Defense">Defense</option><option value="Education">Education</option><option value="Electronics">Electronics</option><option value="Financial Services">Financial Services</option><option value="Food">Food</option><option value="Food Sector">Food Sector</option><option value="Government">Government</option><option value="Healthcare">Healthcare</option><option value="Higher Education">Higher Education</option><option value="Insurance">Insurance</option><option value="Law">Law</option><option value="Leadership">Leadership</option><option value="Life Sciences">Life Sciences</option><option value="Manufacturing">Manufacturing</option><option value="Media">Media</option><option value="NGO">NGO</option><option value="Non-profit">Non-profit</option><option value="Pharmaceutical">Pharmaceutical</option><option value="Pharmaceuticals">Pharmaceuticals</option><option value="Professional Services">Professional Services</option><option value="Public Relations">Public Relations</option><option value="Publishing">Publishing</option><option value="Restaurant">Restaurant</option><option value="Retail">Retail</option></select>
     <select id="clientActivityFilter" onchange="renderClientTable()">
       <option value="">All Clients</option>
-      <option value="active">Active (last 2 years)</option>
-      <option value="dormant">Dormant (2+ years)</option>
+      <option value="active">Active (last 12 months)</option>
+      <option value="dormant">Dormant (12+ months)</option>
     </select>
   </div>
 
@@ -2383,7 +2383,7 @@
       <td>—</td>
       <td class="heat-avg mono">33d</td>
       <td class="heat-fast mono">11d</td>
-      <td><span class="badge badge-overdue">Dormant</span></td>
+      <td><span class="badge badge-paid">Active</span></td>
     </tr><tr>
       <td><strong>Bank of America</strong></td>
       <td><span class="badge badge-industry">Financial Services</span></td>
@@ -2393,7 +2393,7 @@
       <td>—</td>
       <td class="heat-fast mono">14d</td>
       <td class="heat-fast mono">3d</td>
-      <td><span class="badge badge-overdue">Dormant</span></td>
+      <td><span class="badge badge-paid">Active</span></td>
     </tr><tr>
       <td><strong>Goldman Sachs</strong></td>
       <td><span class="badge badge-industry">Financial Services</span></td>
@@ -2403,7 +2403,7 @@
       <td>—</td>
       <td class="heat-avg mono">39d</td>
       <td class="heat-fast mono">1d</td>
-      <td><span class="badge badge-overdue">Dormant</span></td>
+      <td><span class="badge badge-paid">Active</span></td>
     </tr><tr>
       <td><strong>Harsith Chandrakumar</strong></td>
       <td><span class="badge badge-industry">Leadership</span></td>
@@ -2413,7 +2413,7 @@
       <td>—</td>
       <td class="heat-fast mono">1d</td>
       <td class="heat-fast mono">1d</td>
-      <td><span class="badge badge-overdue">Dormant</span></td>
+      <td><span class="badge badge-paid">Active</span></td>
     </tr><tr>
       <td><strong>Depository Trust &amp; Clearing Corporation</strong></td>
       <td><span class="badge badge-industry">Financial Services</span></td>
@@ -2423,7 +2423,7 @@
       <td>—</td>
       <td class="heat-avg mono">39d</td>
       <td class="heat-fast mono">9d</td>
-      <td><span class="badge badge-overdue">Dormant</span></td>
+      <td><span class="badge badge-paid">Active</span></td>
     </tr><tr>
       <td><strong>PTC Therapeutics</strong></td>
       <td><span class="badge badge-industry">Pharmaceuticals</span></td>
@@ -2433,7 +2433,7 @@
       <td>—</td>
       <td class="heat-avg mono">30d</td>
       <td class="heat-avg mono">30d</td>
-      <td><span class="badge badge-overdue">Dormant</span></td>
+      <td><span class="badge badge-paid">Active</span></td>
     </tr><tr>
       <td><strong>Youth Villages</strong></td>
       <td><span class="badge badge-industry">NGO</span></td>
@@ -2443,17 +2443,17 @@
       <td>—</td>
       <td class="heat-fast mono">11d</td>
       <td class="heat-fast mono">10d</td>
-      <td><span class="badge badge-overdue">Dormant</span></td>
+      <td><span class="badge badge-paid">Active</span></td>
     </tr><tr>
       <td><strong>Humana Inc.</strong></td>
       <td><span class="badge badge-industry">Insurance</span></td>
       <td class="mono text-green">$145,016.15</td>
-      <td>Jan 21, 2026</td>
+      <td>Jan 22, 2026</td>
       <td>Consulting</td>
       <td>—</td>
       <td class="heat-avg mono">24d</td>
       <td class="heat-avg mono">18d</td>
-      <td><span class="badge badge-overdue">Dormant</span></td>
+      <td><span class="badge badge-paid">Active</span></td>
     </tr><tr>
       <td><strong>Mohawk Industries, Inc.</strong></td>
       <td><span class="badge badge-industry">Manufacturing</span></td>
@@ -2463,7 +2463,7 @@
       <td>—</td>
       <td class="heat-avg mono">27d</td>
       <td class="heat-avg mono">18d</td>
-      <td><span class="badge badge-overdue">Dormant</span></td>
+      <td><span class="badge badge-paid">Active</span></td>
     </tr><tr>
       <td><strong>Janssen R&amp;D, L.L.C.</strong></td>
       <td><span class="badge badge-industry">Healthcare</span></td>
@@ -2473,7 +2473,7 @@
       <td>—</td>
       <td class="heat-slow mono">41d</td>
       <td class="heat-fast mono">4d</td>
-      <td><span class="badge badge-overdue">Dormant</span></td>
+      <td><span class="badge badge-paid">Active</span></td>
     </tr><tr>
       <td><strong>PRSA</strong></td>
       <td><span class="badge badge-industry">Public Relations</span></td>
@@ -2483,7 +2483,7 @@
       <td>—</td>
       <td class="heat-avg mono">20d</td>
       <td class="heat-fast mono">4d</td>
-      <td><span class="badge badge-overdue">Dormant</span></td>
+      <td><span class="badge badge-paid">Active</span></td>
     </tr><tr>
       <td><strong>Eli Lilly &amp; Co.</strong></td>
       <td><span class="badge badge-industry">Pharmaceuticals</span></td>
@@ -2493,7 +2493,7 @@
       <td>—</td>
       <td class="heat-avg mono">21d</td>
       <td class="heat-fast mono">4d</td>
-      <td><span class="badge badge-overdue">Dormant</span></td>
+      <td><span class="badge badge-paid">Active</span></td>
     </tr><tr>
       <td><strong>Johnson&amp;Johnson</strong></td>
       <td><span class="badge badge-industry">Pharmaceuticals</span></td>
@@ -2503,7 +2503,7 @@
       <td>—</td>
       <td class="heat-avg mono">27d</td>
       <td class="heat-fast mono">12d</td>
-      <td><span class="badge badge-overdue">Dormant</span></td>
+      <td><span class="badge badge-paid">Active</span></td>
     </tr><tr>
       <td><strong>Newport News Shipbuilding</strong></td>
       <td><span class="badge badge-industry">Manufacturing</span></td>
@@ -2513,7 +2513,7 @@
       <td>—</td>
       <td class="heat-avg mono">19d</td>
       <td class="heat-slow mono">59d</td>
-      <td><span class="badge badge-overdue">Dormant</span></td>
+      <td><span class="badge badge-paid">Active</span></td>
     </tr><tr>
       <td><strong>USAA</strong></td>
       <td><span class="badge badge-industry">Financial Services</span></td>
@@ -2523,17 +2523,17 @@
       <td>—</td>
       <td class="heat-avg mono">30d</td>
       <td class="heat-avg mono">30d</td>
-      <td><span class="badge badge-overdue">Dormant</span></td>
+      <td><span class="badge badge-paid">Active</span></td>
     </tr><tr>
       <td><strong>Professional Speechwriters Association</strong></td>
       <td><span class="badge badge-industry">Public Relations</span></td>
       <td class="mono text-green">$26,486.15</td>
-      <td>Oct 28, 2025</td>
+      <td>Nov 17, 2025</td>
       <td>Educational Service</td>
       <td>—</td>
       <td class="heat-avg mono">15d</td>
       <td class="heat-avg mono">26d</td>
-      <td><span class="badge badge-overdue">Dormant</span></td>
+      <td><span class="badge badge-paid">Active</span></td>
     </tr><tr>
       <td><strong>Plaid</strong></td>
       <td><span class="badge badge-industry">Financial Services</span></td>
@@ -2543,17 +2543,17 @@
       <td>—</td>
       <td class="heat-avg mono">19d</td>
       <td class="heat-avg mono">23d</td>
-      <td><span class="badge badge-overdue">Dormant</span></td>
+      <td><span class="badge badge-paid">Active</span></td>
     </tr><tr>
       <td><strong>Invesco</strong></td>
       <td><span class="badge badge-industry">Financial Services</span></td>
       <td class="mono text-green">$6,000.00</td>
-      <td>Oct 8, 2025</td>
+      <td>Oct 10, 2025</td>
       <td>Consulting</td>
       <td>—</td>
       <td class="heat-slow mono">69d</td>
       <td class="heat-slow mono">69d</td>
-      <td><span class="badge badge-overdue">Dormant</span></td>
+      <td><span class="badge badge-paid">Active</span></td>
     </tr><tr>
       <td><strong>Rockefeller Capital Management</strong></td>
       <td><span class="badge badge-industry">Financial Services</span></td>
@@ -2563,7 +2563,7 @@
       <td>—</td>
       <td class="heat-fast mono">13d</td>
       <td class="heat-fast mono">9d</td>
-      <td><span class="badge badge-overdue">Dormant</span></td>
+      <td><span class="badge badge-paid">Active</span></td>
     </tr><tr>
       <td><strong>WURD</strong></td>
       <td><span class="badge badge-industry">Media</span></td>
@@ -2573,7 +2573,7 @@
       <td>—</td>
       <td class="heat-avg mono">25d</td>
       <td class="heat-avg mono">37d</td>
-      <td><span class="badge badge-overdue">Dormant</span></td>
+      <td><span class="badge badge-paid">Active</span></td>
     </tr><tr>
       <td><strong>NeighborWorks America</strong></td>
       <td><span class="badge badge-industry">NGO</span></td>
@@ -2593,7 +2593,7 @@
       <td>—</td>
       <td class="heat-fast mono">5d</td>
       <td class="heat-fast mono">4d</td>
-      <td><span class="badge badge-overdue">Dormant</span></td>
+      <td><span class="badge badge-paid">Active</span></td>
     </tr><tr>
       <td><strong>Campus Text</strong></td>
       <td><span class="badge badge-industry">Publishing</span></td>
@@ -2603,7 +2603,7 @@
       <td>—</td>
       <td class="heat-avg mono">27d</td>
       <td class="heat-avg mono">27d</td>
-      <td><span class="badge badge-overdue">Dormant</span></td>
+      <td><span class="badge badge-paid">Active</span></td>
     </tr><tr>
       <td><strong>Real Chemistry</strong></td>
       <td><span class="badge badge-industry">Healthcare</span></td>
@@ -2613,27 +2613,27 @@
       <td>—</td>
       <td class="heat-slow mono">109d</td>
       <td class="heat-slow mono">109d</td>
-      <td><span class="badge badge-overdue">Dormant</span></td>
+      <td><span class="badge badge-paid">Active</span></td>
     </tr><tr>
       <td><strong>Ghidotti</strong></td>
       <td><span class="badge badge-industry">Communications</span></td>
       <td class="mono text-green">$10,110.57</td>
-      <td>Jun 13, 2025</td>
+      <td>Jun 18, 2025</td>
       <td>—</td>
       <td>—</td>
       <td class="heat-avg mono">19d</td>
       <td class="heat-avg mono">19d</td>
-      <td><span class="badge badge-overdue">Dormant</span></td>
+      <td><span class="badge badge-paid">Active</span></td>
     </tr><tr>
       <td><strong>California Institute for the Arts</strong></td>
       <td><span class="badge badge-industry">Higher Education</span></td>
       <td class="mono text-green">$26,573.24</td>
-      <td>Jun 11, 2025</td>
+      <td>Jun 18, 2025</td>
       <td>Consulting</td>
       <td>—</td>
       <td class="heat-slow mono">62d</td>
       <td class="heat-avg mono">34d</td>
-      <td><span class="badge badge-overdue">Dormant</span></td>
+      <td><span class="badge badge-paid">Active</span></td>
     </tr><tr>
       <td><strong>Biogen</strong></td>
       <td><span class="badge badge-industry">Pharmaceutical</span></td>
@@ -2643,7 +2643,7 @@
       <td>—</td>
       <td class="heat-slow mono">61d</td>
       <td class="heat-slow mono">61d</td>
-      <td><span class="badge badge-overdue">Dormant</span></td>
+      <td><span class="badge badge-paid">Active</span></td>
     </tr><tr>
       <td><strong>Wharton School of Business</strong></td>
       <td><span class="badge badge-industry">Higher Education</span></td>
@@ -2658,7 +2658,7 @@
       <td><strong>Brands2Life</strong></td>
       <td><span class="badge badge-industry">Public Relations</span></td>
       <td class="mono text-green">$2,000.00</td>
-      <td>Mar 26, 2025</td>
+      <td>Mar 28, 2025</td>
       <td>—</td>
       <td>—</td>
       <td class="heat-avg mono">26d</td>
@@ -2678,6 +2678,33 @@
       </table>
     </div>
     <div class="pagination" id="clientPagination"><button class="page-btn active">1</button><button class="page-btn">2</button><button class="page-btn">3</button></div>
+  </div>
+
+  <!-- Add New Client Form -->
+  <div class="panel" style="margin-top:24px;">
+    <div class="panel-header">
+      <span class="panel-title">Add New Client</span>
+    </div>
+    <div style="padding:20px;">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Client Name</label>
+          <input type="text" id="nc_name" placeholder="e.g. Goldman Sachs">
+        </div>
+        <div class="form-group">
+          <label>Industry</label>
+          <input type="text" id="nc_industry" placeholder="e.g. Financial Services">
+        </div>
+        <div class="form-group">
+          <label>Bank</label>
+          <input type="text" id="nc_bank" placeholder="Optional">
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;margin-top:8px;">
+        <button class="btn btn-primary" onclick="saveNewClient()">Add Client</button>
+        <button class="btn btn-secondary" onclick="clearNewClientForm()">Clear</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -2796,20 +2823,20 @@
         <td class="mono">2.0d</td>
         <td class="">→ Steady</td>
       </tr><tr>
-        <td>Janssen Immunology</td>
-        <td class="mono">4.8d</td>
-        <td class="mono">6.3d</td>
+        <td>Stanley Center for …</td>
+        <td class="mono">3.5d</td>
+        <td class="mono">2.3d</td>
+        <td class="">→ Steady</td>
+      </tr><tr>
+        <td>Janssen R&amp;D, L.L.C.</td>
+        <td class="mono">5.0d</td>
+        <td class="mono">3.3d</td>
         <td class="">→ Steady</td>
       </tr><tr>
         <td>Eli Lilly &amp; Co.</td>
         <td class="mono">8.2d</td>
         <td class="mono">2.7d</td>
         <td class="text-green">↑ Faster</td>
-      </tr><tr>
-        <td>Oceansound</td>
-        <td class="mono">9.0d</td>
-        <td class="mono">9.0d</td>
-        <td class="">→ Steady</td>
       </tr><tr>
         <td>Johnson&amp;Johnson</td>
         <td class="mono">9.7d</td>
@@ -2821,15 +2848,15 @@
         <td class="mono">8.0d</td>
         <td class="text-green">↑ Faster</td>
       </tr><tr>
-        <td>Crewcial</td>
-        <td class="mono">11.3d</td>
-        <td class="mono">11.3d</td>
-        <td class="">→ Steady</td>
-      </tr><tr>
         <td>Professional Speech…</td>
         <td class="mono">12.5d</td>
         <td class="mono">8.0d</td>
         <td class="text-green">↑ Faster</td>
+      </tr><tr>
+        <td>Bank of America</td>
+        <td class="mono">12.6d</td>
+        <td class="mono">10.3d</td>
+        <td class="">→ Steady</td>
       </tr></tbody>
     </table></div>
     </div>
@@ -3692,6 +3719,8 @@ const rawInvoiceData = [
 let invoiceData = [...rawInvoiceData];
 let invoiceSortField = 'invoiceDate';
 let invoiceSortDir = -1;
+let projectedSortField = 'invoiceDate';
+let projectedSortDir = 1;
 let clientSortField = 'lastDate';
 let clientSortDir = -1;
 let invoicePage = 1;
@@ -4251,10 +4280,64 @@ function renderInvoiceTable() {
 // =====================================================
 // PROJECTED TABLE
 // =====================================================
+function sortProjected(field) {
+  if (projectedSortField === field) {
+    projectedSortDir *= -1;
+  } else {
+    projectedSortField = field;
+    projectedSortDir = 1;
+  }
+  renderProjectedTable();
+}
+
 function renderProjectedTable() {
   const total = projectedData.filter(p=>p.fee).reduce((s,p)=>s+p.fee,0);
 
-  document.getElementById('projectedTableBody').innerHTML = projectedData.map(p => {
+  // Update sort indicators
+  ['client','fee','invoiceDate','estPay','confidence','status'].forEach(f => {
+    const el = document.getElementById('psort_' + f);
+    if (el) el.textContent = f === projectedSortField ? (projectedSortDir === 1 ? '▲' : '▼') : '';
+  });
+
+  // Sort a copy so original indices stay stable for delete/add
+  const sorted = [...projectedData].map((p, origIdx) => ({ p, origIdx })).sort((a, b) => {
+    const f = projectedSortField;
+    let av, bv;
+
+    if (f === 'client') {
+      av = (a.p.client || '').toLowerCase();
+      bv = (b.p.client || '').toLowerCase();
+    } else if (f === 'fee') {
+      av = a.p.fee || 0;
+      bv = b.p.fee || 0;
+    } else if (f === 'invoiceDate') {
+      av = a.p.invoiceDate || '';
+      bv = b.p.invoiceDate || '';
+    } else if (f === 'estPay') {
+      const ia = a.p.invoiceDate ? clientData.find(c=>c.client===a.p.client)?.industry||invoiceData.find(i=>i.client===a.p.client)?.industry||'' : '';
+      const ib = b.p.invoiceDate ? clientData.find(c=>c.client===b.p.client)?.industry||invoiceData.find(i=>i.client===b.p.client)?.industry||'' : '';
+      av = a.p.invoiceDate ? (getPaymentEstimate(a.p.client, ia, a.p.invoiceDate).date || '9999') : '9999';
+      bv = b.p.invoiceDate ? (getPaymentEstimate(b.p.client, ib, b.p.invoiceDate).date || '9999') : '9999';
+    } else if (f === 'confidence') {
+      const order = { high: 0, medium: 1, low: 2 };
+      const ia = clientData.find(c=>c.client===a.p.client)?.industry || invoiceData.find(i=>i.client===a.p.client)?.industry || '';
+      const ib = clientData.find(c=>c.client===b.p.client)?.industry || invoiceData.find(i=>i.client===b.p.client)?.industry || '';
+      av = order[estimatePaymentDays(a.p.client, ia).confidence] ?? 3;
+      bv = order[estimatePaymentDays(b.p.client, ib).confidence] ?? 3;
+    } else if (f === 'status') {
+      const sv = p => !p.fee ? 2 : !p.invoiceDate ? 1 : p.invoiceDate > todayStr ? 0 : 3;
+      av = sv(a.p);
+      bv = sv(b.p);
+    } else {
+      return 0;
+    }
+
+    if (av < bv) return projectedSortDir === 1 ? -1 : 1;
+    if (av > bv) return projectedSortDir === 1 ? 1 : -1;
+    return 0;
+  });
+
+  document.getElementById('projectedTableBody').innerHTML = sorted.map(({ p, origIdx }) => {
     const upcoming = p.invoiceDate && p.invoiceDate > todayStr;
     const status = !p.fee
       ? `<span class="badge badge-pending">TBD</span>`
@@ -4304,7 +4387,7 @@ function renderProjectedTable() {
       }
     }
 
-    const idx = projectedData.indexOf(p);
+    const idx = origIdx;
     return `<tr class="${!p.invoiceDate ? 'projected-row' : ''}">
       <td style="text-align:center;white-space:nowrap;">
         <button onclick="addFromProjected(${idx})"
@@ -4359,10 +4442,9 @@ function sortClients(field) {
 }
 
 function getFilteredClients() {
-  const q = document.getElementById('clientSearch').value.toLowerCase();
+  const q   = document.getElementById('clientSearch').value.toLowerCase();
   const ind = document.getElementById('clientIndustryFilter').value;
   const act = document.getElementById('clientActivityFilter').value;
-  const twoYearsAgo = new Date(); twoYearsAgo.setFullYear(twoYearsAgo.getFullYear() - 2);
 
   const seen = new Set();
   return clientData.filter(c => {
@@ -4370,8 +4452,8 @@ function getFilteredClients() {
     seen.add(c.client);
     if (q && !c.client.toLowerCase().includes(q) && !c.industry?.toLowerCase().includes(q)) return false;
     if (ind && c.industry !== ind) return false;
-    if (act === 'active' && (!c.lastDate || parseDate(c.lastDate) < twoYearsAgo)) return false;
-    if (act === 'dormant' && c.lastDate && parseDate(c.lastDate) >= twoYearsAgo) return false;
+    if (act === 'active'  && !isClientActive(c.client)) return false;
+    if (act === 'dormant' &&  isClientActive(c.client)) return false;
     return true;
   }).sort((a,b) => {
     let av = a[clientSortField], bv = b[clientSortField];
@@ -4388,27 +4470,92 @@ function getFilteredClients() {
   });
 }
 
+// =====================================================
+// ADD NEW CLIENT
+// =====================================================
+async function saveNewClient() {
+  const name     = document.getElementById('nc_name').value.trim();
+  const industry = document.getElementById('nc_industry').value.trim();
+  const bank     = document.getElementById('nc_bank').value.trim();
+
+  if (!name) { alert('Please enter a client name.'); return; }
+  if (clientData.find(c => c.client.toLowerCase() === name.toLowerCase())) {
+    alert(`"${name}" already exists in the client list.`); return;
+  }
+
+  const newClient = { client: name, industry, revenue: 0, lastDate: null, bank, app: null, latest: null };
+  clientData.push(newClient);
+  clearNewClientForm();
+  renderClientTable();
+  populateFilters();
+  populateProjectedClientDropdown();
+
+  if (APPS_SCRIPT_URL && !APPS_SCRIPT_URL.includes('YOUR_APPS_SCRIPT')) {
+    showLoading('Saving to Google Sheets…');
+    try {
+      const row = {
+        'Client':   name,
+        'Industry': industry,
+        'Engagement Revenue (Since July 2015)': 0,
+        'Last Engagement Date': '',
+        'Bank': bank
+      };
+      await apiFetch({ action: 'addClient', row: encodeURIComponent(JSON.stringify(row)) });
+      hideLoading();
+      showToast(`${name} added to Client List ✓`);
+    } catch (err) {
+      hideLoading();
+      showToast('Saved locally but could not sync to Sheet: ' + err.message, true);
+    }
+  } else {
+    showToast(`${name} added (local only)`);
+  }
+}
+
+function clearNewClientForm() {
+  document.getElementById('nc_name').value = '';
+  document.getElementById('nc_industry').value = '';
+  document.getElementById('nc_bank').value = '';
+}
+
+function getClientLastInvoiceDate(clientName) {
+  // Compute from invoice data directly — ignore Sheet's "Last Engagement Date" column
+  const dates = invoiceData
+    .filter(i => i.client === clientName && (i.invoiceDate || i.serviceDate))
+    .map(i => i.invoiceDate || i.serviceDate)
+    .sort();
+  return dates.length ? dates[dates.length - 1] : null;
+}
+
+function isClientActive(clientName) {
+  const lastDate = getClientLastInvoiceDate(clientName);
+  if (!lastDate) return false;
+  const oneYearAgo = new Date();
+  oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+  return new Date(lastDate + 'T12:00:00') >= oneYearAgo;
+}
+
 function renderClientTable() {
   const filtered = getFilteredClients();
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
   if (clientPage > totalPages) clientPage = 1;
   const page = filtered.slice((clientPage-1)*PAGE_SIZE, clientPage*PAGE_SIZE);
-  const twoYearsAgo = new Date(); twoYearsAgo.setFullYear(twoYearsAgo.getFullYear()-2);
 
   document.getElementById('clientTableBody').innerHTML = page.map(c => {
-    const isActive = c.lastDate && parseDate(c.lastDate) >= twoYearsAgo;
+    const active = isClientActive(c.client);
+    const lastDate = getClientLastInvoiceDate(c.client) || c.lastDate;
     const appClass = c.app == null ? '' : c.app <= 14 ? 'heat-fast' : c.app <= 40 ? 'heat-avg' : 'heat-slow';
     const latestClass = c.latest == null ? '' : c.latest <= 14 ? 'heat-fast' : c.latest <= 40 ? 'heat-avg' : 'heat-slow';
     return `<tr>
       <td><strong>${c.client}</strong></td>
       <td><span class="badge badge-industry">${c.industry||'—'}</span></td>
       <td class="mono text-green">${c.revenue ? fmt$(c.revenue) : '—'}</td>
-      <td>${c.lastDate && c.lastDate !== '1900-01-01' ? fmtDate(c.lastDate) : '—'}</td>
+      <td>${lastDate && lastDate !== '1900-01-01' ? fmtDate(lastDate) : '—'}</td>
       <td>${c.lastCategory||'—'}</td>
       <td>${c.lastFee||'—'}</td>
       <td class="${appClass} mono">${c.app != null ? c.app+'d' : '—'}</td>
       <td class="${latestClass} mono">${c.latest != null ? c.latest+'d' : '—'}</td>
-      <td><span class="badge ${isActive ? 'badge-paid' : 'badge-overdue'}">${isActive ? 'Active' : 'Dormant'}</span></td>
+      <td><span class="badge ${active ? 'badge-paid' : 'badge-overdue'}">${active ? 'Active' : 'Dormant'}</span></td>
     </tr>`;
   }).join('');
 
@@ -4455,14 +4602,14 @@ function renderAnalytics() {
       <div class="lead-amount">${fmt$(v)}</div>
     </div>`).join('');
 
-  // Payment behavior — clients with fastest/slowest payment vs their avg
+  // Payment behavior — active clients only (invoice in past 12 months), 2+ paid invoices
   const clientDays = {};
   invoiceData.filter(i=>i.paid && i.days!=null).forEach(i => {
     if (!clientDays[i.client]) clientDays[i.client] = [];
     clientDays[i.client].push(i.days);
   });
   const clientAvgs = Object.entries(clientDays)
-    .filter(([,d]) => d.length >= 3)
+    .filter(([c, d]) => d.length >= 2 && isClientActive(c))
     .map(([c,d]) => {
       const avg = d.reduce((s,v)=>s+v,0)/d.length;
       const recent = d.slice(-3).reduce((s,v)=>s+v,0)/3;
